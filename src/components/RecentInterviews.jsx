@@ -1,84 +1,94 @@
+import { Link } from "react-router-dom";
+import { getHistory } from "../utils/storage";
+
 function RecentInterviews() {
-  const interviews = [
-    {
-      title: "Frontend React",
-      category: "Frontend",
-      score: "92%",
-      status: "Completed",
-    },
-    {
-      title: "Java OOP",
-      category: "Java",
-      score: "85%",
-      status: "Completed",
-    },
-    {
-      title: "Python Basics",
-      category: "Python",
-      score: "78%",
-      status: "Pending",
-    },
-    {
-      title: "HR Interview",
-      category: "HR",
-      score: "90%",
-      status: "Completed",
-    },
-  ];
+  const interviews = getHistory().slice().reverse().slice(0, 5);
 
   return (
     <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+
       <div className="flex justify-between items-center mb-6">
+
         <h2 className="text-white text-2xl font-bold">
           Recent Interviews
         </h2>
 
-        <button className="text-blue-500 hover:text-blue-400">
+        <Link
+          to="/history"
+          className="text-blue-500 hover:text-blue-400"
+        >
           View All
-        </button>
+        </Link>
+
       </div>
 
-      <table className="w-full">
-        <thead>
-          <tr className="text-gray-400 border-b border-slate-700">
-            <th className="text-left pb-3">Interview</th>
-            <th className="text-left">Category</th>
-            <th className="text-left">Score</th>
-            <th className="text-left">Status</th>
-          </tr>
-        </thead>
+      {interviews.length === 0 ? (
+        <div className="text-center py-10 text-gray-400">
+          No interviews completed yet.
+        </div>
+      ) : (
+        <table className="w-full">
 
-        <tbody>
-          {interviews.map((item, index) => (
-            <tr
-              key={index}
-              className="border-b border-slate-800 hover:bg-slate-800"
-            >
-              <td className="py-4 text-white">{item.title}</td>
+          <thead>
 
-              <td className="text-gray-300">
-                {item.category}
-              </td>
+            <tr className="text-gray-400 border-b border-slate-700">
 
-              <td className="text-blue-400 font-semibold">
-                {item.score}
-              </td>
+              <th className="text-left pb-3">Category</th>
 
-              <td>
-                <span
-                  className={`px-3 py-1 rounded-full text-sm ${
-                    item.status === "Completed"
-                      ? "bg-green-500/20 text-green-400"
-                      : "bg-yellow-500/20 text-yellow-400"
-                  }`}
-                >
-                  {item.status}
-                </span>
-              </td>
+              <th className="text-left">Score</th>
+
+              <th className="text-left">Date</th>
+
+              <th className="text-left">Time</th>
+
+              <th className="text-left">Status</th>
+
             </tr>
-          ))}
-        </tbody>
-      </table>
+
+          </thead>
+
+          <tbody>
+
+            {interviews.map((item) => (
+
+              <tr
+                key={item.id}
+                className="border-b border-slate-800 hover:bg-slate-800 transition"
+              >
+
+                <td className="py-4 text-white capitalize">
+                  {item.category}
+                </td>
+
+                <td className="text-blue-400 font-semibold">
+                  {item.score}%
+                </td>
+
+                <td className="text-gray-300">
+                  {item.date}
+                </td>
+
+                <td className="text-gray-300">
+                  {item.time}
+                </td>
+
+                <td>
+
+                  <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm">
+                    Completed
+                  </span>
+
+                </td>
+
+              </tr>
+
+            ))}
+
+          </tbody>
+
+        </table>
+      )}
+
     </div>
   );
 }

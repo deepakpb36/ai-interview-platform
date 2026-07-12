@@ -12,62 +12,68 @@ import Logo from "./Logo";
 
 function Sidebar() {
   return (
-    <aside className="w-64 min-h-screen bg-slate-900 border-r border-slate-800 p-6">
+    <aside className="w-64 min-h-screen bg-slate-900 border-r border-slate-800 p-6 flex flex-col justify-between">
 
-      <Logo />
+      <div>
 
-      <nav className="mt-10 space-y-2">
+        <Logo />
 
-        <Link
-          to="/dashboard"
-          className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-blue-600 hover:text-white transition"
-        >
-          <LayoutDashboard size={20} />
-          Dashboard
-        </Link>
+        <nav className="mt-10 space-y-2">
 
-        <Link
-          to="/interview"
-          className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-blue-600 hover:text-white transition"
-        >
-          <BriefcaseBusiness size={20} />
-          Interview
-        </Link>
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-blue-600 hover:text-white transition"
+          >
+            <LayoutDashboard size={20} />
+            Dashboard
+          </Link>
 
-        <Link
-          to="#"
-          className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-blue-600 hover:text-white transition"
-        >
-          <History size={20} />
-          History
-        </Link>
+          <Link
+            to="/interview/frontend"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-blue-600 hover:text-white transition"
+          >
+            <BriefcaseBusiness size={20} />
+            Interview
+          </Link>
 
-        <Link
-          to="#"
-          className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-blue-600 hover:text-white transition"
-        >
-          <User size={20} />
-          Profile
-        </Link>
+          <Link
+            to="/history"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-blue-600 hover:text-white transition"
+          >
+            <History size={20} />
+            History
+          </Link>
 
-        <Link
-          to="#"
-          className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-blue-600 hover:text-white transition"
-        >
-          <Settings size={20} />
-          Settings
-        </Link>
+          <Link
+            to="/profile"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-blue-600 hover:text-white transition"
+          >
+            <User size={20} />
+            Profile
+          </Link>
 
-      </nav>
+          <Link
+            to="/settings"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-blue-600 hover:text-white transition"
+          >
+            <Settings size={20} />
+            Settings
+          </Link>
 
-      <div className="absolute bottom-8">
+        </nav>
+
+      </div>
+
+      <div>
+
         <Link
           to="/"
-          className="flex items-center gap-3 text-red-400 hover:text-red-500"
+          className="flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-600 hover:text-white transition"
         >
           <LogOut size={20} />
           Logout
         </Link>
+
       </div>
 
     </aside>
