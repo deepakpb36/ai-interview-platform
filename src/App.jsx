@@ -3,9 +3,12 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
+import InterviewSelection from "./pages/InterviewSelection";
 import Interview from "./pages/Interview";
 import Results from "./pages/Results";
 import History from "./pages/History";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -29,6 +32,19 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      {/* Interview Selection */}
+
+      <Route
+        path="/interview"
+        element={
+          <ProtectedRoute>
+            <InterviewSelection />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Interview Questions */}
 
       <Route
         path="/interview/:category"
@@ -56,6 +72,23 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+  path="/settings"
+  element={
+    <ProtectedRoute>
+      <Settings />
+    </ProtectedRoute>
+  }
+/>
 
     </Routes>
   );
