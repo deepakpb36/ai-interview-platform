@@ -26,25 +26,34 @@ function Dashboard() {
       : 0;
 
   return (
-    <div className="flex bg-slate-950 min-h-screen">
+    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
 
       <Sidebar />
 
-      <div className="flex-1">
+      <main className="flex-1 overflow-hidden">
 
         <Navbar />
 
-        <div className="p-8">
+        <div className="p-8 lg:p-10">
 
-          <h1 className="text-4xl font-bold text-white">
-            Dashboard
-          </h1>
+          {/* Welcome */}
 
-          <p className="text-gray-400 mt-2">
-            Track your interview preparation and improve your skills.
-          </p>
+          <div className="mb-10">
 
-          <div className="grid grid-cols-4 gap-6 mt-8">
+            <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+              Welcome Back 👋
+            </h1>
+
+            <p className="mt-2 text-slate-600 dark:text-slate-400">
+              Track your interview preparation, monitor your progress and
+              improve your skills every day.
+            </p>
+
+          </div>
+
+          {/* Stats */}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
 
             <StatsCard
               title="Total Interviews"
@@ -56,14 +65,14 @@ function Dashboard() {
             <StatsCard
               title="Average Score"
               value={`${averageScore}%`}
-              subtitle="Overall"
+              subtitle="Overall Performance"
               iconBg="bg-purple-600"
             />
 
             <StatsCard
               title="Best Score"
               value={`${bestScore}%`}
-              subtitle="Highest"
+              subtitle="Highest Score"
               iconBg="bg-pink-600"
             />
 
@@ -76,17 +85,23 @@ function Dashboard() {
 
           </div>
 
-          <div className="mt-12">
+          {/* Categories */}
 
-            <h2 className="text-white text-2xl font-bold mb-2">
-              Practice by Category
-            </h2>
+          <section className="mt-12">
 
-            <p className="text-gray-400 mb-6">
-              Choose your interview category
-            </p>
+            <div className="mb-6">
 
-            <div className="grid grid-cols-4 gap-6">
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+                Practice Categories
+              </h2>
+
+              <p className="mt-2 text-slate-600 dark:text-slate-400">
+                Select a category and start your AI mock interview.
+              </p>
+
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
 
               <CategoryCard
                 title="Frontend"
@@ -118,11 +133,13 @@ function Dashboard() {
 
             </div>
 
-          </div>
+          </section>
 
-          <div className="grid grid-cols-3 gap-6 mt-12">
+          {/* Bottom */}
 
-            <div className="col-span-2 space-y-6">
+          <section className="grid grid-cols-1 xl:grid-cols-3 gap-8 mt-12">
+
+            <div className="xl:col-span-2 space-y-8">
 
               <RecentInterviews />
 
@@ -136,11 +153,11 @@ function Dashboard() {
 
             </div>
 
-          </div>
+          </section>
 
         </div>
 
-      </div>
+      </main>
 
     </div>
   );
