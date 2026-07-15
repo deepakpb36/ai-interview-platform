@@ -68,44 +68,37 @@ function InterviewSelection() {
 
   const difficultyColor = (difficulty) => {
     if (difficulty === "Easy")
-      return "bg-green-500/20 text-green-400";
+      return "bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400";
 
     if (difficulty === "Medium")
-      return "bg-yellow-500/20 text-yellow-400";
+      return "bg-yellow-100 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400";
 
-    return "bg-red-500/20 text-red-400";
+    return "bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400";
   };
 
   return (
-    <div className="flex bg-slate-950 min-h-screen">
-
+    <div className="flex bg-gray-100 dark:bg-slate-950 min-h-screen transition-colors duration-300">
       <Sidebar />
 
       <div className="flex-1">
-
         <Navbar />
 
         <div className="p-8">
-
-          <h1 className="text-4xl font-bold text-white">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
             Choose Your Interview
           </h1>
 
-          <p className="text-gray-400 mt-2">
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
             Select a category and begin your AI-powered mock interview.
           </p>
 
           <div className="grid lg:grid-cols-2 gap-8 mt-10">
-
             {categories.map((category) => (
-
               <div
                 key={category.title}
-                className="bg-slate-900 border border-slate-800 rounded-3xl p-8 hover:border-blue-500 hover:-translate-y-2 transition duration-300 shadow-lg"
+                className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl p-8 hover:border-blue-500 hover:-translate-y-2 transition duration-300 shadow-lg"
               >
-
                 <div className="flex justify-between items-start">
-
                   <div
                     className={`${category.color} w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg`}
                   >
@@ -118,53 +111,42 @@ function InterviewSelection() {
                       {category.badge}
                     </span>
                   )}
-
                 </div>
 
-                <h2 className="text-white text-3xl font-bold mt-6">
+                <h2 className="text-gray-900 dark:text-white text-3xl font-bold mt-6">
                   {category.title}
                 </h2>
 
-                <p className="text-gray-400 mt-3 leading-7">
+                <p className="text-gray-600 dark:text-gray-400 mt-3 leading-7">
                   {category.description}
                 </p>
 
+                {/* Sub-Metric Cards */}
                 <div className="grid grid-cols-3 gap-4 mt-8">
-
-                  <div className="bg-slate-800 rounded-xl p-4 text-center">
-
-                    <CircleHelp className="mx-auto text-blue-400" />
-
-                    <p className="text-gray-400 text-sm mt-2">
+                  <div className="bg-gray-100 dark:bg-slate-800 rounded-xl p-4 text-center transition">
+                    <CircleHelp className="mx-auto text-blue-600 dark:text-blue-400" />
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
                       Questions
                     </p>
-
-                    <h3 className="text-white text-xl font-bold mt-1">
+                    <h3 className="text-gray-900 dark:text-white text-xl font-bold mt-1">
                       {category.questions}
                     </h3>
-
                   </div>
 
-                  <div className="bg-slate-800 rounded-xl p-4 text-center">
-
-                    <Clock3 className="mx-auto text-green-400" />
-
-                    <p className="text-gray-400 text-sm mt-2">
+                  <div className="bg-gray-100 dark:bg-slate-800 rounded-xl p-4 text-center transition">
+                    <Clock3 className="mx-auto text-green-600 dark:text-green-400" />
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
                       Duration
                     </p>
-
-                    <h3 className="text-white text-xl font-bold mt-1">
+                    <h3 className="text-gray-900 dark:text-white text-xl font-bold mt-1">
                       {category.duration}
                     </h3>
-
                   </div>
 
-                  <div className="bg-slate-800 rounded-xl p-4 text-center">
-
-                    <p className="text-gray-400 text-sm">
+                  <div className="bg-gray-100 dark:bg-slate-800 rounded-xl p-4 text-center transition">
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">
                       Difficulty
                     </p>
-
                     <span
                       className={`inline-block mt-3 px-3 py-1 rounded-full text-sm font-semibold ${difficultyColor(
                         category.difficulty
@@ -172,61 +154,42 @@ function InterviewSelection() {
                     >
                       {category.difficulty}
                     </span>
-
                   </div>
-
                 </div>
 
+                {/* Progress Level */}
                 <div className="mt-8">
-
                   <div className="flex justify-between text-sm mb-2">
-
-                    <span className="text-gray-400">
+                    <span className="text-gray-500 dark:text-gray-400">
                       Preparation Level
                     </span>
-
-                    <span className="text-blue-400">
+                    <span className="text-blue-600 dark:text-blue-400 font-semibold">
                       {category.progress}%
                     </span>
-
                   </div>
-
-                  <div className="w-full bg-slate-800 rounded-full h-3">
-
+                  <div className="w-full bg-gray-200 dark:bg-slate-800 rounded-full h-3 transition">
                     <div
                       className="bg-blue-600 h-3 rounded-full"
                       style={{
                         width: `${category.progress}%`,
                       }}
                     ></div>
-
                   </div>
-
                 </div>
 
+                {/* Action CTA Button */}
                 <button
-                  onClick={() =>
-                    navigate(`/interview/${category.route}`)
-                  }
+                  onClick={() => navigate(`/interview/${category.route}`)}
                   className="w-full mt-8 bg-blue-600 hover:bg-blue-700 py-4 rounded-xl text-white font-semibold flex items-center justify-center gap-3 transition"
                 >
-
                   Start Interview
-
                   <ArrowRight size={20} />
-
                 </button>
-
               </div>
-
             ))}
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }
