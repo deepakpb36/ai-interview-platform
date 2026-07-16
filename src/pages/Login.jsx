@@ -43,16 +43,19 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-slate-900 rounded-2xl border border-slate-800 p-8 shadow-xl">
+    /* Theme-aligned responsive wrapper background */
+    <div className="min-h-screen bg-gray-100 dark:bg-slate-950 flex items-center justify-center px-4 transition-colors duration-300">
+      
+      {/* Container card modified to fit light and dark frameworks smoothly */}
+      <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 p-8 shadow-xl transition">
 
         <Logo />
 
-        <h2 className="text-white text-3xl font-bold mt-8">
+        <h2 className="text-gray-900 dark:text-white text-3xl font-bold mt-8">
           Welcome Back 👋
         </h2>
 
-        <p className="text-gray-400 mt-2 mb-8">
+        <p className="text-gray-600 dark:text-gray-400 mt-2 mb-8">
           Sign in to continue your interview preparation.
         </p>
 
@@ -75,7 +78,7 @@ function Login() {
         <div className="flex justify-end mb-6">
           <a
             href="#"
-            className="text-sm text-blue-500 hover:underline"
+            className="text-sm text-blue-600 dark:text-blue-500 hover:underline font-medium"
           >
             Forgot Password?
           </a>
@@ -86,27 +89,27 @@ function Login() {
         </div>
 
         <div className="flex items-center my-6">
-          <div className="flex-1 h-px bg-slate-700"></div>
+          <div className="flex-1 h-px bg-gray-200 dark:bg-slate-700"></div>
 
-          <span className="px-3 text-gray-400 text-sm">
+          <span className="px-3 text-gray-500 dark:text-gray-400 text-sm">
             OR
           </span>
 
-          <div className="flex-1 h-px bg-slate-700"></div>
+          <div className="flex-1 h-px bg-gray-200 dark:bg-slate-700"></div>
         </div>
 
         <button
           onClick={handleGoogleLogin}
-          className="w-full border border-slate-700 py-3 rounded-lg text-white hover:bg-slate-800 transition"
+          className="w-full border border-gray-300 dark:border-slate-700 py-3 rounded-lg text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-800 transition font-semibold"
         >
           Continue with Google
         </button>
 
-        <p className="text-center text-gray-400 mt-6">
+        <p className="text-center text-gray-600 dark:text-gray-400 mt-6">
           Don't have an account?{" "}
           <Link
             to="/signup"
-            className="text-blue-500 hover:underline"
+            className="text-blue-600 dark:text-blue-500 hover:underline font-medium"
           >
             Sign Up
           </Link>

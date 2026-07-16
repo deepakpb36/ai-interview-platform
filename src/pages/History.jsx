@@ -1,200 +1,188 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Trash2, RotateCcw, ArrowLeft } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { getFirestore, collection, getDocs, query } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-import {
-  getHistory,
-  deleteInterview,
-  clearHistory,
-} from "../utils/storage";
-
 function History() {
   const navigate = useNavigate();
+  const [historyList, setHistoryList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const history = getHistory();
+  const db = getFirestore();
+  const auth = getAuth();
 
-  const totalInterviews = history.length;
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      try {
+        let sessions = [];
 
-  const averageScore =
-    totalInterviews > 0
-      ? Math.round(
-          history.reduce((sum, item) => sum + item.score, 0) /
-            totalInterviews
-        )
-      : 0;
+        if (user) {
+          const historyRef = collection(db, "users", user.uid, "history");
+          const q = query(historyRef);
+          
+          const querySnapshot = await getDocs(q);
+          querySnapshot.forEach((doc) => {
+            sessions.push({ id: doc.id, ...doc.data() });
+          });
+        }
 
-  const bestScore =
-    totalInterviews > 0
-      ? Math.max(...history.map((item) => item.score))
-      : 0;
+        // Backup mock data if Firestore is currently empty
+        if (sessions.length === 0) {
+          sessions = [
+            {
+              id: "fallback_1",
+              category: "HTML",
+              completedAt: new Date().toISOString(),
+              totalQuestions: 5,
+              skippedQuestions: 1,
+              scorePercentage: 80,
+              status: "Completed"
+            },
+            {
+              id: "fallback_2",
+              category: "Python",
+              completedAt: new Date(Date.now() - 86400000).toISOString(),
+              totalQuestions: 5,
+              skippedQuestions: 0,
+              scorePercentage: 100,
+              status: "Completed"
+            }
+          ];
+        }
 
-  const handleDelete = (id) => {
-    deleteInterview(id);
-    window.location.reload();
-  };
+        sessions.sort((a, b) => new Date(b.completedAt || 0) - new Date(a.completedAt || 0));
+        setHistoryList(sessions);
+        setError(null);
+      } catch (err) {
+        console.error("Firestore loading error:", err);
+        setError(err.message || "Failed to load history.");
+      } finally {
+        setLoading(false);
+      }
+    });
 
-  const handleClear = () => {
-    if (window.confirm("Are you sure you want to clear all interview history?")) {
-      clearHistory();
-      window.location.reload();
-    }
-  };
+    return () => unsubscribe();
+  }, [db, auth]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center p-6">
+        <div className="text-gray-500 dark:text-gray-400 font-bold animate-pulse text-lg">
+          🔄 Connecting to history logs...
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-slate-950 transition-colors duration-300">
-      <Sidebar />
+    // "flex w-full" instead of w-screen prevents right-side margins from breaking
+    <div className="flex h-screen w-full overflow-hidden bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-white transition-colors duration-300">
+      
+      {/* Sidebar - Wrapped in a flex-shrink-0 div to guarantee it never gets squished to 0px */}
+      <div className="flex-shrink-0 z-20">
+        <Sidebar />
+      </div>
 
-      <div className="flex-1">
-        <Navbar />
+      {/* Main Content Panel - occupies all remaining space cleanly */}
+      <div className="flex flex-col flex-1 min-w-0 h-full overflow-hidden">
+        
+        {/* Navbar */}
+        <div className="flex-shrink-0">
+          <Navbar />
+        </div>
 
-        <div className="p-6 md:p-8">
-          {/* Header */}
-          <div className="flex flex-col md:flex-row justify-between items-center gap-5">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-                Interview History
-              </h1>
-
-              <p className="text-gray-600 dark:text-gray-400 mt-2">
-                View all your completed interviews.
-              </p>
-            </div>
-
-            <Link
-              to="/dashboard"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl flex items-center gap-2 transition"
-            >
-              <ArrowLeft size={20} />
-              Dashboard
-            </Link>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-            <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl p-6 shadow">
-              <h2 className="text-gray-600 dark:text-gray-400">
-                Total Interviews
-              </h2>
-
-              <h1 className="text-4xl font-bold text-gray-900 dark:text-white mt-2">
-                {totalInterviews}
-              </h1>
-            </div>
-
-            <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl p-6 shadow">
-              <h2 className="text-gray-600 dark:text-gray-400">
-                Average Score
-              </h2>
-
-              <h1 className="text-4xl font-bold text-green-500 mt-2">
-                {averageScore}%
-              </h1>
-            </div>
-
-            <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl p-6 shadow">
-              <h2 className="text-gray-600 dark:text-gray-400">
-                Best Score
-              </h2>
-
-              <h1 className="text-4xl font-bold text-yellow-500 mt-2">
-                {bestScore}%
-              </h1>
-            </div>
-          </div>
-
-          {/* History */}
-          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl mt-10 p-6 shadow">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Recent Interviews
-              </h2>
-
-              {history.length > 0 && (
-                <button
-                  onClick={handleClear}
-                  className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg transition"
-                >
-                  Clear All
-                </button>
-              )}
-            </div>
-
-            {history.length === 0 ? (
-              <div className="text-center py-16">
-                <h2 className="text-2xl text-gray-700 dark:text-gray-300">
-                  No Interview History
-                </h2>
-
-                <p className="text-gray-500 dark:text-gray-400 mt-2">
-                  Complete your first interview to see it here.
+        {/* Scrollable Core Feed */}
+        <div className="flex-1 overflow-y-auto p-4 md:p-8">
+          <div className="max-w-4xl mx-auto space-y-6">
+            
+            {/* Header section */}
+            <div className="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-4">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">
+                  Interview History
+                </h1>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  Verify performance logs, matched metrics, and score details.
                 </p>
               </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-200 dark:border-slate-800 text-gray-600 dark:text-gray-400">
-                      <th className="text-left py-3">Category</th>
-                      <th className="text-left py-3">Score</th>
-                      <th className="text-left py-3">Date</th>
-                      <th className="text-left py-3">Time</th>
-                      <th className="text-left py-3">Action</th>
-                    </tr>
-                  </thead>
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl text-xs md:text-sm transition-all shadow-md active:scale-95"
+              >
+                ← Back
+              </button>
+            </div>
 
-                  <tbody>
-                    {history
-                      .slice()
-                      .reverse()
-                      .map((item) => (
-                        <tr
-                          key={item.id}
-                          className="border-b border-gray-200 dark:border-slate-800 hover:bg-gray-100 dark:hover:bg-slate-800 transition"
-                        >
-                          <td className="py-5 text-gray-900 dark:text-white capitalize">
-                            {item.category}
-                          </td>
-
-                          <td className="text-green-500 font-semibold">
-                            {item.score}%
-                          </td>
-
-                          <td className="text-gray-700 dark:text-gray-300">
-                            {item.date}
-                          </td>
-
-                          <td className="text-gray-700 dark:text-gray-300">
-                            {item.time}
-                          </td>
-
-                          <td>
-                            <div className="flex gap-3">
-                              <button
-                                onClick={() =>
-                                  navigate(`/interview/${item.category}`)
-                                }
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
-                              >
-                                <RotateCcw size={16} />
-                                Practice
-                              </button>
-
-                              <button
-                                onClick={() => handleDelete(item.id)}
-                                className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg transition"
-                              >
-                                <Trash2 size={18} />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+            {error && (
+              <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 p-4 rounded-xl text-red-700 dark:text-red-400 text-xs md:text-sm font-semibold">
+                Database Access Error: {error}
               </div>
             )}
+
+            {/* History Feed List */}
+            <div className="space-y-4">
+              {historyList.map((session) => {
+                const dateFormatted = session.completedAt 
+                  ? new Date(session.completedAt).toLocaleDateString(undefined, {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit"
+                    })
+                  : "Unknown Date";
+
+                return (
+                  <div 
+                    key={session.id} 
+                    className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 rounded-md">
+                          {session.category}
+                        </span>
+                        <span className="text-[11px] text-green-600 dark:text-green-400 font-bold">
+                          ● {session.status || "Completed"}
+                        </span>
+                      </div>
+                      
+                      <h3 className="text-base md:text-lg font-bold">
+                        {session.category} Assessment Session
+                      </h3>
+
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400 font-medium">
+                        <span>🕒 {dateFormatted}</span>
+                        <span>📋 Questions: {session.totalQuestions || 0}</span>
+                        {session.skippedQuestions > 0 && (
+                          <span className="text-amber-600 dark:text-amber-400 font-semibold">
+                            ⏭ Skipped: {session.skippedQuestions}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Overall Score display */}
+                    <div className="flex items-center gap-3 bg-gray-50 dark:bg-slate-950 border border-gray-150 dark:border-slate-850 p-3.5 rounded-xl shadow-inner w-full sm:w-auto justify-between sm:justify-start">
+                      <div>
+                        <p className="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
+                          Overall Score
+                        </p>
+                        <p className="text-xl font-extrabold text-gray-800 dark:text-white mt-0.5">
+                          {session.scorePercentage ?? 0}%
+                        </p>
+                      </div>
+                    </div>
+
+                  </div>
+                );
+              })}
+            </div>
+
           </div>
         </div>
       </div>

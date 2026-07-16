@@ -33,18 +33,16 @@ function Sidebar() {
     }`;
 
   return (
-    <aside className="w-72 min-h-screen bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col transition-all duration-300">
+    // FIXED classes: Changed min-h-screen to h-screen, added flex-shrink-0 and h-full
+    <aside className="w-72 h-screen flex-shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col transition-all duration-300 overflow-hidden">
 
       {/* Logo */}
-
-      <div className="px-7 py-8 border-b border-slate-200 dark:border-slate-800">
+      <div className="px-7 py-8 border-b border-slate-200 dark:border-slate-800 flex-shrink-0">
         <Logo />
       </div>
 
       {/* Navigation */}
-
-      <nav className="flex-1 px-5 py-8 space-y-3">
-
+      <nav className="flex-1 px-5 py-8 space-y-3 overflow-y-auto">
         <NavLink to="/dashboard" className={navClass}>
           <LayoutDashboard size={21} />
           <span>Dashboard</span>
@@ -69,13 +67,10 @@ function Sidebar() {
           <Settings size={21} />
           <span>Settings</span>
         </NavLink>
-
       </nav>
 
       {/* Logout */}
-
-      <div className="p-5 border-t border-slate-200 dark:border-slate-800">
-
+      <div className="p-5 border-t border-slate-200 dark:border-slate-800 flex-shrink-0">
         <button
           onClick={handleLogout}
           className="w-full flex items-center justify-center gap-3 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white transition-all duration-300 font-semibold"
@@ -83,7 +78,6 @@ function Sidebar() {
           <LogOut size={20} />
           Logout
         </button>
-
       </div>
 
     </aside>

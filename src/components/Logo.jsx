@@ -15,8 +15,9 @@ function Logo() {
           AI Interview
         </h1>
 
-        <p className="text-sm font-semibold tracking-wide uppercase text-blue-600 dark:text-blue-400">
-          Prep Platform
+        {/* Updated text to show the full name requested */}
+        <p className="text-xs font-semibold tracking-wide uppercase text-blue-600 dark:text-blue-400">
+          AI Interview Prep Platform
         </p>
       </div>
 
