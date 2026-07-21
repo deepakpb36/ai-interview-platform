@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { getAuth } from "firebase/auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import {
@@ -115,6 +116,8 @@ function StatCard({ title, value, icon: Icon, color }) {
 function Dashboard() {
 
   const navigate = useNavigate();
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   const [searchParams] = useSearchParams();
 
@@ -241,9 +244,8 @@ function Dashboard() {
 
                 <div>
 
-                  <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-                    Welcome Back, Deepak 👋
-                  </h1>
+                 <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+                Welcome Back, {user?.displayName ||"Deepak"} 👋</h1>
 
                   <p className="mt-3 text-slate-600 dark:text-slate-400 max-w-2xl">
                     Practice technical interviews, improve your confidence,
