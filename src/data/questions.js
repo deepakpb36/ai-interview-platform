@@ -2,112 +2,114 @@ export const INTERVIEW_QUESTIONS = {
   html: [
     {
       id: 1,
-      question: "What is the difference between Block and Inline elements in HTML?",
-      keywords: ["block", "inline", "width", "margin", "padding", "line", "div", "span", "display"]
+      question: "What is HTML?",
+      keywords: ["html", "markup language", "web page", "structure"]
     },
     {
       id: 2,
-      question: "What are semantic HTML tags, and why are they important?",
-      keywords: ["semantic", "seo", "accessibility", "meaning", "header", "footer", "article", "screen reader"]
+      question: "What is the purpose of the <head> tag?",
+      keywords: ["head", "title", "meta", "css", "information"]
     },
     {
       id: 3,
-      question: "Explain the purpose and structure of HTML5 'data-' attributes.",
-      keywords: ["data-", "dataset", "attribute", "custom", "store", "javascript", "prefix"]
+      question: "What is the difference between <div> and <span>?",
+      keywords: ["div", "span", "block", "inline"]
     },
     {
       id: 4,
-      question: "How do you optimize an HTML page's loading performance and SEO metadata?",
-      keywords: ["meta", "viewport", "async", "defer", "preload", "minify", "alt", "title", "performance"]
+      question: "What is the use of the <img> tag?",
+      keywords: ["image", "img", "src", "alt"]
     },
     {
       id: 5,
-      question: "What is the purpose of the 'alt' attribute on an image tag?",
-      keywords: ["alt", "accessibility", "screen reader", "fallback", "broken image", "seo", "description"]
+      question: "What are semantic HTML tags?",
+      keywords: ["semantic", "header", "footer", "article", "section"]
     }
   ],
+
   python: [
     {
       id: 1,
-      question: "What is the difference between Python list and tuple?",
-      keywords: ["mutable", "immutable", "tuple", "list", "brackets", "parentheses", "speed", "memory"]
+      question: "What is Python?",
+      keywords: ["python", "programming", "language", "easy"]
     },
     {
       id: 2,
-      question: "How does memory management work in Python?",
-      keywords: ["garbage collector", "reference counting", "private heap", "memory", "allocator", "sys", "cycles"]
+      question: "What is the difference between a list and a tuple?",
+      keywords: ["list", "tuple", "mutable", "immutable"]
     },
     {
       id: 3,
-      question: "What are decorators in Python and how do you write one?",
-      keywords: ["decorator", "function", "wrapper", "modify", "syntactic sugar", "@", "arguments", "return"]
+      question: "What is a variable in Python?",
+      keywords: ["variable", "store", "value", "memory"]
     },
     {
       id: 4,
-      question: "What is the difference between deep copy and shallow copy in Python?",
-      keywords: ["copy", "deepcopy", "shallow", "reference", "nested", "object", "clone", "address"]
+      question: "What is the use of the print() function?",
+      keywords: ["print", "output", "display"]
     },
     {
       id: 5,
-      question: "Explain generators and the 'yield' keyword in Python.",
-      keywords: ["generator", "yield", "iterator", "lazy evaluation", "memory", "next", "state", "stream"]
+      question: "What is a function in Python?",
+      keywords: ["function", "def", "code", "reuse"]
     }
   ],
+
   java: [
     {
       id: 1,
-      question: "Explain the pillars of Object-Oriented Programming (OOPs) in Java.",
-      keywords: ["encapsulation", "inheritance", "polymorphism", "abstraction", "class", "interface", "extend"]
+      question: "What is Java?",
+      keywords: ["java", "language", "oop"]
     },
     {
       id: 2,
-      question: "What is the difference between JDK, JRE, and JVM?",
-      keywords: ["jdk", "jre", "jvm", "development", "runtime", "virtual machine", "compiler", "bytecode"]
+      question: "What is JVM?",
+      keywords: ["jvm", "java virtual machine", "bytecode"]
     },
     {
       id: 3,
-      question: "How does Garbage Collection work in Java?",
-      keywords: ["garbage collection", "gc", "heap", "stack", "finalize", "unreachable", "system.gc", "memory"]
+      question: "What is the difference between JDK and JRE?",
+      keywords: ["jdk", "jre", "development", "runtime"]
     },
     {
       id: 4,
-      question: "What is the difference between an Abstract Class and an Interface in Java?",
-      keywords: ["abstract", "interface", "multiple inheritance", "implementation", "static", "final", "methods"]
+      question: "What is a class in Java?",
+      keywords: ["class", "object", "oop"]
     },
     {
       id: 5,
-      question: "What are Java Exceptions? Explain the difference between checked and unchecked exceptions.",
-      keywords: ["checked", "unchecked", "exception", "runtime", "try", "catch", "throw", "error"]
+      question: "What is an object in Java?",
+      keywords: ["object", "instance", "class"]
     }
   ],
+
   hr: [
     {
       id: 1,
-      question: "Tell me about yourself and why you are interested in this role.",
-      keywords: ["experience", "background", "passionate", "align", "career", "skills", "growth", "interest"]
+      question: "Tell me about yourself.",
+      keywords: ["introduction", "education", "skills", "background"]
     },
     {
       id: 2,
-      question: "Describe a time you faced a difficult challenge in a project and how you resolved it.",
-      keywords: ["challenge", "resolve", "problem-solving", "action", "learned", "teamwork", "outcome", "star"]
+      question: "Why do you want this job?",
+      keywords: ["career", "interest", "growth", "company"]
     },
     {
       id: 3,
-      question: "How do you handle tight deadlines or working under intense pressure?",
-      keywords: ["prioritize", "schedule", "focus", "planning", "calm", "communication", "delegate", "break"]
+      question: "What are your strengths?",
+      keywords: ["strength", "skill", "hardworking", "teamwork"]
     },
     {
       id: 4,
-      question: "Why should we hire you over other qualified candidates?",
-      keywords: ["unique", "dedication", "culture", "fast learner", "value", "contribution", "skills", "adaptable"]
+      question: "What are your weaknesses?",
+      keywords: ["weakness", "improve", "learning"]
     },
     {
       id: 5,
-      question: "Where do you see yourself in the next 3 to 5 years?",
-      keywords: ["growth", "leadership", "expertise", "learning", "contributing", "future", "goals", "long-term"]
+      question: "Where do you see yourself in 5 years?",
+      keywords: ["future", "career", "goal", "growth"]
     }
   ]
 };
 
-// Exporting as default as well, to prevent any imports from failing!
 export default INTERVIEW_QUESTIONS;

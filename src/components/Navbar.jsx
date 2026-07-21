@@ -11,7 +11,6 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Extract the current "search" parameter from the URL
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get("search") || "";
 
@@ -22,19 +21,30 @@ function Navbar() {
     year: "numeric",
   });
 
-  // Handle live global typing
+  // Username
+  const userName =
+    user?.displayName?.trim() ||
+    (user?.email ? user.email.split("@")[0] : "User");
+
+  // Avatar
+  const userPhoto =
+    user?.photoURL ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(
+      userName
+    )}&background=2563eb&color=ffffff&size=128`;
+
   const handleSearchChange = (e) => {
     const value = e.target.value;
-    
+
     if (location.pathname !== "/dashboard") {
-      // If the user is on ANY other page, redirect them to the dashboard with the query
       navigate(`/dashboard?search=${encodeURIComponent(value)}`);
     } else {
-      // If they are already on the dashboard, just update the URL parameter smoothly
       if (value) {
-        navigate(`/dashboard?search=${encodeURIComponent(value)}`, { replace: true });
+        navigate(`/dashboard?search=${encodeURIComponent(value)}`, {
+          replace: true,
+        });
       } else {
-        navigate("/dashboard", { replace: true }); // Clear parameter if empty
+        navigate("/dashboard", { replace: true });
       }
     }
   };
@@ -47,10 +57,11 @@ function Navbar() {
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
           Dashboard
         </h1>
+
         <p className="mt-1 text-slate-500 dark:text-slate-400">
           Welcome back,{" "}
           <span className="font-semibold text-blue-600 dark:text-blue-400">
-            {user?.displayName || "Deepak"}
+            {userName}
           </span>{" "}
           👋
         </p>
@@ -61,26 +72,32 @@ function Navbar() {
 
         {/* Date */}
         <div className="hidden lg:flex items-center gap-3 bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-xl">
+
           <CalendarDays
             size={18}
             className="text-blue-600 dark:text-blue-400"
           />
+
           <div>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Today
             </p>
+
             <p className="text-sm font-semibold text-slate-800 dark:text-white">
               {today}
             </p>
           </div>
+
         </div>
 
-        {/* Search - Connected globally through URL parameters */}
+        {/* Search */}
         <div className="hidden md:flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl px-4 py-2 w-72">
+
           <Search
             size={18}
             className="text-slate-500"
           />
+
           <input
             type="text"
             value={searchQuery}
@@ -88,67 +105,71 @@ function Navbar() {
             placeholder="Search..."
             className="bg-transparent w-full ml-3 outline-none text-slate-800 dark:text-white placeholder:text-slate-500"
           />
+
         </div>
 
-        {/* Theme Toggle */}
+        {/* Theme */}
         <button
           onClick={toggleTheme}
           className="w-11 h-11 rounded-xl bg-slate-100 dark:bg-slate-800 hover:scale-105 transition-all duration-300 flex items-center justify-center shadow-sm"
         >
           {theme === "dark" ? (
-            <Sun className="text-yellow-500" size={20} />
+            <Sun
+              className="text-yellow-500"
+              size={20}
+            />
           ) : (
-            <Moon className="text-slate-700" size={20} />
+            <Moon
+              className="text-slate-700"
+              size={20}
+            />
           )}
         </button>
 
-       {/* Profile */}
-<button
-  onClick={() => navigate("/profile")}
-  className="
-  flex
-  items-center
-  gap-3
-  bg-slate-100
-  dark:bg-slate-800
-  rounded-xl
-  px-3
-  py-2
-  hover:scale-105
-  transition
-  cursor-pointer
-  "
->
+        {/* Profile */}
+        <button
+          onClick={() => navigate("/profile")}
+          className="
+            flex
+            items-center
+            gap-3
+            bg-slate-100
+            dark:bg-slate-800
+            rounded-xl
+            px-3
+            py-2
+            hover:scale-105
+            transition
+            cursor-pointer
+          "
+        >
 
-  <img
-    src={
-      user?.photoURL ||
-      "https://ui-avatars.com/api/?name=Deepak&background=2563eb&color=ffffff"
-    }
-    alt="Profile"
-    className="
-    w-10
-    h-10
-    rounded-full
-    border-2
-    border-blue-500
-    object-cover
-    "
-  />
+          <img
+            src={userPhoto}
+            alt={userName}
+            className="
+              w-10
+              h-10
+              rounded-full
+              border-2
+              border-blue-500
+              object-cover
+            "
+          />
 
-  <div className="hidden lg:block text-left">
+          <div className="hidden lg:block text-left">
 
-    <h3 className="font-semibold text-slate-800 dark:text-white">
-      {user?.displayName || "Deepak"}
-    </h3>
+            <h3 className="font-semibold text-slate-800 dark:text-white">
+              {userName}
+            </h3>
 
-    <p className="text-xs text-slate-500 dark:text-slate-400">
-      Student
-    </p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Student
+            </p>
 
-  </div>
+          </div>
 
-</button>
+        </button>
 
       </div>
 

@@ -5,7 +5,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Chart as ChartJS,
   ArcElement,
- CategoryScale,
+  CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -112,66 +112,57 @@ function StatCard({ title, value, icon: Icon, color }) {
     </div>
   );
 }
-
 function Dashboard() {
-
   const navigate = useNavigate();
+
   const auth = getAuth();
   const user = auth.currentUser;
 
   const [searchParams] = useSearchParams();
 
-  const search =
-    searchParams.get("search") || "";
+  const search = searchParams.get("search") || "";
 
   const history = getHistory();
 
- const stats = useMemo(() => {
+  const userName =
+    user?.displayName?.trim() ||
+    (user?.email
+      ? user.email.split("@")[0]
+      : "Deepak");
 
-  const total = history.length;
+  const stats = useMemo(() => {
+    const total = history.length;
 
+    const scores = history.map((item) =>
+      Number(
+        item.scorePercentage ??
+        item.score ??
+        0
+      )
+    );
 
-  const scores = history.map((item) =>
-    Number(
-      item.scorePercentage ??
-      item.score ??
-      0
-    )
-  );
+    const average =
+      total === 0
+        ? 0
+        : Math.round(
+            scores.reduce(
+              (sum, score) => sum + score,
+              0
+            ) / total
+          );
 
+    const best =
+      scores.length === 0
+        ? 0
+        : Math.max(...scores);
 
-  const average =
-    total === 0
-      ? 0
-      : Math.round(
-          scores.reduce(
-            (sum, score) => sum + score,
-            0
-          ) / total
-        );
-
-
-  const best =
-    scores.length === 0
-      ? 0
-      : Math.max(...scores);
-
-
-
-  return {
-
-    totalInterviews: total,
-
-    averageScore: average,
-
-    bestScore: best,
-
-    practiceMinutes: total * 10,
-
-  };
-
-
-}, [history]);
+    return {
+      totalInterviews: total,
+      averageScore: average,
+      bestScore: best,
+      practiceMinutes: total * 10,
+    };
+  }, [history]);
 
   const categoryCount = {
     html: 0,
@@ -190,12 +181,26 @@ function Dashboard() {
     labels: ["HTML", "Python", "Java", "HR"],
     datasets: [
       {
+        label: "Interviews",
         data: [
           categoryCount.html,
           categoryCount.python,
           categoryCount.java,
           categoryCount.hr,
         ],
+        backgroundColor: [
+          "#f97316",
+          "#3b82f6",
+          "#ef4444",
+          "#a855f7",
+        ],
+        borderColor: [
+          "#ea580c",
+          "#2563eb",
+          "#dc2626",
+          "#9333ea",
+        ],
+        borderWidth: 2,
       },
     ],
   };
@@ -203,15 +208,27 @@ function Dashboard() {
   const lineData = {
     labels: history
       .slice(-7)
-      .map((item) => item.date),
+      .map((item) =>
+        item.completedAt
+          ? new Date(item.completedAt).toLocaleDateString()
+          : "-"
+      ),
 
     datasets: [
       {
         label: "Score",
         data: history
           .slice(-7)
-          .map((item) => item.score),
-
+          .map((item) =>
+            Number(
+              item.scorePercentage ??
+              item.score ??
+              0
+            )
+          ),
+        borderColor: "#2563eb",
+        backgroundColor: "rgba(37,99,235,0.25)",
+        fill: true,
         tension: 0.4,
       },
     ],
@@ -223,7 +240,8 @@ function Dashboard() {
         .toLowerCase()
         .includes(search.toLowerCase())
     );
-      return (
+
+  return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-slate-950">
 
       <Sidebar />
@@ -231,21 +249,21 @@ function Dashboard() {
       <div className="flex-1 flex flex-col">
 
         <Navbar />
+<main className="flex-1 overflow-y-auto p-6">
 
-        <main className="flex-1 overflow-y-auto p-6">
+  <div className="max-w-7xl mx-auto space-y-8">
 
-          <div className="max-w-7xl mx-auto space-y-8">
+    {/* Hero Section */}
 
-            {/* Hero Section */}
-
-            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
-
+    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
+       
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
 
                 <div>
 
-                 <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-                Welcome Back, {user?.displayName ||"Deepak"} 👋</h1>
+                  <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+                    Welcome Back, {userName} 👋
+                  </h1>
 
                   <p className="mt-3 text-slate-600 dark:text-slate-400 max-w-2xl">
                     Practice technical interviews, improve your confidence,
@@ -409,8 +427,7 @@ function Dashboard() {
               </div>
 
             </section>
-
-            {/* Analytics */}
+                        {/* Analytics */}
 
             <section>
 
@@ -572,21 +589,23 @@ function Dashboard() {
                             </h3>
 
                             <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                              {item.date} • {item.time}
+                              {item.completedAt
+                                ? new Date(item.completedAt).toLocaleDateString()
+                                : "-"}
                             </p>
 
                           </div>
 
                           <span
                             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                              item.score >= 80
+                              (item.scorePercentage ?? item.score ?? 0) >= 80
                                 ? "bg-green-100 text-green-700"
-                                : item.score >= 60
+                                : (item.scorePercentage ?? item.score ?? 0) >= 60
                                 ? "bg-yellow-100 text-yellow-700"
                                 : "bg-red-100 text-red-700"
                             }`}
                           >
-                            {item.score}%
+                            {item.scorePercentage ?? item.score ?? 0}%
                           </span>
 
                         </div>
@@ -608,6 +627,7 @@ function Dashboard() {
       </div>
 
     </div>
+
   );
 }
 

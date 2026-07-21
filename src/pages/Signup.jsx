@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+
 import { auth } from "../firebase";
 
 import Logo from "../components/Logo";
@@ -17,6 +21,7 @@ function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSignup = async () => {
+
     if (!name || !email || !password || !confirmPassword) {
       alert("Please fill all fields.");
       return;
@@ -28,22 +33,30 @@ function Signup() {
     }
 
     try {
-      await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+
+      // Create Account
+      const userCredential =
+        await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+      // Save Full Name
+      await updateProfile(userCredential.user, {
+        displayName: name,
+      });
 
       alert("Account Created Successfully ✅");
 
       navigate("/dashboard");
+
     } catch (error) {
       alert(error.message);
     }
   };
 
   return (
-    /* Responsive Light/Dark layout background wrapper wrapper */
     <div className="min-h-screen bg-gray-100 dark:bg-slate-950 flex items-center justify-center px-4 transition-colors duration-300">
 
       <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl p-8 shadow-xl transition">
@@ -105,7 +118,7 @@ function Signup() {
         </div>
 
         <Link to="/">
-          <button className="w-full border border-gray-300 dark:border-slate-700 py-3 rounded-lg text-gray-750 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-800 transition font-medium">
+          <button className="w-full border border-gray-300 dark:border-slate-700 py-3 rounded-lg text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-800 transition font-medium">
             Already have an account? Sign In
           </button>
         </Link>

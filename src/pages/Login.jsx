@@ -20,33 +20,57 @@ function Login() {
 
   // Email & Password Login
   const handleLogin = async () => {
+
+    if (!email || !password) {
+      alert("Please enter your email and password.");
+      return;
+    }
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
       alert("Login Successful ✅");
+
       navigate("/dashboard");
+
     } catch (error) {
+
       alert(error.message);
+
     }
+
   };
 
   // Google Login
   const handleGoogleLogin = async () => {
+
     try {
-      await signInWithPopup(auth, provider);
+
+      await signInWithPopup(
+        auth,
+        provider
+      );
 
       alert("Google Login Successful ✅");
+
       navigate("/dashboard");
+
     } catch (error) {
+
       alert(error.message);
+
     }
+
   };
 
   return (
-    /* Theme-aligned responsive wrapper background */
     <div className="min-h-screen bg-gray-100 dark:bg-slate-950 flex items-center justify-center px-4 transition-colors duration-300">
-      
-      {/* Container card modified to fit light and dark frameworks smoothly */}
+
       <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 p-8 shadow-xl transition">
 
         <Logo />
@@ -116,8 +140,9 @@ function Login() {
         </p>
 
       </div>
+
     </div>
   );
 }
 
-export default Login;
+export default Login; 
