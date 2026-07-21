@@ -102,25 +102,53 @@ function Navbar() {
           )}
         </button>
 
-        {/* Profile */}
-        <div className="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-2">
-          <img
-            src={
-              user?.photoURL ||
-              "https://ui-avatars.com/api/?name=Deepak&background=2563eb&color=ffffff"
-            }
-            alt="Profile"
-            className="w-10 h-10 rounded-full border-2 border-blue-500 object-cover"
-          />
-          <div className="hidden lg:block">
-            <h3 className="font-semibold text-slate-800 dark:text-white">
-              {user?.displayName || "Deepak"}
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Student
-            </p>
-          </div>
-        </div>
+       {/* Profile */}
+<button
+  onClick={() => navigate("/profile")}
+  className="
+  flex
+  items-center
+  gap-3
+  bg-slate-100
+  dark:bg-slate-800
+  rounded-xl
+  px-3
+  py-2
+  hover:scale-105
+  transition
+  cursor-pointer
+  "
+>
+
+  <img
+    src={
+      user?.photoURL ||
+      "https://ui-avatars.com/api/?name=Deepak&background=2563eb&color=ffffff"
+    }
+    alt="Profile"
+    className="
+    w-10
+    h-10
+    rounded-full
+    border-2
+    border-blue-500
+    object-cover
+    "
+  />
+
+  <div className="hidden lg:block text-left">
+
+    <h3 className="font-semibold text-slate-800 dark:text-white">
+      {user?.displayName || "Deepak"}
+    </h3>
+
+    <p className="text-xs text-slate-500 dark:text-slate-400">
+      Student
+    </p>
+
+  </div>
+
+</button>
 
       </div>
 

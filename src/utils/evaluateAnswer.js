@@ -1,66 +1,34 @@
 export function evaluateAnswer(answer, keywords) {
-  if (!answer.trim()) {
-    return {
-      score: 0,
-      message: "Please enter your answer.",
-      color: "red",
-      canProceed: false,
-    };
+  const cleanAnswer = answer.trim();
+
+  // 1. Spam/Validation check
+  const nonLetters = cleanAnswer.replace(/[a-zA-Z\s]/g, "").length;
+  const spamRatio = nonLetters / (cleanAnswer.length || 1);
+  const words = cleanAnswer.split(/\s+/);
+  
+  if (spamRatio > 0.4 || words.some(w => w.length > 25) || cleanAnswer.length < 8) {
+    return { passed: false, percentage: 0, marks: 0, matchedKeywords: [], missingKeywords: keywords, isSpamDetected: true };
   }
 
-  const userAnswer = answer.toLowerCase();
+  // 2. Keyword Matching
+  const userAnswerLower = cleanAnswer.toLowerCase();
+  const matched = keywords.filter((kw) => new RegExp(`\\b${kw.toLowerCase()}\\b`, "g").test(userAnswerLower));
+  
+  const percentage = Math.round((matched.length / keywords.length) * 100);
 
-  let matchedKeywords = 0;
-
-  keywords.forEach((keyword) => {
-    if (userAnswer.includes(keyword.toLowerCase())) {
-      matchedKeywords++;
-    }
-  });
-
-  const percentage = (matchedKeywords / keywords.length) * 100;
-
-  if (percentage >= 80) {
-    return {
-      score: 5,
-      message: "Excellent answer! Great job.",
-      color: "green",
-      canProceed: true,
-    };
-  }
-
-  if (percentage >= 60) {
-    return {
-      score: 4,
-      message: "Very good answer. You covered most concepts.",
-      color: "green",
-      canProceed: true,
-    };
-  }
-
-  if (percentage >= 40) {
-    return {
-      score: 3,
-      message: "Good answer, but add more details.",
-      color: "yellow",
-      canProceed: true,
-    };
-  }
-
-  if (percentage >= 20) {
-    return {
-      score: 2,
-      message: "Partially correct. Try explaining more clearly.",
-      color: "orange",
-      canProceed: true,
-    };
-  }
+  // 3. Scoring
+  let marks = 1;
+  if (percentage >= 80) marks = 5;
+  else if (percentage >= 60) marks = 4;
+  else if (percentage >= 40) marks = 3;
+  else if (percentage >= 20) marks = 2;
 
   return {
-    score: 0,
-    message:
-      "Your answer doesn't appear to be related to the question. Please answer again.",
-    color: "red",
-    canProceed: false,
+    passed: marks >= 3,
+    percentage,
+    marks,
+    matchedKeywords: matched,
+    missingKeywords: keywords.filter((kw) => !matched.includes(kw)),
+    isSpamDetected: false
   };
 }

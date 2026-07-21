@@ -9,7 +9,6 @@ import Results from "./pages/Results";
 import History from "./pages/History";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
-
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
