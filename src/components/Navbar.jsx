@@ -1,8 +1,19 @@
 import { getAuth } from "firebase/auth";
+import { Sun, Moon, Search, CalendarDays } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Navbar() {
   const auth = getAuth();
   const user = auth.currentUser;
+
+  const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Extract the current "search" parameter from the URL
+  const queryParams = new URLSearchParams(location.search);
+  const searchQuery = queryParams.get("search") || "";
 
   const today = new Date().toLocaleDateString("en-IN", {
     weekday: "long",
@@ -11,51 +22,105 @@ function Navbar() {
     year: "numeric",
   });
 
+  // Handle live global typing
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    
+    if (location.pathname !== "/dashboard") {
+      // If the user is on ANY other page, redirect them to the dashboard with the query
+      navigate(`/dashboard?search=${encodeURIComponent(value)}`);
+    } else {
+      // If they are already on the dashboard, just update the URL parameter smoothly
+      if (value) {
+        navigate(`/dashboard?search=${encodeURIComponent(value)}`, { replace: true });
+      } else {
+        navigate("/dashboard", { replace: true }); // Clear parameter if empty
+      }
+    }
+  };
+
   return (
-    <header className="h-20 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-8">
+    <header className="h-20 px-8 flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
 
       {/* Left */}
-
       <div>
-        <h2 className="text-white text-2xl font-bold">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
           Dashboard
-        </h2>
-
-        <p className="text-gray-400 mt-1">
-          Welcome back, {user?.displayName || "Deepak"} 👋
+        </h1>
+        <p className="mt-1 text-slate-500 dark:text-slate-400">
+          Welcome back,{" "}
+          <span className="font-semibold text-blue-600 dark:text-blue-400">
+            {user?.displayName || "Deepak"}
+          </span>{" "}
+          👋
         </p>
       </div>
 
       {/* Right */}
-
       <div className="flex items-center gap-5">
 
-        <div className="hidden md:block text-right">
-
-          <p className="text-gray-400 text-sm">
-            Today
-          </p>
-
-          <p className="text-white font-semibold">
-            {today}
-          </p>
-
+        {/* Date */}
+        <div className="hidden lg:flex items-center gap-3 bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-xl">
+          <CalendarDays
+            size={18}
+            className="text-blue-600 dark:text-blue-400"
+          />
+          <div>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Today
+            </p>
+            <p className="text-sm font-semibold text-slate-800 dark:text-white">
+              {today}
+            </p>
+          </div>
         </div>
 
-        <input
-          type="text"
-          placeholder="Search..."
-          className="bg-slate-800 text-white px-4 py-2 rounded-lg outline-none border border-slate-700 focus:border-blue-500"
-        />
+        {/* Search - Connected globally through URL parameters */}
+        <div className="hidden md:flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl px-4 py-2 w-72">
+          <Search
+            size={18}
+            className="text-slate-500"
+          />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder="Search..."
+            className="bg-transparent w-full ml-3 outline-none text-slate-800 dark:text-white placeholder:text-slate-500"
+          />
+        </div>
 
-        <img
-          src={
-            user?.photoURL ||
-            "https://ui-avatars.com/api/?name=Deepak&background=2563eb&color=ffffff"
-          }
-          alt="Profile"
-          className="w-11 h-11 rounded-full border-2 border-blue-500 object-cover"
-        />
+        {/* Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          className="w-11 h-11 rounded-xl bg-slate-100 dark:bg-slate-800 hover:scale-105 transition-all duration-300 flex items-center justify-center shadow-sm"
+        >
+          {theme === "dark" ? (
+            <Sun className="text-yellow-500" size={20} />
+          ) : (
+            <Moon className="text-slate-700" size={20} />
+          )}
+        </button>
+
+        {/* Profile */}
+        <div className="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-2">
+          <img
+            src={
+              user?.photoURL ||
+              "https://ui-avatars.com/api/?name=Deepak&background=2563eb&color=ffffff"
+            }
+            alt="Profile"
+            className="w-10 h-10 rounded-full border-2 border-blue-500 object-cover"
+          />
+          <div className="hidden lg:block">
+            <h3 className="font-semibold text-slate-800 dark:text-white">
+              {user?.displayName || "Deepak"}
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Student
+            </p>
+          </div>
+        </div>
 
       </div>
 

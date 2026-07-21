@@ -15,15 +15,11 @@ import ProtectedRoute from "./components/ProtectedRoute";
 function App() {
   return (
     <Routes>
-
       {/* Public Routes */}
-
       <Route path="/" element={<Login />} />
-
       <Route path="/signup" element={<Signup />} />
 
       {/* Protected Routes */}
-
       <Route
         path="/dashboard"
         element={
@@ -34,7 +30,6 @@ function App() {
       />
 
       {/* Interview Selection */}
-
       <Route
         path="/interview"
         element={
@@ -45,7 +40,6 @@ function App() {
       />
 
       {/* Interview Questions */}
-
       <Route
         path="/interview/:category"
         element={
@@ -81,15 +75,15 @@ function App() {
           </ProtectedRoute>
         }
       />
+      
       <Route
-  path="/settings"
-  element={
-    <ProtectedRoute>
-      <Settings />
-    </ProtectedRoute>
-  }
-/>
-
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }

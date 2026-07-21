@@ -1,232 +1,113 @@
-const questions = {
-  frontend: [
+export const INTERVIEW_QUESTIONS = {
+  html: [
     {
-      question: "What is HTML?",
-      keywords: [
-        "html",
-        "markup",
-        "language",
-        "web",
-        "structure",
-        "elements",
-      ],
+      id: 1,
+      question: "What is the difference between Block and Inline elements in HTML?",
+      keywords: ["block", "inline", "width", "margin", "padding", "line", "div", "span", "display"]
     },
     {
-      question: "Difference between Flexbox and Grid?",
-      keywords: [
-        "flexbox",
-        "grid",
-        "layout",
-        "one-dimensional",
-        "two-dimensional",
-        "rows",
-        "columns",
-      ],
+      id: 2,
+      question: "What are semantic HTML tags, and why are they important?",
+      keywords: ["semantic", "seo", "accessibility", "meaning", "header", "footer", "article", "screen reader"]
     },
     {
-      question: "Explain React Hooks.",
-      keywords: [
-        "hooks",
-        "react",
-        "usestate",
-        "useeffect",
-        "functional",
-        "components",
-        "state",
-      ],
+      id: 3,
+      question: "Explain the purpose and structure of HTML5 'data-' attributes.",
+      keywords: ["data-", "dataset", "attribute", "custom", "store", "javascript", "prefix"]
     },
     {
-      question: "What is Virtual DOM?",
-      keywords: [
-        "virtual",
-        "dom",
-        "react",
-        "memory",
-        "update",
-        "performance",
-        "diffing",
-      ],
+      id: 4,
+      question: "How do you optimize an HTML page's loading performance and SEO metadata?",
+      keywords: ["meta", "viewport", "async", "defer", "preload", "minify", "alt", "title", "performance"]
     },
     {
-      question: "Difference between let and const?",
-      keywords: [
-        "let",
-        "const",
-        "variable",
-        "reassign",
-        "block",
-        "scope",
-        "constant",
-      ],
-    },
+      id: 5,
+      question: "What is the purpose of the 'alt' attribute on an image tag?",
+      keywords: ["alt", "accessibility", "screen reader", "fallback", "broken image", "seo", "description"]
+    }
   ],
-
-  java: [
-    {
-      question: "What is JVM?",
-      keywords: [
-        "jvm",
-        "java",
-        "virtual",
-        "machine",
-        "bytecode",
-        "execute",
-      ],
-    },
-    {
-      question: "Explain OOP.",
-      keywords: [
-        "oop",
-        "object",
-        "class",
-        "inheritance",
-        "encapsulation",
-        "polymorphism",
-        "abstraction",
-      ],
-    },
-    {
-      question: "What is inheritance?",
-      keywords: [
-        "inheritance",
-        "parent",
-        "child",
-        "extends",
-        "reuse",
-        "class",
-      ],
-    },
-    {
-      question: "Difference between ArrayList and LinkedList?",
-      keywords: [
-        "arraylist",
-        "linkedlist",
-        "list",
-        "memory",
-        "performance",
-        "insert",
-        "delete",
-      ],
-    },
-    {
-      question: "What is Exception Handling?",
-      keywords: [
-        "exception",
-        "try",
-        "catch",
-        "finally",
-        "throw",
-        "error",
-      ],
-    },
-  ],
-
   python: [
     {
-      question: "What is Python?",
-      keywords: [
-        "python",
-        "programming",
-        "language",
-        "interpreted",
-        "high-level",
-      ],
+      id: 1,
+      question: "What is the difference between Python list and tuple?",
+      keywords: ["mutable", "immutable", "tuple", "list", "brackets", "parentheses", "speed", "memory"]
     },
     {
-      question: "Difference between List and Tuple?",
-      keywords: [
-        "list",
-        "tuple",
-        "mutable",
-        "immutable",
-        "python",
-      ],
+      id: 2,
+      question: "How does memory management work in Python?",
+      keywords: ["garbage collector", "reference counting", "private heap", "memory", "allocator", "sys", "cycles"]
     },
     {
-      question: "What is a Lambda function?",
-      keywords: [
-        "lambda",
-        "anonymous",
-        "function",
-        "single",
-        "expression",
-      ],
+      id: 3,
+      question: "What are decorators in Python and how do you write one?",
+      keywords: ["decorator", "function", "wrapper", "modify", "syntactic sugar", "@", "arguments", "return"]
     },
     {
-      question: "Explain decorators.",
-      keywords: [
-        "decorator",
-        "function",
-        "wrapper",
-        "modify",
-        "python",
-      ],
+      id: 4,
+      question: "What is the difference between deep copy and shallow copy in Python?",
+      keywords: ["copy", "deepcopy", "shallow", "reference", "nested", "object", "clone", "address"]
     },
     {
-      question: "What is a dictionary?",
-      keywords: [
-        "dictionary",
-        "key",
-        "value",
-        "python",
-        "mapping",
-      ],
-    },
+      id: 5,
+      question: "Explain generators and the 'yield' keyword in Python.",
+      keywords: ["generator", "yield", "iterator", "lazy evaluation", "memory", "next", "state", "stream"]
+    }
   ],
-
+  java: [
+    {
+      id: 1,
+      question: "Explain the pillars of Object-Oriented Programming (OOPs) in Java.",
+      keywords: ["encapsulation", "inheritance", "polymorphism", "abstraction", "class", "interface", "extend"]
+    },
+    {
+      id: 2,
+      question: "What is the difference between JDK, JRE, and JVM?",
+      keywords: ["jdk", "jre", "jvm", "development", "runtime", "virtual machine", "compiler", "bytecode"]
+    },
+    {
+      id: 3,
+      question: "How does Garbage Collection work in Java?",
+      keywords: ["garbage collection", "gc", "heap", "stack", "finalize", "unreachable", "system.gc", "memory"]
+    },
+    {
+      id: 4,
+      question: "What is the difference between an Abstract Class and an Interface in Java?",
+      keywords: ["abstract", "interface", "multiple inheritance", "implementation", "static", "final", "methods"]
+    },
+    {
+      id: 5,
+      question: "What are Java Exceptions? Explain the difference between checked and unchecked exceptions.",
+      keywords: ["checked", "unchecked", "exception", "runtime", "try", "catch", "throw", "error"]
+    }
+  ],
   hr: [
     {
-      question: "Tell me about yourself.",
-      keywords: [
-        "name",
-        "education",
-        "skills",
-        "experience",
-        "career",
-      ],
+      id: 1,
+      question: "Tell me about yourself and why you are interested in this role.",
+      keywords: ["experience", "background", "passionate", "align", "career", "skills", "growth", "interest"]
     },
     {
-      question: "Why should we hire you?",
-      keywords: [
-        "skills",
-        "team",
-        "hardworking",
-        "learn",
-        "contribute",
-      ],
+      id: 2,
+      question: "Describe a time you faced a difficult challenge in a project and how you resolved it.",
+      keywords: ["challenge", "resolve", "problem-solving", "action", "learned", "teamwork", "outcome", "star"]
     },
     {
-      question: "Where do you see yourself in 5 years?",
-      keywords: [
-        "career",
-        "growth",
-        "learn",
-        "future",
-        "goal",
-      ],
+      id: 3,
+      question: "How do you handle tight deadlines or working under intense pressure?",
+      keywords: ["prioritize", "schedule", "focus", "planning", "calm", "communication", "delegate", "break"]
     },
     {
-      question: "Describe a challenge you faced.",
-      keywords: [
-        "challenge",
-        "problem",
-        "solution",
-        "learned",
-        "experience",
-      ],
+      id: 4,
+      question: "Why should we hire you over other qualified candidates?",
+      keywords: ["unique", "dedication", "culture", "fast learner", "value", "contribution", "skills", "adaptable"]
     },
     {
-      question: "What are your strengths?",
-      keywords: [
-        "strength",
-        "communication",
-        "teamwork",
-        "leadership",
-        "problem",
-        "solving",
-      ],
-    },
-  ],
+      id: 5,
+      question: "Where do you see yourself in the next 3 to 5 years?",
+      keywords: ["growth", "leadership", "expertise", "learning", "contributing", "future", "goals", "long-term"]
+    }
+  ]
 };
 
-export default questions;
+// Exporting as default as well, to prevent any imports from failing!
+export default INTERVIEW_QUESTIONS;
