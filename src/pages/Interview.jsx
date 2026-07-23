@@ -861,16 +861,18 @@ const progressPercent =
 
 
       <div
-        className="
-        bg-white
-        dark:bg-slate-900
-        rounded-3xl
-        shadow-lg
-        border
-        border-gray-200
-        dark:border-slate-800
-        p-8
-        "
+       className="
+bg-white
+dark:bg-slate-900
+rounded-3xl
+shadow-lg
+border
+border-gray-200
+dark:border-slate-800
+p-5
+sm:p-6
+lg:p-8
+"
       >
 
 
@@ -928,10 +930,12 @@ const progressPercent =
           "
 
 
-          className="
-          w-full
-          h-56
-          resize-none
+         className="
+w-full
+h-44
+sm:h-52
+lg:h-56
+resize-none
           rounded-2xl
           border
           border-gray-300
@@ -968,11 +972,13 @@ const progressPercent =
 
         <div
           className="
-          flex
-          flex-wrap
-          gap-4
-          mt-6
-          "
+flex
+flex-col
+sm:flex-row
+flex-wrap
+gap-4
+mt-6
+"
         >
 
 
@@ -1053,9 +1059,12 @@ const progressPercent =
             onClick={handleSkipQuestion}
 
             className="
-            px-6
-            py-3
-            rounded-xl
+w-full
+sm:w-auto
+px-6
+py-3
+rounded-xl
+
             bg-gray-200
             hover:bg-gray-300
             dark:bg-slate-800
@@ -1109,17 +1118,19 @@ const progressPercent =
 
 
         <div
-          className="
-          mt-8
-          bg-white
-          dark:bg-slate-900
-          rounded-3xl
-          shadow-lg
-          border
-          border-gray-200
-          dark:border-slate-800
-          p-8
-          "
+         className="
+mt-8
+bg-white
+dark:bg-slate-900
+rounded-3xl
+shadow-lg
+border
+border-gray-200
+dark:border-slate-800
+p-5
+sm:p-6
+lg:p-8
+"
         >
 
 
@@ -1334,11 +1345,10 @@ const progressPercent =
 
           <div
             className="
-            grid
-            grid-cols-2
-            gap-4
-            mt-8
-            "
+           grid
+grid-cols-1
+sm:grid-cols-2
+gap-4"
           >
 
 

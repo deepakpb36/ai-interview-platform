@@ -81,11 +81,11 @@ function Results() {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-slate-950 transition-colors duration-300 p-5 md:p-8">
 
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto w-full">
 
         {/* Header Section */}
 
-        <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl shadow-lg p-6 md:p-10">
+        <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl shadow-lg p-4 sm:p-6 lg:p-10">
 
           <div className="flex flex-col items-center text-center">
 
@@ -129,12 +129,12 @@ function Results() {
                 Overall Score
               </p>
 
+<div className="mt-5 relative w-32 h-32 sm:w-40 sm:h-40 mx-auto">
+              
 
-              <div className="mt-5 relative w-40 h-40 mx-auto">
+              <div className="w-full h-full rounded-full border-[10px] sm:border-[14px] border-blue-500 flex items-center justify-center">
 
-                <div className="w-full h-full rounded-full border-[14px] border-blue-500 flex items-center justify-center">
-
-                  <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
+                  <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
                     {score}%
                   </h2>
 
@@ -146,7 +146,7 @@ function Results() {
             </div>
 
 
-            <div className={`${performanceBg} rounded-2xl p-8 flex flex-col justify-center text-center`}>
+           <div className={`${performanceBg} rounded-2xl p-6 sm:p-8 flex flex-col justify-center text-center`}>
 
               <p className="text-gray-500 dark:text-gray-400">
                 Performance Level

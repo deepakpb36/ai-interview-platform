@@ -50,11 +50,11 @@ function Navbar() {
   };
 
   return (
-    <header className="h-20 px-8 flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
+   <header className="min-h-[80px] px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
 
       {/* Left */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
           Dashboard
         </h1>
 
@@ -68,7 +68,7 @@ function Navbar() {
       </div>
 
       {/* Right */}
-      <div className="flex items-center gap-5">
+      <div className="flex flex-wrap items-center justify-end gap-3 w-full sm:w-auto">
 
         {/* Date */}
         <div className="hidden lg:flex items-center gap-3 bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-xl">
@@ -91,7 +91,7 @@ function Navbar() {
         </div>
 
         {/* Search */}
-        <div className="hidden md:flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl px-4 py-2 w-72">
+        <div className="hidden md:flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl px-4 py-2 w-52 lg:w-72">
 
           <Search
             size={18}
@@ -129,35 +129,38 @@ function Navbar() {
         {/* Profile */}
         <button
           onClick={() => navigate("/profile")}
-          className="
-            flex
-            items-center
-            gap-3
-            bg-slate-100
-            dark:bg-slate-800
-            rounded-xl
-            px-3
-            py-2
-            hover:scale-105
-            transition
-            cursor-pointer
-          "
+         className="
+flex
+items-center
+gap-2
+bg-slate-100
+dark:bg-slate-800
+rounded-xl
+px-2
+sm:px-3
+py-2
+hover:scale-105
+transition
+cursor-pointer
+"
         >
 
           <img
             src={userPhoto}
             alt={userName}
-            className="
-              w-10
-              h-10
-              rounded-full
-              border-2
-              border-blue-500
-              object-cover
-            "
+           className="
+w-9
+h-9
+sm:w-10
+sm:h-10
+rounded-full
+border-2
+border-blue-500
+object-cover
+"
           />
 
-          <div className="hidden lg:block text-left">
+         <div className="hidden xl:block text-left">
 
             <h3 className="font-semibold text-slate-800 dark:text-white">
               {userName}

@@ -1,16 +1,63 @@
 import { useState, useEffect } from "react";
-
 import {
   Calendar,
   Trophy,
   Target,
   Clock,
 } from "lucide-react";
-
 import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+
+function StatCard({
+  title,
+  value,
+  icon,
+}) {
+  return (
+    <div
+      className="
+        bg-white
+        dark:bg-slate-900
+        rounded-3xl
+        p-5
+        sm:p-6
+        shadow-sm
+        border
+        border-slate-200
+        dark:border-slate-800
+      "
+    >
+      <div className="flex items-center justify-between">
+
+        <div className="min-w-0">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            {title}
+          </p>
+
+          <h2 className="text-2xl sm:text-3xl font-bold mt-2 text-slate-900 dark:text-white break-words">
+            {value}
+          </h2>
+        </div>
+
+        <div
+          className="
+            p-3
+            rounded-xl
+            bg-blue-100
+            dark:bg-blue-500/10
+            text-blue-600
+            flex-shrink-0
+          "
+        >
+          {icon}
+        </div>
+
+      </div>
+    </div>
+  );
+}
 
 function History() {
 
@@ -20,236 +67,148 @@ function History() {
 
   const [loading, setLoading] = useState(true);
 
-
-
   useEffect(() => {
 
-    const loadHistory = () => {
+    const data =
+      JSON.parse(localStorage.getItem("history")) || [];
 
-      const data =
-        JSON.parse(
-          localStorage.getItem("history")
-        ) || [];
+    const sorted = data.sort(
+      (a, b) =>
+        new Date(b.completedAt || 0) -
+        new Date(a.completedAt || 0)
+    );
 
+    setHistoryList(sorted);
 
-      const sortedData = data.sort(
-        (a, b) =>
-          new Date(b.completedAt || 0) -
-          new Date(a.completedAt || 0)
-      );
-
-
-      setHistoryList(sortedData);
-
-      setLoading(false);
-
-    };
-
-
-    loadHistory();
-
+    setLoading(false);
 
   }, []);
 
-
-
-
-
   const totalInterviews = historyList.length;
-
-
 
   const averageScore =
     totalInterviews > 0
       ? Math.round(
           historyList.reduce(
             (sum, item) =>
-              sum + Number(item.scorePercentage || item.score || 0),
+              sum +
+              Number(
+                item.scorePercentage ||
+                item.score ||
+                0
+              ),
             0
           ) / totalInterviews
         )
       : 0;
 
-
-
   const bestScore =
     totalInterviews > 0
       ? Math.max(
-          ...historyList.map(
-            (item) =>
-              Number(
-                item.scorePercentage ||
-                item.score ||
-                0
-              )
+          ...historyList.map((item) =>
+            Number(
+              item.scorePercentage ||
+              item.score ||
+              0
+            )
           )
         )
       : 0;
 
-
-
-
-
   if (loading) {
-
+    return (
+      <div className="min-h-screen bg-gray-100 dark:bg-slate-950 flex items-center justify-center">
+        <p className="text-slate-500 animate-pulse">
+          Loading history...
+        </p>
+      </div>
+    );
+  }
     return (
 
-      <div className="
-        min-h-screen
-        bg-gray-100
-        dark:bg-slate-950
-        flex
-        items-center
-        justify-center
-      ">
-
-        <p className="
-          text-gray-600
-          dark:text-gray-400
-          font-semibold
-          animate-pulse
-        ">
-
-          Loading history...
-
-        </p>
-
-      </div>
-
-    );
-
-  }
-
-
-
-
-
-
-  return (
-
-    <div className="
-      flex
-      h-screen
-      overflow-hidden
-      bg-gray-100
-      dark:bg-slate-950
-      text-gray-900
-      dark:text-white
-    ">
-
+    <div className="flex min-h-screen bg-gray-100 dark:bg-slate-950 overflow-hidden">
 
       <Sidebar />
 
-
-
-      <div className="
-        flex-1
-        flex
-        flex-col
-        overflow-hidden
-      ">
-
+      <div className="flex-1 flex flex-col min-w-0">
 
         <Navbar />
 
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
 
-
-        <main className="
-          flex-1
-          overflow-y-auto
-          p-6
-        ">
-
-
-          <div className="
-            max-w-6xl
-            mx-auto
-          ">
-
-
+          <div className="max-w-7xl mx-auto w-full space-y-8">
 
             {/* Header */}
 
-
-            <div className="
-              flex
-              flex-col
-              md:flex-row
-              justify-between
-              gap-5
-              mb-8
-            ">
-
+            <div
+              className="
+                flex
+                flex-col
+                lg:flex-row
+                lg:items-center
+                lg:justify-between
+                gap-6
+              "
+            >
 
               <div>
 
-                <h1 className="
-                  text-3xl
-                  md:text-4xl
-                  font-bold
-                ">
-
+                <h1
+                  className="
+                    text-2xl
+                    sm:text-3xl
+                    lg:text-4xl
+                    font-bold
+                    text-slate-900
+                    dark:text-white
+                  "
+                >
                   Interview History
-
                 </h1>
 
-
-                <p className="
-                  text-gray-500
-                  dark:text-gray-400
-                  mt-2
-                ">
-
-                  Track your previous interview performance.
-
+                <p
+                  className="
+                    mt-2
+                    text-slate-500
+                    dark:text-slate-400
+                  "
+                >
+                  Track your previous interview performance and monitor your progress.
                 </p>
-
 
               </div>
 
-
-
               <button
-
-                onClick={() =>
-                  navigate("/dashboard")
-                }
-
+                onClick={() => navigate("/dashboard")}
                 className="
-                  px-5
+                  w-full
+                  sm:w-auto
+                  px-6
                   py-3
                   rounded-xl
                   bg-blue-600
                   hover:bg-blue-700
                   text-white
                   font-semibold
+                  transition
                 "
-
               >
-
                 ← Dashboard
-
               </button>
-
 
             </div>
 
-
-
-
-
-
             {/* Statistics */}
 
-
-            <div className="
-              grid
-              grid-cols-1
-              sm:grid-cols-3
-              gap-6
-              mb-10
-            ">
-
+            <div
+              className="
+                grid
+                grid-cols-1
+                sm:grid-cols-2
+                xl:grid-cols-3
+                gap-6
+              "
+            >
 
               <StatCard
                 title="Total Interviews"
@@ -257,15 +216,11 @@ function History() {
                 icon={<Clock />}
               />
 
-
-
               <StatCard
                 title="Average Score"
                 value={`${averageScore}%`}
                 icon={<Target />}
               />
-
-
 
               <StatCard
                 title="Best Score"
@@ -273,304 +228,235 @@ function History() {
                 icon={<Trophy />}
               />
 
-
             </div>
+                        {/* History List */}
 
+            {historyList.length === 0 ? (
 
-
-
-
-
-
-            {
-              historyList.length === 0 ?
-
-
-              (
-
-                <div className="
+              <div
+                className="
                   bg-white
                   dark:bg-slate-900
                   rounded-3xl
-                  p-10
+                  p-8
+                  sm:p-12
                   text-center
-                ">
+                  border
+                  border-slate-200
+                  dark:border-slate-800
+                  shadow-sm
+                "
+              >
 
+                <Calendar
+                  size={60}
+                  className="mx-auto text-blue-500"
+                />
 
-                  <Calendar
-                    size={50}
-                    className="mx-auto text-blue-500"
-                  />
-
-
-                  <h2 className="
+                <h2
+                  className="
                     text-2xl
                     font-bold
-                    mt-5
-                  ">
+                    mt-6
+                    text-slate-900
+                    dark:text-white
+                  "
+                >
+                  No Interviews Found
+                </h2>
 
-                    No Interviews Found
+                <p
+                  className="
+                    text-slate-500
+                    dark:text-slate-400
+                    mt-3
+                  "
+                >
+                  Complete your first interview to see your history here.
+                </p>
 
-                  </h2>
+              </div>
 
+            ) : (
 
-                  <p className="
-                    text-gray-500
-                    mt-2
-                  ">
+              <div className="space-y-6">
 
-                    Complete an interview to see results here.
+                {historyList.map((item) => (
 
-                  </p>
+                  <div
+                    key={item.id}
+                    className="
+                      bg-white
+                      dark:bg-slate-900
+                      rounded-3xl
+                      border
+                      border-slate-200
+                      dark:border-slate-800
+                      shadow-sm
+                      hover:shadow-lg
+                      transition-all
+                      duration-300
+                      p-6
+                    "
+                  >
 
+                    <div
+                      className="
+                        flex
+                        flex-col
+                        lg:flex-row
+                        lg:items-center
+                        lg:justify-between
+                        gap-6
+                      "
+                    >
 
-                </div>
+                      {/* Left Side */}
 
-              )
+                      <div className="flex-1">
 
-
-              :
-
-
-              (
-
-                <div className="space-y-5">
-
-
-                  {
-                    historyList.map((item)=>(
-
-
-                      <div
-
-                        key={item.id}
-
-                        className="
-                          bg-white
-                          dark:bg-slate-900
-                          rounded-3xl
-                          p-6
-                          shadow-lg
-                          flex
-                          flex-col
-                          md:flex-row
-                          justify-between
-                          gap-5
-                        "
-
-                      >
-
-
-
-                        <div>
-
-
-                          <span className="
+                        <span
+                          className="
+                            inline-block
                             px-4
                             py-1
                             rounded-full
                             bg-indigo-100
-                            text-indigo-700
                             dark:bg-indigo-500/10
+                            text-indigo-700
                             dark:text-indigo-400
                             text-sm
                             font-semibold
-                          ">
+                            capitalize
+                          "
+                        >
+                          {item.category}
+                        </span>
 
-                            {item.category}
-
-                          </span>
-
-
-
-                          <h2 className="
+                        <h2
+                          className="
                             text-xl
                             font-bold
                             mt-4
-                          ">
+                            text-slate-900
+                            dark:text-white
+                          "
+                        >
+                          {item.category} Interview
+                        </h2>
 
-                            {item.category} Interview
+                        <p
+                          className="
+                            text-slate-500
+                            dark:text-slate-400
+                            mt-3
+                            break-words
+                          "
+                        >
+                          {item.completedAt
+                            ? new Date(item.completedAt).toLocaleString()
+                            : item.date || "Unknown date"}
+                        </p>
 
-                          </h2>
+                      </div>
+                                            {/* Right Side */}
 
+                      <div
+                        className="
+                          w-full
+                          lg:w-auto
+                          flex
+                          justify-center
+                        "
+                      >
 
-
-                          <p className="
-                            text-gray-500
-                            dark:text-gray-400
-                            mt-2
-                          ">
-
-                            {
-                              item.completedAt
-                              ?
-                              new Date(
-                                item.completedAt
-                              ).toLocaleString()
-                              :
-                              item.date || "Unknown date"
-                            }
-
-                          </p>
-
-
-                        </div>
-
-
-
-
-
-
-                        <div className="text-center">
-
-
-                          <div className="
+                        <div
+                          className="
                             bg-gray-100
                             dark:bg-slate-800
                             rounded-2xl
                             px-8
-                            py-5
-                          ">
+                            py-6
+                            text-center
+                            min-w-[170px]
+                          "
+                        >
 
-
-                            <p className="
-                              text-3xl
+                          <p
+                            className="
+                              text-4xl
                               font-bold
-                            ">
+                              text-blue-600
+                            "
+                          >
+                            {item.scorePercentage ||
+                              item.score ||
+                              0}
+                            %
+                          </p>
 
-                              {
-                                item.scorePercentage ||
-                                item.score ||
-                                0
-                              }%
-
-                            </p>
-
-
-                            <p className="
+                          <p
+                            className="
                               text-xs
-                              text-gray-500
-                            ">
+                              uppercase
+                              tracking-widest
+                              text-slate-500
+                              mt-2
+                            "
+                          >
+                            Score
+                          </p>
 
-                              SCORE
+                          <div className="mt-4">
 
-                            </p>
+                            {(item.scorePercentage ||
+                              item.score ||
+                              0) >= 80 ? (
 
+                              <span className="px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-semibold">
+                                Excellent
+                              </span>
+
+                            ) : (item.scorePercentage ||
+                              item.score ||
+                              0) >= 60 ? (
+
+                              <span className="px-4 py-2 rounded-full bg-yellow-100 text-yellow-700 text-sm font-semibold">
+                                Good
+                              </span>
+
+                            ) : (
+
+                              <span className="px-4 py-2 rounded-full bg-red-100 text-red-700 text-sm font-semibold">
+                                Improve
+                              </span>
+
+                            )}
 
                           </div>
 
-
                         </div>
-
-
 
                       </div>
 
+                    </div>
 
-                    ))
-                  }
+                  </div>
 
+                ))}
 
-                </div>
+              </div>
 
-              )
-
-            }
-
-
-
-          </div>
-
+            )}
+                      </div>
 
         </main>
 
-
       </div>
-
 
     </div>
 
   );
-
 }
-
-
-
-
-function StatCard({
-  title,
-  value,
-  icon
-}) {
-
-
-  return (
-
-    <div className="
-      bg-white
-      dark:bg-slate-900
-      rounded-3xl
-      p-6
-      shadow-lg
-    ">
-
-
-      <div className="
-        flex
-        justify-between
-        items-center
-      ">
-
-
-        <div>
-
-          <p className="
-            text-gray-500
-            dark:text-gray-400
-          ">
-
-            {title}
-
-          </p>
-
-
-          <h2 className="
-            text-3xl
-            font-bold
-            mt-2
-          ">
-
-            {value}
-
-          </h2>
-
-
-        </div>
-
-
-
-        <div className="
-          p-3
-          rounded-xl
-          bg-blue-100
-          dark:bg-blue-500/10
-          text-blue-600
-        ">
-
-          {icon}
-
-        </div>
-
-
-      </div>
-
-
-    </div>
-
-  );
-
-}
-
-
 
 export default History;

@@ -12,6 +12,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from "chart.js";
 
 import { Doughnut, Line } from "react-chartjs-2";
@@ -41,14 +42,16 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 const INTERVIEW_TRACKS = [
   {
     id: "html",
     title: "HTML",
-    description: "Master semantic HTML, accessibility and page structure.",
+    description:
+      "Master semantic HTML, accessibility and page structure.",
     icon: BookOpen,
     color: "from-orange-500 to-red-500",
     difficulty: "Beginner",
@@ -57,7 +60,8 @@ const INTERVIEW_TRACKS = [
   {
     id: "python",
     title: "Python",
-    description: "Practice Python fundamentals and problem solving.",
+    description:
+      "Practice Python fundamentals and problem solving.",
     icon: Terminal,
     color: "from-blue-500 to-indigo-500",
     difficulty: "Intermediate",
@@ -66,7 +70,8 @@ const INTERVIEW_TRACKS = [
   {
     id: "java",
     title: "Java",
-    description: "Prepare Java OOP and core interview questions.",
+    description:
+      "Prepare Java OOP and core interview questions.",
     icon: Code,
     color: "from-red-500 to-rose-500",
     difficulty: "Intermediate",
@@ -75,7 +80,8 @@ const INTERVIEW_TRACKS = [
   {
     id: "hr",
     title: "HR",
-    description: "Improve communication and behavioural interview skills.",
+    description:
+      "Improve communication and behavioural interview skills.",
     icon: Users,
     color: "from-purple-500 to-pink-500",
     difficulty: "Easy",
@@ -83,15 +89,20 @@ const INTERVIEW_TRACKS = [
   },
 ];
 
-function StatCard({ title, value, icon: Icon, color }) {
+function StatCard({
+  title,
+  value,
+  icon: Icon,
+  color,
+}) {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-lg transition">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
 
       <div className="flex justify-between items-center">
 
         <div>
 
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             {title}
           </p>
 
@@ -120,7 +131,8 @@ function Dashboard() {
 
   const [searchParams] = useSearchParams();
 
-  const search = searchParams.get("search") || "";
+  const search =
+    searchParams.get("search") || "";
 
   const history = getHistory();
 
@@ -131,6 +143,7 @@ function Dashboard() {
       : "Deepak");
 
   const stats = useMemo(() => {
+
     const total = history.length;
 
     const scores = history.map((item) =>
@@ -162,6 +175,7 @@ function Dashboard() {
       bestScore: best,
       practiceMinutes: total * 10,
     };
+
   }, [history]);
 
   const categoryCount = {
@@ -178,45 +192,52 @@ function Dashboard() {
   });
 
   const doughnutData = {
-    labels: ["HTML", "Python", "Java", "HR"],
+    labels: [
+      "HTML",
+      "Python",
+      "Java",
+      "HR",
+    ],
+
     datasets: [
       {
         label: "Interviews",
+
         data: [
           categoryCount.html,
           categoryCount.python,
           categoryCount.java,
           categoryCount.hr,
         ],
+
         backgroundColor: [
           "#f97316",
           "#3b82f6",
           "#ef4444",
           "#a855f7",
         ],
-        borderColor: [
-          "#ea580c",
-          "#2563eb",
-          "#dc2626",
-          "#9333ea",
-        ],
+
         borderWidth: 2,
       },
     ],
   };
 
   const lineData = {
+
     labels: history
       .slice(-7)
       .map((item) =>
         item.completedAt
-          ? new Date(item.completedAt).toLocaleDateString()
+          ? new Date(
+              item.completedAt
+            ).toLocaleDateString()
           : "-"
       ),
 
     datasets: [
       {
         label: "Score",
+
         data: history
           .slice(-7)
           .map((item) =>
@@ -226,9 +247,14 @@ function Dashboard() {
               0
             )
           ),
+
         borderColor: "#2563eb",
-        backgroundColor: "rgba(37,99,235,0.25)",
+
+        backgroundColor:
+          "rgba(37,99,235,0.2)",
+
         fill: true,
+
         tension: 0.4,
       },
     ],
@@ -238,30 +264,33 @@ function Dashboard() {
     INTERVIEW_TRACKS.filter((track) =>
       track.title
         .toLowerCase()
-        .includes(search.toLowerCase())
+        .includes(
+          search.toLowerCase()
+        )
     );
 
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-slate-950">
+
+    <div className="flex min-h-screen bg-gray-100 dark:bg-slate-950 overflow-hidden">
 
       <Sidebar />
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
 
         <Navbar />
-<main className="flex-1 overflow-y-auto p-6">
 
-  <div className="max-w-7xl mx-auto space-y-8">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
 
-    {/* Hero Section */}
+          <div className="max-w-7xl mx-auto w-full space-y-8">
 
-    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
-       
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+            {/* Hero Section */}
+                        <section>
+
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-8">
 
                 <div>
 
-                  <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">
                     Welcome Back, {userName} 👋
                   </h1>
 
@@ -279,7 +308,7 @@ function Dashboard() {
 
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:w-auto">
 
                   <div className="bg-blue-50 dark:bg-slate-800 rounded-xl p-5 text-center">
 
@@ -309,7 +338,7 @@ function Dashboard() {
 
               </div>
 
-            </div>
+            </section>
 
             {/* Statistics */}
 
@@ -365,7 +394,7 @@ function Dashboard() {
 
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
 
                 {filteredTracks.map((track) => {
 
@@ -378,7 +407,7 @@ function Dashboard() {
 
                     <div
                       key={track.id}
-                      className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-lg transition p-6"
+                      className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-lg transition"
                     >
 
                       <div
@@ -391,7 +420,7 @@ function Dashboard() {
                         {track.title}
                       </h3>
 
-                      <p className="mt-3 text-sm text-slate-500 dark:text-slate-400 leading-6">
+                      <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
                         {track.description}
                       </p>
 
@@ -413,7 +442,7 @@ function Dashboard() {
 
                       <button
                         onClick={() => navigate(`/interview/${track.id}`)}
-                        className="mt-6 w-full rounded-xl bg-blue-600 hover:bg-blue-700 transition text-white py-3 font-semibold"
+                        className="mt-6 w-full rounded-xl bg-blue-600 hover:bg-blue-700 text-white py-3 font-semibold transition"
                       >
                         Start Interview
                       </button>
@@ -449,7 +478,9 @@ function Dashboard() {
 
               <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+                {/* Doughnut Chart */}
+
+                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
 
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                     Category Distribution
@@ -459,14 +490,14 @@ function Dashboard() {
                     Interviews attempted in each category.
                   </p>
 
-                  <div className="h-[320px]">
+                  <div className="h-72">
 
                     <Doughnut
                       data={doughnutData}
                       options={{
                         responsive: true,
                         maintainAspectRatio: false,
-                        cutout: "68%",
+                        cutout: "65%",
                         plugins: {
                           legend: {
                             position: "bottom",
@@ -479,7 +510,9 @@ function Dashboard() {
 
                 </div>
 
-                <div className="xl:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+                {/* Line Chart */}
+
+                <div className="xl:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
 
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                     Score Progress
@@ -489,7 +522,7 @@ function Dashboard() {
                     Performance across completed interviews.
                   </p>
 
-                  <div className="h-[320px]">
+                  <div className="h-72">
 
                     <Line
                       data={lineData}
@@ -518,8 +551,7 @@ function Dashboard() {
               </div>
 
             </section>
-
-            {/* Recent Interviews */}
+                        {/* Recent Interviews */}
 
             <section>
 
@@ -579,7 +611,7 @@ function Dashboard() {
 
                         <div
                           key={item.id}
-                          className="flex items-center justify-between px-6 py-5 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-5 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
                         >
 
                           <div>
@@ -629,6 +661,7 @@ function Dashboard() {
     </div>
 
   );
+
 }
 
 export default Dashboard;
