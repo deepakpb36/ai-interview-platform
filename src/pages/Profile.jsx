@@ -1,9 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
-
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
-
 import { getHistory } from "../utils/storage";
 
 function Profile() {
@@ -16,12 +12,9 @@ function Profile() {
 
   const userName =
     user?.displayName?.trim() ||
-    (user?.email
-      ? user.email.split("@")[0]
-      : "Guest User");
+    (user?.email ? user.email.split("@")[0] : "Guest User");
 
-  const userEmail =
-    user?.email || "No Email";
+  const userEmail = user?.email || "No Email";
 
   const userPhoto =
     user?.photoURL ||
@@ -44,9 +37,7 @@ function Profile() {
       : 0;
 
   const bestScore =
-    scores.length > 0
-      ? Math.max(...scores)
-      : 0;
+    scores.length > 0 ? Math.max(...scores) : 0;
 
   const practiceTime = totalInterviews * 15;
 
@@ -56,146 +47,124 @@ function Profile() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-slate-950 overflow-hidden">
+    <div className="max-w-7xl mx-auto w-full space-y-8">
 
-      <Sidebar />
+      {/* Heading */}
+      <div>
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+          My Profile
+        </h1>
 
-      <div className="flex-1 flex flex-col min-w-0">
+        <p className="text-gray-600 dark:text-gray-400 mt-2">
+          View your account information and interview statistics.
+        </p>
+      </div>
 
-        <Navbar />
+      {/* Profile Card */}
+      <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm">
 
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8">
 
-          <div className="max-w-7xl mx-auto w-full space-y-8">
+          <img
+            src={userPhoto}
+            alt={userName}
+            className="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-4 border-blue-600 object-cover"
+          />
 
-            {/* Heading */}
+          <div className="text-center lg:text-left flex-1">
 
-            <div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              {userName}
+            </h2>
 
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
-                My Profile
-              </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2 break-all">
+              {userEmail}
+            </p>
 
-              <p className="text-gray-600 dark:text-gray-400 mt-2">
-                View your account information and interview statistics.
-              </p>
+            <span className="inline-block mt-4 px-4 py-2 bg-green-600 rounded-full text-white text-sm font-medium">
+              Active User
+            </span>
 
-            </div>
+          </div>
 
-            {/* Profile Card */}
+        </div>
 
-            <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm">
+        {/* Statistics */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-10">
 
-              <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8">
+          <StatCard
+            title="Interviews"
+            value={totalInterviews}
+          />
 
-                <img
-                  src={userPhoto}
-                  alt={userName}
-                  className="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-4 border-blue-600 object-cover"
-                />
+          <StatCard
+            title="Average Score"
+            value={`${averageScore}%`}
+            green
+          />
 
-                <div className="text-center lg:text-left flex-1">
+          <StatCard
+            title="Best Score"
+            value={`${bestScore}%`}
+            yellow
+          />
 
-                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-                    {userName}
-                  </h2>
+          <StatCard
+            title="Practice Time"
+            value={`${practiceTime} min`}
+            cyan
+          />
 
-                  <p className="text-gray-600 dark:text-gray-400 mt-2 break-all">
-                    {userEmail}
-                  </p>
+        </div>
 
-                  <span className="inline-block mt-4 px-4 py-2 bg-green-600 rounded-full text-white text-sm font-medium">
-                    Active User
-                  </span>
+        {/* Account Information */}
+        <div className="mt-10">
 
-                </div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+            Account Information
+          </h2>
 
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-              {/* Statistics */}
+            <InfoCard
+              title="Full Name"
+              value={userName}
+            />
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-10">
+            <InfoCard
+              title="Email Address"
+              value={userEmail}
+            />
 
-                <StatCard
-                  title="Interviews"
-                  value={totalInterviews}
-                />
+            <InfoCard
+              title="Account Status"
+              value="Active"
+            />
 
-                <StatCard
-                  title="Average Score"
-                  value={`${averageScore}%`}
-                  green
-                />
+            <InfoCard
+              title="Interview Platform"
+              value="AI Interview Prep"
+            />
 
-                <StatCard
-                  title="Best Score"
-                  value={`${bestScore}%`}
-                  yellow
-                />
+          </div>
 
-                <StatCard
-                  title="Practice Time"
-                  value={`${practiceTime} min`}
-                  cyan
-                />
+        </div>
 
-              </div>
+        {/* Logout */}
+        <div className="mt-10">
 
-              {/* Account Information */}
+          <button
+            onClick={handleLogout}
+            className="w-full sm:w-auto bg-red-600 hover:bg-red-700 px-8 py-3 rounded-xl text-white font-semibold transition"
+          >
+            Logout
+          </button>
 
-              <div className="mt-10">
-
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-                  Account Information
-                </h2>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                  <InfoCard
-                    title="Full Name"
-                    value={userName}
-                  />
-
-                  <InfoCard
-                    title="Email Address"
-                    value={userEmail}
-                  />
-
-                  <InfoCard
-                    title="Account Status"
-                    value="Active"
-                  />
-
-                  <InfoCard
-                    title="Interview Platform"
-                    value="AI Interview Prep"
-                  />
-
-                </div>
-
-              </div>
-
-              {/* Logout */}
-
-              <div className="mt-10">
-
-                <button
-                  onClick={handleLogout}
-                  className="w-full sm:w-auto bg-red-600 hover:bg-red-700 px-8 py-3 rounded-xl text-white font-semibold transition"
-                >
-                  Logout
-                </button>
-
-              </div>
-
-            </div>          </div>
-
-        </main>
+        </div>
 
       </div>
 
     </div>
-
   );
 }
 
@@ -207,7 +176,6 @@ function StatCard({
   cyan,
 }) {
   return (
-
     <div className="bg-gray-100 dark:bg-slate-800 rounded-2xl p-6 text-center">
 
       <h3 className="text-gray-500 dark:text-gray-400 font-medium">
@@ -229,7 +197,6 @@ function StatCard({
       </h2>
 
     </div>
-
   );
 }
 
@@ -238,7 +205,6 @@ function InfoCard({
   value,
 }) {
   return (
-
     <div className="bg-gray-100 dark:bg-slate-800 rounded-xl p-5">
 
       <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -250,7 +216,6 @@ function InfoCard({
       </h3>
 
     </div>
-
   );
 }
 

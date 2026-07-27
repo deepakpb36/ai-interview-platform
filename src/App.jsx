@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -9,6 +9,8 @@ import Results from "./pages/Results";
 import History from "./pages/History";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+
+import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -20,69 +22,23 @@ function App() {
 
       {/* Protected Routes */}
       <Route
-        path="/dashboard"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <Layout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/interview" element={<InterviewSelection />} />
+        <Route path="/interview/:category" element={<Interview />} />
+        <Route path="/results" element={<Results />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
+      </Route>
 
-      {/* Interview Selection */}
-      <Route
-        path="/interview"
-        element={
-          <ProtectedRoute>
-            <InterviewSelection />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Interview Questions */}
-      <Route
-        path="/interview/:category"
-        element={
-          <ProtectedRoute>
-            <Interview />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/results"
-        element={
-          <ProtectedRoute>
-            <Results />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/history"
-        element={
-          <ProtectedRoute>
-            <History />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        }
-      />
-      
-      <Route
-        path="/settings"
-        element={
-          <ProtectedRoute>
-            <Settings />
-          </ProtectedRoute>
-        }
-      />
+      {/* Fallback Route */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

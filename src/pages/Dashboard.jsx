@@ -28,9 +28,6 @@ import {
   Users,
 } from "lucide-react";
 
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
-
 import INTERVIEW_QUESTIONS from "../data/questions";
 import { getHistory } from "../utils/storage";
 
@@ -50,8 +47,7 @@ const INTERVIEW_TRACKS = [
   {
     id: "html",
     title: "HTML",
-    description:
-      "Master semantic HTML, accessibility and page structure.",
+    description: "Master semantic HTML, accessibility and page structure.",
     icon: BookOpen,
     color: "from-orange-500 to-red-500",
     difficulty: "Beginner",
@@ -60,8 +56,7 @@ const INTERVIEW_TRACKS = [
   {
     id: "python",
     title: "Python",
-    description:
-      "Practice Python fundamentals and problem solving.",
+    description: "Practice Python fundamentals and problem solving.",
     icon: Terminal,
     color: "from-blue-500 to-indigo-500",
     difficulty: "Intermediate",
@@ -70,8 +65,7 @@ const INTERVIEW_TRACKS = [
   {
     id: "java",
     title: "Java",
-    description:
-      "Prepare Java OOP and core interview questions.",
+    description: "Prepare Java OOP and core interview questions.",
     icon: Code,
     color: "from-red-500 to-rose-500",
     difficulty: "Intermediate",
@@ -80,36 +74,25 @@ const INTERVIEW_TRACKS = [
   {
     id: "hr",
     title: "HR",
-    description:
-      "Improve communication and behavioural interview skills.",
+    description: "Improve communication and behavioural interview skills.",
     icon: Users,
     color: "from-purple-500 to-pink-500",
     difficulty: "Easy",
     duration: "8 min",
   },
 ];
-
-function StatCard({
-  title,
-  value,
-  icon: Icon,
-  color,
-}) {
+function StatCard({ title, value, icon: Icon, color }) {
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
-
-      <div className="flex justify-between items-center">
-
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300">
+      <div className="flex items-center justify-between">
         <div>
-
           <p className="text-sm text-slate-500 dark:text-slate-400">
             {title}
           </p>
 
-          <h2 className="text-3xl font-bold mt-2 text-slate-900 dark:text-white">
+          <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
             {value}
           </h2>
-
         </div>
 
         <div
@@ -117,12 +100,11 @@ function StatCard({
         >
           <Icon size={26} />
         </div>
-
       </div>
-
     </div>
   );
 }
+
 function Dashboard() {
   const navigate = useNavigate();
 
@@ -131,37 +113,28 @@ function Dashboard() {
 
   const [searchParams] = useSearchParams();
 
-  const search =
-    searchParams.get("search") || "";
+  const search = searchParams.get("search") || "";
 
   const history = getHistory();
 
-  const userName =
-    user?.displayName?.trim() ||
-    (user?.email
-      ? user.email.split("@")[0]
-      : "Deepak");
+  
+    const userName =
+  user?.displayName ||
+  user?.providerData?.[0]?.displayName ||
+  (user?.email ? user.email.split("@")[0] : "User");
 
   const stats = useMemo(() => {
-
     const total = history.length;
 
     const scores = history.map((item) =>
-      Number(
-        item.scorePercentage ??
-        item.score ??
-        0
-      )
+      Number(item.scorePercentage ?? item.score ?? 0)
     );
 
     const average =
       total === 0
         ? 0
         : Math.round(
-            scores.reduce(
-              (sum, score) => sum + score,
-              0
-            ) / total
+            scores.reduce((sum, score) => sum + score, 0) / total
           );
 
     const best =
@@ -175,7 +148,6 @@ function Dashboard() {
       bestScore: best,
       practiceMinutes: total * 10,
     };
-
   }, [history]);
 
   const categoryCount = {
@@ -192,476 +164,455 @@ function Dashboard() {
   });
 
   const doughnutData = {
-    labels: [
-      "HTML",
-      "Python",
-      "Java",
-      "HR",
-    ],
-
+    labels: ["HTML", "Python", "Java", "HR"],
     datasets: [
       {
         label: "Interviews",
-
         data: [
           categoryCount.html,
           categoryCount.python,
           categoryCount.java,
           categoryCount.hr,
         ],
-
         backgroundColor: [
           "#f97316",
           "#3b82f6",
           "#ef4444",
           "#a855f7",
         ],
-
         borderWidth: 2,
       },
     ],
   };
 
   const lineData = {
-
     labels: history
       .slice(-7)
       .map((item) =>
         item.completedAt
-          ? new Date(
-              item.completedAt
-            ).toLocaleDateString()
+          ? new Date(item.completedAt).toLocaleDateString()
           : "-"
       ),
 
     datasets: [
       {
         label: "Score",
-
         data: history
           .slice(-7)
           .map((item) =>
-            Number(
-              item.scorePercentage ??
-              item.score ??
-              0
-            )
+            Number(item.scorePercentage ?? item.score ?? 0)
           ),
 
         borderColor: "#2563eb",
-
-        backgroundColor:
-          "rgba(37,99,235,0.2)",
-
+        backgroundColor: "rgba(37,99,235,0.2)",
         fill: true,
-
         tension: 0.4,
       },
     ],
   };
 
-  const filteredTracks =
-    INTERVIEW_TRACKS.filter((track) =>
-      track.title
-        .toLowerCase()
-        .includes(
-          search.toLowerCase()
-        )
-    );
+  const filteredTracks = INTERVIEW_TRACKS.filter((track) =>
+    track.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
-
-    <div className="flex min-h-screen bg-gray-100 dark:bg-slate-950 overflow-hidden">
-
-      <Sidebar />
-
-      <div className="flex-1 flex flex-col min-w-0">
-
-        <Navbar />
-
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-
+    <>
           <div className="max-w-7xl mx-auto w-full space-y-8">
 
-            {/* Hero Section */}
-                        <section>
+        {/* Hero Section */}
+        <section>
 
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
 
-                <div>
+            <div>
 
-                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">
-                    Welcome Back, {userName} 👋
-                  </h1>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">
+                Welcome Back, {userName} 👋
+              </h1>
 
-                  <p className="mt-3 text-slate-600 dark:text-slate-400 max-w-2xl">
-                    Practice technical interviews, improve your confidence,
-                    and track your progress with every assessment.
+              <p className="mt-3 text-slate-600 dark:text-slate-400 max-w-2xl">
+                Practice technical interviews, improve your confidence,
+                and track your progress with every assessment.
+              </p>
+
+              <button
+                onClick={() => navigate("/interview")}
+                className="mt-6 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition"
+              >
+                Start New Interview
+              </button>
+
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+
+              <div className="bg-blue-50 dark:bg-slate-800 rounded-xl p-5 text-center">
+
+                <p className="text-sm text-slate-500">
+                  Average Score
+                </p>
+
+                <h2 className="mt-2 text-3xl font-bold text-blue-600">
+                  {stats.averageScore}%
+                </h2>
+
+              </div>
+
+              <div className="bg-green-50 dark:bg-slate-800 rounded-xl p-5 text-center">
+
+                <p className="text-sm text-slate-500">
+                  Best Score
+                </p>
+
+                <h2 className="mt-2 text-3xl font-bold text-green-600">
+                  {stats.bestScore}%
+                </h2>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* Statistics */}
+        <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+
+          <StatCard
+            title="Total Interviews"
+            value={stats.totalInterviews}
+            icon={Target}
+            color="from-blue-500 to-blue-700"
+          />
+
+          <StatCard
+            title="Average Score"
+            value={`${stats.averageScore}%`}
+            icon={TrendingUp}
+            color="from-green-500 to-green-700"
+          />
+
+          <StatCard
+            title="Highest Score"
+            value={`${stats.bestScore}%`}
+            icon={Trophy}
+            color="from-yellow-500 to-orange-500"
+          />
+
+          <StatCard
+            title="Practice Time"
+            value={`${stats.practiceMinutes} min`}
+            icon={Clock}
+            color="from-purple-500 to-pink-600"
+          />
+
+        </section>
+
+        {/* Interview Categories */}
+        <section>
+
+          <div className="mb-6">
+
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+              Interview Categories
+            </h2>
+
+            <p className="mt-1 text-slate-500 dark:text-slate-400">
+              Choose a category to begin your interview.
+            </p>
+
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+
+            {filteredTracks.map((track) => {
+
+              const Icon = track.icon;
+
+              const questionCount =
+                INTERVIEW_QUESTIONS[track.id]?.length || 0;
+
+              return (
+
+                <div
+                  key={track.id}
+                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-lg transition"
+                >
+
+                  <div
+                    className={`w-14 h-14 rounded-xl bg-gradient-to-r ${track.color} flex items-center justify-center text-white`}
+                  >
+                    <Icon size={28} />
+                  </div>
+
+                  <h3 className="mt-5 text-xl font-bold text-slate-900 dark:text-white">
+                    {track.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+                    {track.description}
                   </p>
 
+                  <div className="flex flex-wrap gap-2 mt-5">
+
+                    <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">
+                      {questionCount} Questions
+                    </span>
+
+                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
+                      {track.duration}
+                    </span>
+
+                    <span className="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">
+                      {track.difficulty}
+                    </span>
+
+                  </div>
+
                   <button
-                    onClick={() => navigate("/interview")}
-                    className="mt-6 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition"
+                    onClick={() => navigate(`/interview/${track.id}`)}
+                    className="mt-6 w-full rounded-xl bg-blue-600 hover:bg-blue-700 text-white py-3 font-semibold transition"
                   >
-                    Start New Interview
+                    Start Interview
                   </button>
 
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:w-auto">
+              );
 
-                  <div className="bg-blue-50 dark:bg-slate-800 rounded-xl p-5 text-center">
-
-                    <p className="text-sm text-slate-500">
-                      Average Score
-                    </p>
-
-                    <h2 className="text-3xl font-bold text-blue-600 mt-2">
-                      {stats.averageScore}%
-                    </h2>
-
-                  </div>
-
-                  <div className="bg-green-50 dark:bg-slate-800 rounded-xl p-5 text-center">
-
-                    <p className="text-sm text-slate-500">
-                      Best Score
-                    </p>
-
-                    <h2 className="text-3xl font-bold text-green-600 mt-2">
-                      {stats.bestScore}%
-                    </h2>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </section>
-
-            {/* Statistics */}
-
-            <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-
-              <StatCard
-                title="Total Interviews"
-                value={stats.totalInterviews}
-                icon={Target}
-                color="from-blue-500 to-blue-700"
-              />
-
-              <StatCard
-                title="Average Score"
-                value={`${stats.averageScore}%`}
-                icon={TrendingUp}
-                color="from-green-500 to-green-700"
-              />
-
-              <StatCard
-                title="Highest Score"
-                value={`${stats.bestScore}%`}
-                icon={Trophy}
-                color="from-yellow-500 to-orange-500"
-              />
-
-              <StatCard
-                title="Practice Time"
-                value={`${stats.practiceMinutes} min`}
-                icon={Clock}
-                color="from-purple-500 to-pink-600"
-              />
-
-            </section>
-
-            {/* Interview Categories */}
-
-            <section>
-
-              <div className="flex items-center justify-between mb-6">
-
-                <div>
-
-                  <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-                    Interview Categories
-                  </h2>
-
-                  <p className="text-slate-500 dark:text-slate-400 mt-1">
-                    Choose a category to begin your interview.
-                  </p>
-
-                </div>
-
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-
-                {filteredTracks.map((track) => {
-
-                  const Icon = track.icon;
-
-                  const questionCount =
-                    INTERVIEW_QUESTIONS[track.id]?.length || 0;
-
-                  return (
-
-                    <div
-                      key={track.id}
-                      className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-lg transition"
-                    >
-
-                      <div
-                        className={`w-14 h-14 rounded-xl bg-gradient-to-r ${track.color} flex items-center justify-center text-white`}
-                      >
-                        <Icon size={28} />
-                      </div>
-
-                      <h3 className="mt-5 text-xl font-bold text-slate-900 dark:text-white">
-                        {track.title}
-                      </h3>
-
-                      <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                        {track.description}
-                      </p>
-
-                      <div className="flex flex-wrap gap-2 mt-5">
-
-                        <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">
-                          {questionCount} Questions
-                        </span>
-
-                        <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                          {track.duration}
-                        </span>
-
-                        <span className="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">
-                          {track.difficulty}
-                        </span>
-
-                      </div>
-
-                      <button
-                        onClick={() => navigate(`/interview/${track.id}`)}
-                        className="mt-6 w-full rounded-xl bg-blue-600 hover:bg-blue-700 text-white py-3 font-semibold transition"
-                      >
-                        Start Interview
-                      </button>
-
-                    </div>
-
-                  );
-
-                })}
-
-              </div>
-
-            </section>
-                        {/* Analytics */}
-
-            <section>
-
-              <div className="flex items-center justify-between mb-6">
-
-                <div>
-
-                  <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-                    Performance Analytics
-                  </h2>
-
-                  <p className="text-slate-500 dark:text-slate-400 mt-1">
-                    Monitor your interview progress and performance.
-                  </p>
-
-                </div>
-
-              </div>
-
-              <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-
-                {/* Doughnut Chart */}
-
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
-
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                    Category Distribution
-                  </h3>
-
-                  <p className="text-sm text-slate-500 mt-1 mb-6">
-                    Interviews attempted in each category.
-                  </p>
-
-                  <div className="h-72">
-
-                    <Doughnut
-                      data={doughnutData}
-                      options={{
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: "65%",
-                        plugins: {
-                          legend: {
-                            position: "bottom",
-                          },
-                        },
-                      }}
-                    />
-
-                  </div>
-
-                </div>
-
-                {/* Line Chart */}
-
-                <div className="xl:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
-
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                    Score Progress
-                  </h3>
-
-                  <p className="text-sm text-slate-500 mt-1 mb-6">
-                    Performance across completed interviews.
-                  </p>
-
-                  <div className="h-72">
-
-                    <Line
-                      data={lineData}
-                      options={{
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                          legend: {
-                            display: true,
-                            position: "top",
-                          },
-                        },
-                        scales: {
-                          y: {
-                            beginAtZero: true,
-                            max: 100,
-                          },
-                        },
-                      }}
-                    />
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </section>
-                        {/* Recent Interviews */}
-
-            <section>
-
-              <div className="flex items-center justify-between mb-6">
-
-                <div>
-
-                  <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-                    Recent Interviews
-                  </h2>
-
-                  <p className="text-slate-500 dark:text-slate-400 mt-1">
-                    Your latest interview attempts.
-                  </p>
-
-                </div>
-
-                <button
-                  onClick={() => navigate("/history")}
-                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition"
-                >
-                  View History
-                </button>
-
-              </div>
-
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-
-                {history.length === 0 ? (
-
-                  <div className="py-20 text-center">
-
-                    <Target
-                      size={60}
-                      className="mx-auto text-blue-500 mb-5"
-                    />
-
-                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
-                      No Interviews Yet
-                    </h3>
-
-                    <p className="mt-3 text-slate-500 dark:text-slate-400">
-                      Complete your first interview to see your activity.
-                    </p>
-
-                  </div>
-
-                ) : (
-
-                  <div className="divide-y divide-slate-200 dark:divide-slate-800">
-
-                    {history
-                      .slice()
-                      .reverse()
-                      .slice(0, 5)
-                      .map((item) => (
-
-                        <div
-                          key={item.id}
-                          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-5 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
-                        >
-
-                          <div>
-
-                            <h3 className="font-semibold text-slate-900 dark:text-white capitalize">
-                              {item.category} Interview
-                            </h3>
-
-                            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                              {item.completedAt
-                                ? new Date(item.completedAt).toLocaleDateString()
-                                : "-"}
-                            </p>
-
-                          </div>
-
-                          <span
-                            className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                              (item.scorePercentage ?? item.score ?? 0) >= 80
-                                ? "bg-green-100 text-green-700"
-                                : (item.scorePercentage ?? item.score ?? 0) >= 60
-                                ? "bg-yellow-100 text-yellow-700"
-                                : "bg-red-100 text-red-700"
-                            }`}
-                          >
-                            {item.scorePercentage ?? item.score ?? 0}%
-                          </span>
-
-                        </div>
-
-                      ))}
-
-                  </div>
-
-                )}
-
-              </div>
-
-            </section>
+            })}
 
           </div>
 
-        </main>
+        </section>
+                {/* Performance Analytics */}
+        <section>
+
+          <div className="mb-6">
+
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+              Performance Analytics
+            </h2>
+
+            <p className="mt-1 text-slate-500 dark:text-slate-400">
+              Monitor your interview progress and performance.
+            </p>
+
+          </div>
+
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+            {/* Category Distribution */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                Category Distribution
+              </h3>
+
+              <p className="mt-1 mb-6 text-sm text-slate-500 dark:text-slate-400">
+                Interviews attempted in each category.
+              </p>
+
+              <div className="h-72">
+
+                <Doughnut
+                  data={doughnutData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "65%",
+                    plugins: {
+                      legend: {
+                        position: "bottom",
+                        labels: {
+                          color: "#64748b",
+                        },
+                      },
+                    },
+                  }}
+                />
+
+              </div>
+
+            </div>
+
+            {/* Score Progress */}
+            <div className="xl:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                Score Progress
+              </h3>
+
+              <p className="mt-1 mb-6 text-sm text-slate-500 dark:text-slate-400">
+                Performance across completed interviews.
+              </p>
+
+              <div className="h-72">
+
+                <Line
+                  data={lineData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    plugins: {
+                      legend: {
+                        display: true,
+                        position: "top",
+                        labels: {
+                          color: "#64748b",
+                        },
+                      },
+                    },
+
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                          color: "#64748b",
+                        },
+                        grid: {
+                          color: "rgba(148,163,184,0.15)",
+                        },
+                      },
+
+                      x: {
+                        ticks: {
+                          color: "#64748b",
+                        },
+                        grid: {
+                          display: false,
+                        },
+                      },
+                    },
+                  }}
+                />
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+                {/* Recent Interviews */}
+        <section>
+
+          <div className="flex items-center justify-between mb-6">
+
+            <div>
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+                Recent Interviews
+              </h2>
+
+              <p className="mt-1 text-slate-500 dark:text-slate-400">
+                Your latest interview attempts.
+              </p>
+            </div>
+
+            <button
+              onClick={() => navigate("/history")}
+              className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition"
+            >
+              View History
+            </button>
+
+          </div>
+
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+
+            {history.length === 0 ? (
+
+              <div className="py-20 text-center">
+
+                <Target
+                  size={52}
+                  className="mx-auto text-blue-500 mb-5"
+                />
+
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+                  No Interviews Yet
+                </h3>
+
+                <p className="mt-2 text-slate-500 dark:text-slate-400">
+                  Complete your first interview to see your activity.
+                </p>
+
+              </div>
+
+            ) : (
+
+              <div className="divide-y divide-slate-200 dark:divide-slate-800">
+
+                {history
+                  .slice()
+                  .reverse()
+                  .slice(0, 5)
+                  .map((item, index) => {
+
+                    const score = Number(
+                      item.scorePercentage ??
+                      item.score ??
+                      0
+                    );
+
+                    return (
+
+                      <div
+                        key={item.id || index}
+                        className="flex items-center justify-between px-6 py-5 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                      >
+
+                        <div>
+
+                          <h3 className="font-semibold text-slate-900 dark:text-white capitalize">
+                            {item.category} Interview
+                          </h3>
+
+                          <p className="text-sm text-slate-500 dark:text-slate-400">
+
+                            {item.completedAt
+                              ? new Date(
+                                  item.completedAt
+                                ).toLocaleDateString()
+                              : "-"}
+
+                          </p>
+
+                        </div>
+
+                        <span
+                          className={`px-4 py-1 rounded-full text-sm font-semibold ${
+                            score >= 80
+                              ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
+                              : score >= 60
+                              ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300"
+                              : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
+                          }`}
+                        >
+                          {score}%
+                        </span>
+
+                      </div>
+
+                    );
+
+                  })}
+
+              </div>
+
+            )}
+
+          </div>
+
+        </section>
 
       </div>
 
-    </div>
-
+    </>
   );
-
 }
 
 export default Dashboard;
