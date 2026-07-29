@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Mic, Square, CheckCircle } from "lucide-react";
+import { Mic, Square, CheckCircle, AlertCircle } from "lucide-react";
+import { validateAnswer } from "../data/questions";
 
 function QuestionCard({ 
-  question = "What is HTML?", 
+  questionObj = { id: 1, question: "What is HTML?", keywords: ["html", "markup", "elements", "tags", "web", "structure"] }, 
   questionNumber = 1, 
   totalQuestions = 5,
   onSubmitAnswer 
@@ -10,6 +11,10 @@ function QuestionCard({
   const [answer, setAnswer] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [recognition, setRecognition] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Extract question string from prop (handles both object and string formats gracefully)
+  const questionText = typeof questionObj === "string" ? questionObj : questionObj?.question || "What is HTML?";
 
   // Initialize Web Speech API for voice recording
   useEffect(() => {
@@ -26,6 +31,7 @@ function QuestionCard({
           transcript += event.results[i][0].transcript;
         }
         setAnswer((prev) => (prev ? prev + " " + transcript : transcript));
+        setErrorMessage(""); // Clear error when recording new input
       };
 
       recog.onerror = (err) => {
@@ -54,7 +60,7 @@ function QuestionCard({
     }
   };
 
-  // Auto-Save feature (triggers if "autoSaveAnswers" setting is enabled in localStorage)
+  // Auto-Save feature
   useEffect(() => {
     const isAutoSaveEnabled = JSON.parse(localStorage.getItem("autoSaveAnswers") ?? "true");
     if (isAutoSaveEnabled && answer.trim().length > 0) {
@@ -74,15 +80,33 @@ function QuestionCard({
     } else {
       setAnswer("");
     }
+    setErrorMessage(""); // Reset error state on new question
   }, [questionNumber]);
 
+  // Handle Submit with Keyword and Gibberish Validation
   const handleSubmit = () => {
-    if (!answer.trim()) {
-      alert("Please write or record an answer before submitting!");
+    const trimmedAnswer = answer.trim();
+
+    if (!trimmedAnswer) {
+      setErrorMessage("Please write or record an answer before submitting.");
       return;
     }
+
+    // Validate using the helper function against question keywords
+    const isValid = validateAnswer(trimmedAnswer, questionObj);
+
+    if (!isValid) {
+      setErrorMessage(
+        "Invalid answer! Please explain the concept using relevant terms. Numeric values (e.g. 1234), random characters (e.g. gudueu), or off-topic responses are not accepted."
+      );
+      return;
+    }
+
+    // Clear error message if validation succeeds
+    setErrorMessage("");
+
     if (onSubmitAnswer) {
-      onSubmitAnswer(answer);
+      onSubmitAnswer(trimmedAnswer);
     }
   };
 
@@ -119,13 +143,13 @@ function QuestionCard({
               AI Interview Question
             </h2>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Read the question carefully before answering.
+              Read the question carefully and explain using core technical concepts.
             </p>
           </div>
         </div>
 
         <h3 className="mt-6 text-2xl font-bold text-gray-900 dark:text-white">
-          {question}
+          {questionText}
         </h3>
       </div>
 
@@ -140,13 +164,27 @@ function QuestionCard({
           </span>
         </div>
 
-        {/* Input Text Area - Completely Fixed Text and Background Visibility */}
+        {/* Input Text Area */}
         <textarea
           value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
+          onChange={(e) => {
+            setAnswer(e.target.value);
+            if (errorMessage) setErrorMessage("");
+          }}
           placeholder="Type your answer here or use the voice recorder below..."
           className="w-full h-48 p-4 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-gray-950 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 resize-none font-medium text-base"
         />
+
+        {/* Validation Error Banner */}
+        {errorMessage && (
+          <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-xl text-red-700 dark:text-red-400 text-sm">
+            <AlertCircle size={20} className="shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold">Answer Validation Failed</p>
+              <p className="mt-0.5 text-xs opacity-90">{errorMessage}</p>
+            </div>
+          </div>
+        )}
 
         {/* Controls Bar */}
         <div className="flex flex-wrap items-center justify-between gap-4 pt-2">

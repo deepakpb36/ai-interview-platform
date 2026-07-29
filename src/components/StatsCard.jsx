@@ -1,28 +1,56 @@
-import { ArrowUpRight } from "lucide-react";
+import React from "react";
 
-function StatsCard({ title, value, subtitle, iconBg }) {
+// Reusable Statistics Card
+function StatCard({ title, value, icon: Icon, color }) {
+
   return (
-    <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl p-6 hover:border-blue-500 shadow-sm hover:shadow-lg transition-all duration-300">
+    <div className="
+      bg-white dark:bg-slate-900
+      border border-slate-200 dark:border-slate-800
+      rounded-2xl p-6
+      shadow-sm
+      hover:shadow-lg
+      transition-all duration-300
+    ">
 
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
 
         <div>
-          <p className="text-gray-600 dark:text-gray-400 text-sm">
+
+          <p className="
+            text-sm font-medium
+            text-slate-500
+            dark:text-slate-400
+          ">
             {title}
           </p>
 
-          <h2 className="text-gray-900 dark:text-white text-4xl font-bold mt-3">
+
+          <h2 className="
+            mt-2
+            text-3xl font-bold
+            text-slate-900
+            dark:text-white
+          ">
             {value}
           </h2>
 
-          <p className="text-green-500 dark:text-green-400 text-sm mt-2">
-            {subtitle}
-          </p>
         </div>
 
-        <div className={`${iconBg} p-3 rounded-xl shadow-md`}>
-          <ArrowUpRight className="text-white" size={22} />
+
+        <div
+          className={`
+            w-14 h-14
+            rounded-xl
+            bg-gradient-to-r ${color}
+            flex items-center justify-center
+            text-white
+            shadow-md
+          `}
+        >
+          <Icon size={26} />
         </div>
+
 
       </div>
 
@@ -30,4 +58,4 @@ function StatsCard({ title, value, subtitle, iconBg }) {
   );
 }
 
-export default StatsCard;
+export default StatCard;

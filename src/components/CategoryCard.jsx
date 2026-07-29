@@ -22,6 +22,7 @@ function CategoryCard({ title, interviews, score, color }) {
       </p>
 
       <p className="text-white/80 mt-2">
+    
         Average Score: {score}
       </p>
 

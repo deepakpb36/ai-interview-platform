@@ -85,16 +85,14 @@ function Settings() {
     <button
       type="button"
       onClick={onChange}
-      className={`w-14 h-8 rounded-full transition-colors duration-300 relative focus:outline-none ${
-        enabled
+      className={`w-14 h-8 rounded-full transition-colors duration-300 relative focus:outline-none ${enabled
           ? "bg-blue-600"
           : "bg-gray-300 dark:bg-slate-700"
-      }`}
+        }`}
     >
       <div
-        className={`w-6 h-6 bg-white rounded-full absolute top-1 transition-all duration-300 ${
-          enabled ? "left-7" : "left-1"
-        }`}
+        className={`w-6 h-6 bg-white rounded-full absolute top-1 transition-all duration-300 ${enabled ? "left-7" : "left-1"
+          }`}
       ></div>
     </button>
   );
@@ -123,7 +121,8 @@ function Settings() {
             <img
               src={
                 user?.photoURL ||
-                "https://ui-avatars.com/api/?name=User"
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.displayName || user?.email || "User")
+                }&background=2563eb&color=fff`
               }
               alt="Profile"
               className="w-20 h-20 rounded-full border-2 border-blue-500 object-cover"
