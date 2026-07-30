@@ -157,7 +157,7 @@ function InterviewSelection() {
       color: "bg-green-600",
       badge: "",
       icon: <Brain size={34} />,
-      route: "machinelearning",
+      route: "machine-learning",
     },
 
     {
@@ -171,7 +171,7 @@ function InterviewSelection() {
       color: "bg-red-600",
       badge: "Advanced",
       icon: <Cpu size={34} />,
-      route: "deeplearning",
+      route: "deep-learning",
     },
 
     {
