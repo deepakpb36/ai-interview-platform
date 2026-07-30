@@ -45,7 +45,7 @@ function Interview() {
 
     const allQuestions =
       questionsByCategory[
-        category.toLowerCase()
+      category.toLowerCase()
       ] ||
       questionsByCategory.html;
 
@@ -118,6 +118,7 @@ function Interview() {
 
   const auth =
     getAuth();
+
   // ==========================
   // Speech Recognition
   // ==========================
@@ -127,8 +128,6 @@ function Interview() {
     const SpeechRecognition =
       window.SpeechRecognition ||
       window.webkitSpeechRecognition;
-
-
     if (!SpeechRecognition) {
       return;
     }
@@ -277,6 +276,9 @@ function Interview() {
     setEvaluation(result);
 
   };
+
+
+
   // ==========================
   // Save Interview History
   // ==========================
@@ -304,16 +306,11 @@ function Interview() {
       );
 
 
-    // Save Local Storage
-
     saveInterview(
       category,
       score
     );
 
-
-
-    // Save Firebase
 
     const user =
       auth.currentUser;
@@ -347,14 +344,11 @@ function Interview() {
           passedQuestions:
             finalPassed,
 
-
           skippedQuestions:
             finalSkipped,
 
-
           completedAt:
             new Date().toISOString(),
-
 
           status:
             "Completed",
@@ -363,10 +357,9 @@ function Interview() {
 
       );
 
-
     }
 
-    catch(error) {
+    catch (error) {
 
       console.log(
         "Firebase History Error:",
@@ -376,9 +369,6 @@ function Interview() {
     }
 
   };
-
-
-
   // ==========================
   // Next Question
   // ==========================
@@ -566,7 +556,10 @@ function Interview() {
       ) * 100
 
     );
-      return (
+
+
+
+  return (
 
     <div
       className="
@@ -673,15 +666,9 @@ function Interview() {
 
 
         </div>
-
-
-
-
         {/* Progress Bar */}
 
-
         <div className="mb-8">
-
 
           <div
             className="
@@ -704,8 +691,6 @@ function Interview() {
 
             </span>
 
-
-
             <span
               className="
               font-bold
@@ -717,10 +702,7 @@ function Interview() {
 
             </span>
 
-
           </div>
-
-
 
           <div
             className="
@@ -732,7 +714,6 @@ function Interview() {
             dark:bg-slate-800
             "
           >
-
 
             <div
 
@@ -751,17 +732,13 @@ function Interview() {
 
             />
 
-
           </div>
-
 
         </div>
 
 
 
-
         {/* Question Card */}
-
 
         <div
           className="
@@ -777,7 +754,6 @@ function Interview() {
           "
         >
 
-
           <h2
             className="
             text-2xl
@@ -792,38 +768,29 @@ function Interview() {
 
           </h2>
 
-
         </div>
-
-
 
 
 
         {/* Answer Input */}
 
-
         <div className="mt-8">
-
 
           <textarea
 
             value={answer}
 
-
             onChange={(e) =>
               setAnswer(e.target.value)
             }
-
 
             disabled={
               evaluation !== null
             }
 
-
             placeholder="
             Type your answer here or use microphone...
             "
-
 
             className="
             w-full
@@ -845,18 +812,13 @@ function Interview() {
 
           />
 
-
         </div>
-
-
 
 
 
         {/* Action Buttons */}
 
-
         {!evaluation && (
-
 
           <div
             className="
@@ -868,16 +830,13 @@ function Interview() {
             "
           >
 
-
-
             <button
 
               onClick={
                 isRecording
-                ? stopRecording
-                : startRecording
+                  ? stopRecording
+                  : startRecording
               }
-
 
               className={`
 
@@ -892,11 +851,10 @@ function Interview() {
               font-semibold
               transition
 
-              ${
-                isRecording
-                ? "bg-red-600 hover:bg-red-700"
-                : "bg-blue-600 hover:bg-blue-700"
-              }
+              ${isRecording
+                  ? "bg-red-600 hover:bg-red-700"
+                  : "bg-blue-600 hover:bg-blue-700"
+                }
 
               `}
 
@@ -904,29 +862,23 @@ function Interview() {
 
               {
                 isRecording
-                ?
-                <>
-                  <Square size={18}/>
-                  Stop Recording
-                </>
-                :
-                <>
-                  <Mic size={18}/>
-                  Start Recording
-                </>
+                  ?
+                  <>
+                    <Square size={18} />
+                    Stop Recording
+                  </>
+                  :
+                  <>
+                    <Mic size={18} />
+                    Start Recording
+                  </>
               }
 
-
             </button>
-
-
-
-
 
             <button
 
               onClick={handleSkipQuestion}
-
 
               className="
               px-6
@@ -946,14 +898,9 @@ function Interview() {
 
             </button>
 
-
-
-
-
             <button
 
               onClick={handleEvaluateAnswer}
-
 
               className="
               px-6
@@ -972,12 +919,13 @@ function Interview() {
 
             </button>
 
-
           </div>
 
-
         )}
-                {/* Evaluation Result */}
+
+
+
+        {/* Evaluation Result */}
 
         {evaluation && (
 
@@ -996,7 +944,6 @@ function Interview() {
             "
           >
 
-
             <div
               className="
               flex
@@ -1007,9 +954,7 @@ function Interview() {
               "
             >
 
-
               <div>
-
 
                 <h2
                   className={`
@@ -1017,24 +962,21 @@ function Interview() {
                   text-2xl
                   font-bold
 
-                  ${
-                    evaluation.passed
-                    ? "text-green-600"
-                    : "text-red-600"
-                  }
+                  ${evaluation.passed
+                      ? "text-green-600"
+                      : "text-red-600"
+                    }
 
                   `}
                 >
 
                   {
                     evaluation.passed
-                    ? "✅ Answer Approved"
-                    : "❌ Needs Improvement"
+                      ? "✅ Answer Approved"
+                      : "❌ Needs Improvement"
                   }
 
                 </h2>
-
-
 
                 <p
                   className="
@@ -1048,19 +990,13 @@ function Interview() {
 
                 </p>
 
-
               </div>
-
-
-
-
 
               <div
                 className="
                 text-right
                 "
               >
-
 
                 <p
                   className="
@@ -1072,7 +1008,6 @@ function Interview() {
                   Score
 
                 </p>
-
 
                 <h3
                   className="
@@ -1086,17 +1021,9 @@ function Interview() {
 
                 </h3>
 
-
               </div>
 
-
             </div>
-
-
-
-
-
-            {/* Stars */}
 
             <div
               className="
@@ -1107,7 +1034,7 @@ function Interview() {
               "
             >
 
-              {[1,2,3,4,5].map((star)=>(
+              {[1, 2, 3, 4, 5].map((star) => (
 
                 <span
 
@@ -1115,8 +1042,8 @@ function Interview() {
 
                   className={
                     star <= evaluation.marks
-                    ? "text-yellow-500"
-                    : "text-gray-300"
+                      ? "text-yellow-500"
+                      : "text-gray-300"
                   }
 
                 >
@@ -1127,18 +1054,9 @@ function Interview() {
 
               ))}
 
-
             </div>
 
-
-
-
-
-            {/* Feedback */}
-
-
             <div className="mt-6">
-
 
               <h3
                 className="
@@ -1153,8 +1071,6 @@ function Interview() {
 
               </h3>
 
-
-
               <p
                 className="
                 mt-2
@@ -1168,15 +1084,7 @@ function Interview() {
 
               </p>
 
-
             </div>
-
-
-
-
-
-            {/* Statistics */}
-
 
             <div
               className="
@@ -1187,7 +1095,6 @@ function Interview() {
               mt-8
               "
             >
-
 
               <div
                 className="
@@ -1203,7 +1110,6 @@ function Interview() {
                   Passed
                 </p>
 
-
                 <h2
                   className="
                   text-3xl
@@ -1217,12 +1123,7 @@ function Interview() {
 
                 </h2>
 
-
               </div>
-
-
-
-
 
               <div
                 className="
@@ -1238,7 +1139,6 @@ function Interview() {
                   Skipped
                 </p>
 
-
                 <h2
                   className="
                   text-3xl
@@ -1252,27 +1152,15 @@ function Interview() {
 
                 </h2>
 
-
               </div>
 
-
             </div>
-
-
-
-
-
-
-            {/* Next / Finish Button */}
-
 
             <button
 
               disabled={isFinished}
 
-
               onClick={handleNextQuestion}
-
 
               className={`
 
@@ -1285,44 +1173,33 @@ function Interview() {
               text-lg
               transition
 
-              ${
-                isFinished
-                ? "bg-gray-500 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
-              }
+              ${isFinished
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+                }
 
               `}
-
 
             >
 
               {
                 currentIdx === questionsList.length - 1
-                ? "Finish Interview"
-                : "Next Question"
+                  ? "Finish Interview"
+                  : "Next Question"
               }
-
 
             </button>
 
-
           </div>
-
 
         )}
 
-
-
       </div>
-
 
     </div>
 
-
   );
 
-
 }
-
 
 export default Interview;

@@ -11,6 +11,7 @@ import { phpQuestions } from "./php";
 import { pythonQuestions } from "./python";
 import { javaQuestions } from "./java";
 import { cQuestions } from "./c";
+import { cppQuestions } from "./cpp";
 import { csharpQuestions } from "./csharp";
 
 import { aiQuestions } from "./ai";
@@ -33,6 +34,7 @@ export const questionsByCategory = {
   python: pythonQuestions,
   java: javaQuestions,
   c: cQuestions,
+  cpp: cppQuestions,
   csharp: csharpQuestions,
 
   ai: aiQuestions,
@@ -51,3 +53,5 @@ export function getRandomQuestions(category, count = 5) {
     .sort(() => Math.random() - 0.5)
     .slice(0, count);
 }
+
+export default questionsByCategory;

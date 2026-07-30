@@ -26,6 +26,7 @@ import {
   Terminal,
   Code,
   Users,
+  ArrowRight,
 } from "lucide-react";
 
 import { questionsByCategory } from "../data/questions";
@@ -91,6 +92,18 @@ const INTERVIEW_TRACKS = [
     duration: "8 min",
   },
 ];
+
+// How many category cards to show on the Dashboard before collapsing
+// into a "See More" link. Keep this at 4 to match the current grid
+// (grid-cols-1 sm:grid-cols-2 xl:grid-cols-4) regardless of how many
+// tracks INTERVIEW_TRACKS grows to in the future.
+const MAX_VISIBLE_TRACKS = 4;
+
+// Route to navigate to when the user wants to see the full list of
+// interview categories. Update this if your full category/selection
+// page lives at a different path (e.g. "/categories" or
+// "/interview-selection").
+const ALL_CATEGORIES_ROUTE = "/interview";
 
 
 // Reusable Statistics Card
@@ -273,6 +286,13 @@ function Dashboard() {
       .toLowerCase()
       .includes(search.toLowerCase())
   );
+
+  // Only ever show up to MAX_VISIBLE_TRACKS cards on the Dashboard.
+  // If there are more (matching) tracks than that, "See More" appears
+  // below the grid and routes to the full category/interview page.
+  const visibleTracks = filteredTracks.slice(0, MAX_VISIBLE_TRACKS);
+
+  const hasMoreTracks = filteredTracks.length > MAX_VISIBLE_TRACKS;
 
 
   return (
@@ -669,7 +689,7 @@ function Dashboard() {
         ">
 
 
-          {filteredTracks.map((track) => {
+          {visibleTracks.map((track) => {
 
 
             const Icon = track.icon;
@@ -968,6 +988,52 @@ function Dashboard() {
 
 
         </div>
+
+        {/* See More — only renders once there are more matching
+            tracks than MAX_VISIBLE_TRACKS. Keeps the existing grid
+            untouched; this is a new element appended below it. */}
+        {hasMoreTracks && (
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={() => navigate(ALL_CATEGORIES_ROUTE)}
+              className="
+                inline-flex
+                items-center
+                gap-2
+
+                px-6
+                py-3
+
+                rounded-xl
+
+                border
+                border-slate-200
+                dark:border-slate-800
+
+                bg-white
+                dark:bg-slate-900
+
+                hover:bg-slate-50
+                dark:hover:bg-slate-800
+
+                text-slate-700
+                dark:text-slate-300
+
+                font-semibold
+
+                text-sm
+
+                shadow-sm
+
+                transition-all
+                duration-200
+              "
+            >
+              See More Categories
+              <ArrowRight size={16} />
+            </button>
+          </div>
+        )}
 
 
       </section>

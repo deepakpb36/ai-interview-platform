@@ -37,7 +37,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
       </Route>
 
-      {/* Fallback Route */}
+      {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
