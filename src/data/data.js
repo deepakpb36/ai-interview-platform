@@ -141,6 +141,18 @@ export const categories = [
     color: "#00599C",
     path: "/interview/c",
   },
+  {
+  id: "cpp",
+  title: "C++",
+  description:
+    "Practice OOP, STL, classes, inheritance, polymorphism, templates, and memory management.",
+  questionsCount: 20,
+  duration: "15 min",
+  level: "Intermediate",
+  badge: "Core",
+  color: "#00599C",
+  path: "/interview/cpp",
+},
 
   {
     id: "csharp",

@@ -51,53 +51,162 @@ const INTERVIEW_TRACKS = [
   {
     id: "html",
     title: "HTML",
-    description:
-      "Master semantic HTML, accessibility and page structure.",
+    description: "Master semantic HTML and page structure.",
     icon: BookOpen,
     color: "from-orange-500 to-red-500",
     difficulty: "Beginner",
     duration: "10 min",
   },
-
+  {
+    id: "css",
+    title: "CSS",
+    description: "Practice layouts, Flexbox, Grid and animations.",
+    icon: Code,
+    color: "from-sky-500 to-cyan-500",
+    difficulty: "Beginner",
+    duration: "10 min",
+  },
+  {
+    id: "javascript",
+    title: "JavaScript",
+    description: "Practice core JavaScript interview questions.",
+    icon: Code,
+    color: "from-yellow-500 to-amber-500",
+    difficulty: "Intermediate",
+    duration: "12 min",
+  },
+  {
+    id: "react",
+    title: "React",
+    description: "React Hooks, Components and Lifecycle.",
+    icon: Code,
+    color: "from-cyan-500 to-blue-500",
+    difficulty: "Intermediate",
+    duration: "12 min",
+  },
+  {
+    id: "tailwind",
+    title: "Tailwind",
+    description: "Utility-first CSS interview practice.",
+    icon: Code,
+    color: "from-teal-500 to-cyan-500",
+    difficulty: "Intermediate",
+    duration: "10 min",
+  },
+  {
+    id: "frontend",
+    title: "Frontend",
+    description: "Frontend development interview preparation.",
+    icon: Code,
+    color: "from-indigo-500 to-blue-600",
+    difficulty: "Intermediate",
+    duration: "15 min",
+  },
+  {
+    id: "backend",
+    title: "Backend",
+    description: "Backend development interview preparation.",
+    icon: Terminal,
+    color: "from-slate-600 to-slate-900",
+    difficulty: "Intermediate",
+    duration: "15 min",
+  },
+  {
+    id: "php",
+    title: "PHP",
+    description: "PHP interview questions.",
+    icon: Terminal,
+    color: "from-indigo-500 to-violet-500",
+    difficulty: "Intermediate",
+    duration: "10 min",
+  },
   {
     id: "python",
     title: "Python",
-    description:
-      "Practice Python fundamentals and problem solving.",
+    description: "Python programming interview.",
     icon: Terminal,
     color: "from-blue-500 to-indigo-500",
     difficulty: "Intermediate",
     duration: "10 min",
   },
-
   {
     id: "java",
     title: "Java",
-    description:
-      "Prepare Java OOP and core interview questions.",
+    description: "Core Java interview preparation.",
     icon: Code,
     color: "from-red-500 to-rose-500",
     difficulty: "Intermediate",
     duration: "10 min",
   },
-
+  {
+    id: "c",
+    title: "C",
+    description: "C programming interview.",
+    icon: Code,
+    color: "from-gray-600 to-gray-800",
+    difficulty: "Intermediate",
+    duration: "10 min",
+  },
+  {
+    id: "cpp",
+    title: "C++",
+    description: "C++ interview preparation.",
+    icon: Code,
+    color: "from-blue-700 to-indigo-700",
+    difficulty: "Intermediate",
+    duration: "12 min",
+  },
+  {
+    id: "csharp",
+    title: "C#",
+    description: "C# interview preparation.",
+    icon: Code,
+    color: "from-purple-600 to-violet-700",
+    difficulty: "Intermediate",
+    duration: "12 min",
+  },
+  {
+    id: "ai",
+    title: "AI",
+    description: "Artificial Intelligence interview questions.",
+    icon: Terminal,
+    color: "from-pink-500 to-rose-500",
+    difficulty: "Advanced",
+    duration: "15 min",
+  },
+  {
+    id: "machine-learning",
+    title: "Machine Learning",
+    description: "Machine Learning interview questions.",
+    icon: Terminal,
+    color: "from-green-500 to-emerald-600",
+    difficulty: "Advanced",
+    duration: "15 min",
+  },
+  {
+    id: "deep-learning",
+    title: "Deep Learning",
+    description: "Deep Learning interview questions.",
+    icon: Terminal,
+    color: "from-fuchsia-500 to-purple-600",
+    difficulty: "Advanced",
+    duration: "15 min",
+  },
   {
     id: "hr",
     title: "HR",
-    description:
-      "Improve communication and behavioural interview skills.",
+    description: "HR interview preparation.",
     icon: Users,
     color: "from-purple-500 to-pink-500",
     difficulty: "Easy",
     duration: "8 min",
   },
 ];
-
 // How many category cards to show on the Dashboard before collapsing
 // into a "See More" link. Keep this at 4 to match the current grid
 // (grid-cols-1 sm:grid-cols-2 xl:grid-cols-4) regardless of how many
 // tracks INTERVIEW_TRACKS grows to in the future.
-const MAX_VISIBLE_TRACKS = 4;
+const MAX_VISIBLE_TRACKS = INTERVIEW_TRACKS.length;
 
 // Route to navigate to when the user wants to see the full list of
 // interview categories. Update this if your full category/selection
@@ -257,14 +366,11 @@ function Dashboard() {
 
   // Category Count
 
-  const categoryCount = {
+  const categoryCount = {};
 
-    html: 0,
-    python: 0,
-    java: 0,
-    hr: 0,
-
-  };
+  Object.keys(questionsByCategory).forEach((key) => {
+    categoryCount[key] = 0;
+  });
 
 
   history.forEach((item) => {
@@ -1184,12 +1290,12 @@ function Dashboard() {
 
                 data={{
 
-                  labels: [
-                    "HTML",
-                    "Python",
-                    "Java",
-                    "HR"
-                  ],
+                  labels: Object.keys(categoryCount).map(
+                    item =>
+                      item
+                        .replace("-", " ")
+                        .toUpperCase()
+                  ),
 
 
                   datasets: [
@@ -1198,35 +1304,73 @@ function Dashboard() {
 
                       label: "Interviews",
 
-                      data: [
+                      data: Object.values(categoryCount),
 
-                        categoryCount.html,
+                      backgroundColor: Object.keys(categoryCount).map((key) => {
 
-                        categoryCount.python,
+                        switch (key) {
 
-                        categoryCount.java,
+                          case "html":
+                            return "#f97316";
 
-                        categoryCount.hr
+                          case "css":
+                            return "#3b82f6";
 
-                      ],
+                          case "javascript":
+                            return "#facc15";
 
+                          case "react":
+                            return "#06b6d4";
 
-                      backgroundColor: [
+                          case "tailwind":
+                            return "#14b8a6";
 
-                        "#f97316",
+                          case "frontend":
+                            return "#22c55e";
 
-                        "#3b82f6",
+                          case "backend":
+                            return "#6366f1";
 
-                        "#ef4444",
+                          case "php":
+                            return "#8b5cf6";
 
-                        "#a855f7"
+                          case "python":
+                            return "#10b981";
 
-                      ],
+                          case "java":
+                            return "#dc2626";
 
+                          case "c":
+                            return "#ef4444";
+
+                          case "cpp":
+                            return "#ec4899";
+
+                          case "csharp":
+                            return "#a855f7";
+
+                          case "ai":
+                            return "#0ea5e9";
+
+                          case "machine-learning":
+                            return "#84cc16";
+
+                          case "deep-learning":
+                            return "#f43f5e";
+
+                          case "hr":
+                            return "#648b6a";
+
+                          default:
+                            return "#94a3b8";
+
+                        }
+
+                      }),
 
                       borderWidth: 2,
 
-                      borderColor: "transparent"
+                      borderColor: "transparent",
 
                     }
 

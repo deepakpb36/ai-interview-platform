@@ -748,9 +748,9 @@ function Interview() {
           border-gray-200
           dark:border-slate-800
           rounded-3xl
-          shadow-lg
-          p-6
-          lg:p-8
+          shadow-xl hover:shadow-2xl transition-all duration-300
+          p-8
+lg:p-10
           "
         >
 
@@ -794,7 +794,7 @@ function Interview() {
 
             className="
             w-full
-            h-52
+            h-56
             resize-none
             rounded-2xl
             border
@@ -852,9 +852,9 @@ function Interview() {
               transition
 
               ${isRecording
-                  ? "bg-red-600 hover:bg-red-700"
-                  : "bg-blue-600 hover:bg-blue-700"
-                }
+  ? "bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 shadow-lg hover:shadow-xl"
+  : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl"
+}
 
               `}
 
@@ -906,8 +906,9 @@ function Interview() {
               px-6
               py-3
               rounded-xl
-              bg-yellow-500
-              hover:bg-yellow-600
+              bg-gradient-to-r from-yellow-500 to-orange-500
+hover:from-yellow-600
+hover:to-orange-600
               text-white
               font-semibold
               transition
@@ -1174,9 +1175,9 @@ function Interview() {
               transition
 
               ${isFinished
-                  ? "bg-gray-500 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700"
-                }
+  ? "bg-gray-500 cursor-not-allowed"
+  : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl"
+}
 
               `}
 

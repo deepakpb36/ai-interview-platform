@@ -72,10 +72,10 @@ function Results() {
     score >= 90
       ? "⭐⭐⭐⭐⭐"
       : score >= 75
-      ? "⭐⭐⭐⭐☆"
-      : score >= 60
-      ? "⭐⭐⭐☆☆"
-      : "⭐⭐☆☆☆";
+        ? "⭐⭐⭐⭐☆"
+        : score >= 60
+          ? "⭐⭐⭐☆☆"
+          : "⭐⭐☆☆☆";
 
 
   return (
@@ -85,12 +85,12 @@ function Results() {
 
         {/* Header Section */}
 
-        <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl shadow-lg p-4 sm:p-6 lg:p-10">
+        <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl shadow-xl p-4 sm:p-6 lg:p-10">
 
           <div className="flex flex-col items-center text-center">
 
-            <div className="bg-yellow-500 p-5 rounded-full shadow-lg">
-              <Trophy 
+            <div className="bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 p-5 rounded-full shadow-2xl animate-pulse">
+              <Trophy
                 size={45}
                 className="text-white"
               />
@@ -109,7 +109,7 @@ function Results() {
 
             <div className="mt-5">
 
-              <span className="px-5 py-2 rounded-full bg-blue-600 text-white font-semibold capitalize">
+              <span className="px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold capitalize shadow-lg">
                 {category} Interview
               </span>
 
@@ -129,12 +129,12 @@ function Results() {
                 Overall Score
               </p>
 
-<div className="mt-5 relative w-32 h-32 sm:w-40 sm:h-40 mx-auto">
-              
+              <div className="mt-5 relative w-32 h-32 sm:w-40 sm:h-40 mx-auto">
 
-              <div className="w-full h-full rounded-full border-[10px] sm:border-[14px] border-blue-500 flex items-center justify-center">
 
-                  <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
+                <div className="w-full h-full rounded-full border-[10px] sm:border-[14px] border-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.35)] flex items-center justify-center">
+
+                  <h2 className="text-4xl sm:text-5xl font-extrabold text-blue-600 dark:text-blue-400">
                     {score}%
                   </h2>
 
@@ -146,7 +146,7 @@ function Results() {
             </div>
 
 
-           <div className={`${performanceBg} rounded-2xl p-6 sm:p-8 flex flex-col justify-center text-center`}>
+            <div className={`${performanceBg} rounded-2xl p-6 sm:p-8 flex flex-col justify-center text-center`}>
 
               <p className="text-gray-500 dark:text-gray-400">
                 Performance Level
@@ -181,10 +181,10 @@ function Results() {
 
               {/* Communication */}
 
-              <div className="bg-gray-100 dark:bg-slate-800 rounded-2xl p-6 hover:scale-105 transition">
+              <div className="bg-gray-100 dark:bg-slate-800 rounded-2xl p-6 hover:scale-105 hover:shadow-2xl transition-all duration-300">
 
                 <div className="flex justify-center">
-                  <MessageCircle 
+                  <MessageCircle
                     size={35}
                     className="text-blue-500"
                   />
@@ -214,7 +214,7 @@ function Results() {
               <div className="bg-gray-100 dark:bg-slate-800 rounded-2xl p-6 hover:scale-105 transition">
 
                 <div className="flex justify-center">
-                  <Brain 
+                  <Brain
                     size={35}
                     className="text-green-500"
                   />
@@ -247,7 +247,7 @@ function Results() {
 
                 <div className="flex justify-center">
 
-                  <Mic 
+                  <Mic
                     size={35}
                     className="text-purple-500"
                   />
@@ -288,7 +288,7 @@ function Results() {
 
           <div className="mt-10">
 
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-5">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-5">
               Interview Summary
             </h2>
 
@@ -296,11 +296,11 @@ function Results() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
 
 
-              <div className="bg-gray-100 dark:bg-slate-800 rounded-xl p-5">
+              <div className="bg-gray-100 dark:bg-slate-800 rounded-xl p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
 
                 <div className="flex items-center gap-3">
 
-                  <Target className="text-blue-500"/>
+                  <Target className="text-blue-500" />
 
                   <h3 className="font-semibold text-gray-900 dark:text-white">
                     Accuracy
@@ -324,7 +324,7 @@ function Results() {
 
                 <div className="flex items-center gap-3">
 
-                  <CheckCircle className="text-green-500"/>
+                  <CheckCircle className="text-green-500" />
 
                   <h3 className="font-semibold text-gray-900 dark:text-white">
                     Status
@@ -349,7 +349,7 @@ function Results() {
 
                 <div className="flex items-center gap-3">
 
-                  <Trophy className="text-yellow-500"/>
+                  <Trophy className="text-yellow-500" />
 
                   <h3 className="font-semibold text-gray-900 dark:text-white">
                     Category
@@ -372,7 +372,7 @@ function Results() {
 
 
           </div>
-                    {/* Suggestions Section */}
+          {/* Suggestions Section */}
 
           <div className="mt-10 bg-gray-100 dark:bg-slate-800 rounded-2xl p-6 md:p-8">
 
@@ -387,7 +387,7 @@ function Results() {
 
                 <div
                   key={index}
-                  className="flex items-start gap-3 bg-white dark:bg-slate-900 rounded-xl p-4 border border-gray-200 dark:border-slate-700"
+                  className="flex items-start gap-3 bg-white dark:bg-slate-900 rounded-xl p-4 border-l-4 border-green-500 border border-gray-200 dark:border-slate-700 hover:shadow-lg transition-all duration-300"
                 >
 
                   <CheckCircle
@@ -426,10 +426,29 @@ function Results() {
             >
 
               <button
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition"
+                className="
+w-full
+bg-blue-600
+hover:bg-blue-700
+hover:scale-105
+active:scale-95
+text-white
+px-8
+py-3
+rounded-xl
+font-semibold
+flex
+items-center
+justify-center
+gap-2
+transition-all
+duration-300
+shadow-lg
+hover:shadow-blue-500/30
+"
               >
 
-                <Home size={20}/>
+                <Home size={20} />
 
                 Back To Dashboard
 
@@ -448,10 +467,32 @@ function Results() {
             >
 
               <button
-                className="w-full bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition"
+                className="
+w-full
+bg-gradient-to-r
+from-green-500
+to-emerald-600
+hover:from-green-600
+hover:to-emerald-700
+hover:scale-105
+active:scale-95
+text-white
+px-8
+py-3
+rounded-xl
+font-semibold
+flex
+items-center
+justify-center
+gap-2
+transition-all
+duration-300
+shadow-lg
+hover:shadow-green-500/40
+"
               >
 
-                <RotateCcw size={20}/>
+                <RotateCcw size={20} />
 
                 Practice Again
 
