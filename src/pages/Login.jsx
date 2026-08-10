@@ -7,7 +7,15 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 
-import { auth, provider } from "../firebase";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+
+import { auth, provider, db } from "../firebase";
 
 import Logo from "../components/Logo";
 import Input from "../components/Input";
@@ -25,18 +33,85 @@ function Login() {
   // ==========================
 
   const handleLogin = async () => {
-
     if (!email || !password) {
       alert("Please enter your email and password.");
       return;
     }
 
     try {
+      const userCredential =
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
 
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
+      const user = userCredential.user;
+
+      // ==========================
+      // Firestore User Update
+      // ==========================
+
+      const userRef = doc(db, "users", user.uid);
+
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        await updateDoc(userRef, {
+          displayName:
+            user.displayName || "User",
+          email: user.email,
+          lastLogin: serverTimestamp(),
+        });
+      } else {
+        await setDoc(userRef, {
+          uid: user.uid,
+          displayName:
+            user.displayName || "User",
+          email: user.email,
+          createdAt: serverTimestamp(),
+          lastLogin: serverTimestamp(),
+        });
+      }
+
+      // ==========================
+      // Local Storage Users
+      // ==========================
+
+      const users =
+        JSON.parse(localStorage.getItem("users")) || [];
+
+      const existingUser = users.find(
+        (item) => item.uid === user.uid
+      );
+
+      if (!existingUser) {
+        users.push({
+          uid: user.uid,
+          displayName:
+            user.displayName || "User",
+          email: user.email,
+          createdAt: new Date().toISOString(),
+        });
+
+        localStorage.setItem(
+          "users",
+          JSON.stringify(users)
+        );
+      }
+
+      // ==========================
+      // Current User
+      // ==========================
+
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify({
+          uid: user.uid,
+          displayName:
+            user.displayName || "User",
+          email: user.email,
+        })
       );
 
       alert("Login Successful ✅");
@@ -44,11 +119,8 @@ function Login() {
       navigate("/dashboard");
 
     } catch (error) {
-
       alert(error.message);
-
     }
-
   };
 
   // ==========================
@@ -56,12 +128,83 @@ function Login() {
   // ==========================
 
   const handleGoogleLogin = async () => {
-
     try {
+      const result =
+        await signInWithPopup(
+          auth,
+          provider
+        );
 
-      await signInWithPopup(
-        auth,
-        provider
+      const user = result.user;
+
+      // ==========================
+      // Firestore User
+      // ==========================
+
+      const userRef = doc(db, "users", user.uid);
+
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        await updateDoc(userRef, {
+          displayName:
+            user.displayName || "User",
+          email: user.email,
+          photoURL:
+            user.photoURL || "",
+          lastLogin: serverTimestamp(),
+        });
+      } else {
+        await setDoc(userRef, {
+          uid: user.uid,
+          displayName:
+            user.displayName || "User",
+          email: user.email,
+          photoURL:
+            user.photoURL || "",
+          createdAt: serverTimestamp(),
+          lastLogin: serverTimestamp(),
+        });
+      }
+
+      // ==========================
+      // Local Storage Users
+      // ==========================
+
+      const users =
+        JSON.parse(localStorage.getItem("users")) || [];
+
+      const existingUser = users.find(
+        (item) => item.uid === user.uid
+      );
+
+      if (!existingUser) {
+        users.push({
+          uid: user.uid,
+          displayName:
+            user.displayName || "User",
+          email: user.email,
+          createdAt: new Date().toISOString(),
+        });
+
+        localStorage.setItem(
+          "users",
+          JSON.stringify(users)
+        );
+      }
+
+      // ==========================
+      // Current User
+      // ==========================
+
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify({
+          uid: user.uid,
+          displayName:
+            user.displayName || "User",
+          email: user.email,
+        })
       );
 
       alert("Google Login Successful ✅");
@@ -69,11 +212,8 @@ function Login() {
       navigate("/dashboard");
 
     } catch (error) {
-
       alert(error.message);
-
     }
-
   };
 
   // ==========================
@@ -81,14 +221,12 @@ function Login() {
   // ==========================
 
   const handleForgotPassword = async () => {
-
     if (!email) {
       alert("Please enter your email address first.");
       return;
     }
 
     try {
-
       await sendPasswordResetEmail(
         auth,
         email
@@ -99,23 +237,17 @@ function Login() {
       );
 
     } catch (error) {
-
       alert(error.message);
-
     }
-
   };
 
   return (
-
     <div className="min-h-screen bg-gray-100 dark:bg-slate-950 flex items-center justify-center px-4 sm:px-6 lg:px-8 transition-colors duration-300">
 
       <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-gray-200 dark:border-slate-800 shadow-lg p-6 sm:p-8 transition">
 
         <div className="flex justify-center">
-
           <Logo />
-
         </div>
 
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mt-6 text-center">
@@ -147,7 +279,6 @@ function Login() {
         />
 
         <div className="flex justify-end mb-6">
-
           <button
             type="button"
             onClick={handleForgotPassword}
@@ -155,13 +286,10 @@ function Login() {
           >
             Forgot Password?
           </button>
-
         </div>
 
         <div onClick={handleLogin}>
-
           <Button text="Sign In" />
-
         </div>
 
         <div className="flex items-center my-6">
@@ -199,7 +327,6 @@ function Login() {
       </div>
 
     </div>
-
   );
 }
 

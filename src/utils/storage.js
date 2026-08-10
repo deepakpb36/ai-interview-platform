@@ -1,7 +1,6 @@
 import { getAuth } from "firebase/auth";
 
 function getStorageKey() {
-
   const auth = getAuth();
   const user = auth.currentUser;
 
@@ -11,7 +10,10 @@ function getStorageKey() {
 
   return `history_${user.uid}`;
 }
+
 export function saveInterview(category, score) {
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   const key = getStorageKey();
 
@@ -19,15 +21,17 @@ export function saveInterview(category, score) {
     JSON.parse(localStorage.getItem(key)) || [];
 
   const interview = {
-
     id: crypto.randomUUID(),
 
+    // User Information
+    userId: user?.uid || "guest",
+    userName: user?.displayName || "Guest User",
+    email: user?.email || "guest@example.com",
+
+    // Interview Information
     category,
-
     scorePercentage: score,
-
     completedAt: new Date().toISOString(),
-
   };
 
   history.push(interview);
@@ -39,26 +43,24 @@ export function saveInterview(category, score) {
 
   return interview;
 }
-export function getHistory() {
 
+export function getHistory() {
   const key = getStorageKey();
 
   const history =
     JSON.parse(localStorage.getItem(key)) || [];
 
   history.sort((a, b) => {
-
     return (
       new Date(b.completedAt) -
       new Date(a.completedAt)
     );
-
   });
 
   return history;
 }
-export function deleteInterview(id) {
 
+export function deleteInterview(id) {
   const key = getStorageKey();
 
   const history = getHistory().filter(
@@ -72,7 +74,6 @@ export function deleteInterview(id) {
 }
 
 export function getStatistics() {
-
   const history = getHistory();
 
   const totalInterviews =
@@ -86,8 +87,10 @@ export function getStatistics() {
     totalInterviews === 0
       ? 0
       : Math.round(
-          scores.reduce((sum, score) => sum + score, 0) /
-            totalInterviews
+          scores.reduce(
+            (sum, score) => sum + score,
+            0
+          ) / totalInterviews
         );
 
   const highestScore =
@@ -96,53 +99,39 @@ export function getStatistics() {
       : Math.max(...scores);
 
   return {
-
     totalInterviews,
-
     averageScore,
-
     highestScore,
-
     practiceMinutes:
       totalInterviews * 10,
-
   };
 }
-export function clearHistory() {
 
+export function clearHistory() {
   const key = getStorageKey();
 
   localStorage.removeItem(key);
-
 }
 
-
 export function updateInterview(id, updatedData) {
-
   const key = getStorageKey();
 
   const history = getHistory();
 
   const updatedHistory =
     history.map((item) => {
-
       if (item.id === id) {
-
         return {
           ...item,
           ...updatedData,
         };
-
       }
 
       return item;
-
     });
-
 
   localStorage.setItem(
     key,
     JSON.stringify(updatedHistory)
   );
-
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
@@ -7,17 +7,22 @@ import Navbar from "./Navbar";
 function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const location = useLocation();
+  const isAdminPage = location.pathname.startsWith("/admin");
+
   return (
     <div className="h-screen flex bg-slate-100 dark:bg-slate-950 overflow-hidden">
 
       {/* Sidebar */}
-      <Sidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-      />
+      {!isAdminPage && (
+        <Sidebar
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+        />
+      )}
 
       {/* Mobile Overlay */}
-      {sidebarOpen && (
+      {!isAdminPage && sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
           className="fixed inset-0 z-40 bg-black/50 lg:hidden"
@@ -25,10 +30,16 @@ function Layout() {
       )}
 
       {/* Main Content */}
-      <div className="flex flex-1 flex-col min-w-0 lg:ml-72">
+      <div
+        className={`flex flex-1 flex-col min-w-0 ${
+          isAdminPage ? "" : "lg:ml-72"
+        }`}
+      >
 
         {/* Navbar */}
-        <Navbar setSidebarOpen={setSidebarOpen} />
+        {!isAdminPage && (
+          <Navbar setSidebarOpen={setSidebarOpen} />
+        )}
 
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8">

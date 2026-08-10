@@ -6,7 +6,14 @@ import {
   updateProfile,
 } from "firebase/auth";
 
-import { auth } from "../firebase";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+
+import { auth, db } from "../firebase";
 
 import Logo from "../components/Logo";
 import Input from "../components/Input";
@@ -35,6 +42,10 @@ function Signup() {
     }
 
     try {
+      // ==========================
+      // Create Firebase Account
+      // ==========================
+
       const userCredential =
         await createUserWithEmailAndPassword(
           auth,
@@ -42,13 +53,76 @@ function Signup() {
           password
         );
 
-      await updateProfile(userCredential.user, {
+      const user = userCredential.user;
+
+      // ==========================
+      // Update Display Name
+      // ==========================
+
+      await updateProfile(user, {
         displayName: name,
       });
+
+      // ==========================
+      // Save User To Firestore
+      // ==========================
+
+      const userRef = doc(db, "users", user.uid);
+
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          uid: user.uid,
+          displayName: name,
+          email: user.email,
+          createdAt: serverTimestamp(),
+          lastLogin: serverTimestamp(),
+        });
+      }
+
+      // ==========================
+      // Save User for Local Admin
+      // ==========================
+
+      const users =
+        JSON.parse(localStorage.getItem("users")) || [];
+
+      const existingUser = users.find(
+        (item) => item.uid === user.uid
+      );
+
+      if (!existingUser) {
+        users.push({
+          uid: user.uid,
+          displayName: name,
+          email: user.email,
+          createdAt: new Date().toISOString(),
+        });
+
+        localStorage.setItem(
+          "users",
+          JSON.stringify(users)
+        );
+      }
+
+      // ==========================
+      // Save Current User
+      // ==========================
+
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify({
+          uid: user.uid,
+          displayName: name,
+          email: user.email,
+        })
+      );
 
       alert("Account Created Successfully ✅");
 
       navigate("/dashboard");
+
     } catch (error) {
       alert(error.message);
     }
@@ -112,9 +186,7 @@ function Signup() {
         />
 
         <div onClick={handleSignup}>
-
           <Button text="Create Account" />
-
         </div>
 
         <div className="flex items-center my-6">
