@@ -5,7 +5,7 @@ export function evaluateAnswer(answer, keywords) {
   // Basic Validation
   // ==========================
 
-  if (cleanAnswer.length < 15) {
+  if (!cleanAnswer) {
     return {
       passed: false,
       percentage: 0,
@@ -14,7 +14,7 @@ export function evaluateAnswer(answer, keywords) {
       missingKeywords: keywords,
       isSpamDetected: true,
       message:
-        "Your answer is too short. Please explain your answer in more detail.",
+        "Please provide an answer before continuing.",
     };
   }
 
@@ -32,7 +32,9 @@ export function evaluateAnswer(answer, keywords) {
     cleanAnswer.split(/\s+/);
 
   const repeatedWords =
-    [...new Set(words)].length <
+    [...new Set(
+      words.map((word) => word.toLowerCase())
+    )].length <
     words.length / 2;
 
   if (
@@ -61,7 +63,9 @@ export function evaluateAnswer(answer, keywords) {
 
   const matchedKeywords =
     keywords.filter((keyword) =>
-      userAnswer.includes(keyword.toLowerCase())
+      userAnswer.includes(
+        keyword.toLowerCase()
+      )
     );
 
   const missingKeywords =
@@ -70,14 +74,33 @@ export function evaluateAnswer(answer, keywords) {
         !matchedKeywords.includes(keyword)
     );
 
-  const percentage = Math.round(
-    (matchedKeywords.length /
-      keywords.length) *
-      100
-  );
+  // ==========================
+  // Percentage
+  // ==========================
+
+  const percentage =
+    keywords.length > 0
+      ? Math.round(
+          (matchedKeywords.length /
+            keywords.length) *
+            100
+        )
+      : 0;
+
+ // ==========================
+// PASS RULE
+// ==========================
+// At least 30% keyword match
+// = valid answer
+//
+// Below 30%
+// = invalid answer
+
+const passed =
+  percentage >= 30;
 
   // ==========================
-  // Marks Calculation
+  // Marks
   // ==========================
 
   let marks = 0;
@@ -90,39 +113,41 @@ export function evaluateAnswer(answer, keywords) {
     marks = 3;
   } else if (percentage >= 30) {
     marks = 2;
-  } else if (percentage >= 10) {
+  } else if (percentage > 0) {
     marks = 1;
   }
+// ==========================
+// Feedback Message
+// ==========================
 
-  // ==========================
-  // Feedback Message
-  // ==========================
+let message = "";
 
-  let message = "";
-
-  if (marks === 5) {
-    message =
-      "Excellent answer! You covered almost every important concept.";
-  } else if (marks === 4) {
-    message =
-      "Very good answer. Only a few important points are missing.";
-  } else if (marks === 3) {
-    message =
-      "Good answer, but you should explain more concepts.";
-  } else if (marks === 2) {
-    message =
-      "Basic understanding shown, but several important points are missing.";
-  } else {
-    message =
-      "Your answer needs significant improvement. Try explaining the topic in more detail.";
-  }
+if (passed && marks === 5) {
+  message =
+    "Excellent answer! You covered the important concepts clearly.";
+} else if (passed && marks === 4) {
+  message =
+    "Very good answer. Your response covers most of the important points.";
+} else if (passed && marks === 3) {
+  message =
+    "Good answer. Your response is relevant, but you could explain a few more points.";
+} else if (passed && marks === 2) {
+  message =
+    "Your answer is relevant, but it needs more explanation and detail.";
+} else if (passed && marks === 1) {
+  message =
+    "Your answer is relevant, but please provide a more complete explanation.";
+} else {
+  message =
+    "This answer is not relevant to the question. Please try again.";
+}
 
   // ==========================
   // Final Result
   // ==========================
 
   return {
-    passed: marks >= 3,
+    passed,
     percentage,
     marks,
     matchedKeywords,

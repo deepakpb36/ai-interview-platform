@@ -1,12 +1,23 @@
-import { useState, useEffect, useRef, useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+} from "react";
+
+import {
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
 import {
   Mic,
   Square,
 } from "lucide-react";
 
-import { questionsByCategory } from "../data/questions";
+import {
+  questionsByCategory,
+} from "../data/questions";
 
 import {
   evaluateAnswer,
@@ -17,12 +28,6 @@ import {
 } from "../utils/storage";
 
 import {
-  getFirestore,
-  collection,
-  addDoc,
-} from "firebase/firestore";
-
-import {
   getAuth,
 } from "firebase/auth";
 
@@ -31,106 +36,333 @@ function Interview() {
 
   const navigate = useNavigate();
 
-  const { category = "html" } = useParams();
+  const {
+    category = "html",
+  } = useParams();
 
 
-  // ==========================
-  // Questions Setup
-  // ==========================
+  /*
+   * Number of questions asked
+   * in one interview.
+   */
+  const QUESTIONS_PER_INTERVIEW = 5;
 
-  const QUESTIONS_PER_INTERVIEW = 10;
+
+  /*
+   * Number of completed interviews
+   * before the question cycle resets.
+   */
+  const INTERVIEWS_BEFORE_RESET = 5;
 
 
+  /*
+   * Normalize category name.
+   */
+  const normalizedCategory =
+    category.toLowerCase();
+
+
+  /*
+   * Current logged-in user.
+   */
+  const user =
+    getAuth().currentUser;
+
+
+  const userId =
+    user?.uid || "guest";
+
+
+  /*
+   * Storage key for completed/used
+   * questions of this category.
+   */
+  const usedQuestionsStorageKey =
+    `usedQuestions_${userId}_${normalizedCategory}`;
+
+
+  /*
+   * Storage key for number of
+   * completed interviews in this cycle.
+   */
+  const interviewCountStorageKey =
+    `interviewCount_${userId}_${normalizedCategory}`;
+
+
+  /*
+   * Select questions for this interview.
+   */
   const questionsList = useMemo(() => {
 
     const allQuestions =
       questionsByCategory[
-      category.toLowerCase()
+        normalizedCategory
       ] ||
       questionsByCategory.html;
 
 
-    const shuffled =
-      [...allQuestions].sort(
+    if (
+      !Array.isArray(allQuestions) ||
+      allQuestions.length === 0
+    ) {
+      return [];
+    }
+
+
+    let usedQuestionIds = [];
+
+
+    try {
+
+      const savedUsedQuestions =
+        JSON.parse(
+          localStorage.getItem(
+            usedQuestionsStorageKey
+          )
+        );
+
+
+      if (
+        Array.isArray(
+          savedUsedQuestions
+        )
+      ) {
+
+        usedQuestionIds =
+          savedUsedQuestions;
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Unable to read used questions:",
+        error
+      );
+
+    }
+
+
+    /*
+     * Find questions that have
+     * not been used yet.
+     */
+    let availableQuestions =
+      allQuestions.filter(
+        (question) =>
+          !usedQuestionIds.includes(
+            question.id
+          )
+      );
+
+
+    /*
+     * If fewer than 5 questions remain,
+     * start a fresh pool.
+     */
+    if (
+      availableQuestions.length <
+      QUESTIONS_PER_INTERVIEW
+    ) {
+
+      usedQuestionIds = [];
+
+      availableQuestions =
+        [...allQuestions];
+
+    }
+
+
+    /*
+     * Shuffle available questions.
+     */
+    const shuffledQuestions =
+      [...availableQuestions].sort(
         () => Math.random() - 0.5
       );
 
 
-    return shuffled.slice(
+    /*
+     * Select questions.
+     */
+    return shuffledQuestions.slice(
       0,
       Math.min(
         QUESTIONS_PER_INTERVIEW,
-        shuffled.length
+        shuffledQuestions.length
       )
     );
 
-
-  }, [category]);
-
-
-
-  // ==========================
-  // States
-  // ==========================
-
-  const [currentIdx, setCurrentIdx] =
-    useState(0);
+  }, [
+    normalizedCategory,
+    usedQuestionsStorageKey,
+  ]);
 
 
-  const [answer, setAnswer] =
-    useState("");
+  /*
+   * Current question index.
+   */
+  const [
+    currentIdx,
+    setCurrentIdx,
+  ] = useState(0);
 
 
-  const [evaluation, setEvaluation] =
-    useState(null);
+  /*
+   * User answer.
+   */
+  const [
+    answer,
+    setAnswer,
+  ] = useState("");
 
 
-  const [isRecording, setIsRecording] =
-    useState(false);
+  /*
+   * Current evaluation.
+   */
+  const [
+    evaluation,
+    setEvaluation,
+  ] = useState(null);
 
 
-  const [passedCount, setPassedCount] =
-    useState(0);
+  /*
+   * IMPORTANT:
+   *
+   * This tells us whether the answer
+   * was actually accepted.
+   *
+   * It is different from evaluation
+   * because an invalid answer can be
+   * evaluated and then edited again.
+   */
+  const [
+    isAnswerAccepted,
+    setIsAnswerAccepted,
+  ] = useState(false);
 
 
-  const [skippedCount, setSkippedCount] =
-    useState(0);
+  /*
+   * Recording state.
+   */
+  const [
+    isRecording,
+    setIsRecording,
+  ] = useState(false);
 
 
-  const [isFinished, setIsFinished] =
-    useState(false);
+  /*
+   * Number of passed questions.
+   */
+  const [
+    passedCount,
+    setPassedCount,
+  ] = useState(0);
 
 
+  /*
+   * Number of skipped questions.
+   */
+  const [
+    skippedCount,
+    setSkippedCount,
+  ] = useState(0);
 
+
+  /*
+   * Prevent interview from
+   * finishing multiple times.
+   */
+  const [
+    isFinished,
+    setIsFinished,
+  ] = useState(false);
+
+
+  /*
+   * Prevent Evaluate Answer
+   * from being clicked twice
+   * while evaluation is running.
+   */
+  const [
+    isEvaluating,
+    setIsEvaluating,
+  ] = useState(false);
+
+
+  /*
+   * Speech recognition reference.
+   */
   const recognitionRef =
     useRef(null);
 
 
-
+  /*
+   * Current question object.
+   */
   const currentQuestionObj =
     questionsList[currentIdx];
 
 
+  /*
+   * Store completed question IDs.
+   */
+  const completedQuestionIdsRef =
+    useRef([]);
 
-  const db =
-    getFirestore();
+
+  /*
+   * Store latest passed/skipped
+   * counts.
+   */
+  const passedCountRef =
+    useRef(0);
+
+  const skippedCountRef =
+    useRef(0);
 
 
-  const auth =
-    getAuth();
+  /*
+   * Keep refs synchronized with state.
+   */
+  useEffect(() => {
 
-  // ==========================
-  // Speech Recognition
-  // ==========================
+    passedCountRef.current =
+      passedCount;
+
+  }, [passedCount]);
+
 
   useEffect(() => {
+
+    skippedCountRef.current =
+      skippedCount;
+
+  }, [skippedCount]);
+
+
+  /*
+   * Speech Recognition setup.
+   */
+  useEffect(() => {
+
+    if (
+      !(
+        "webkitSpeechRecognition" in
+        window
+      ) &&
+      !(
+        "SpeechRecognition" in
+        window
+      )
+    ) {
+      return;
+    }
+
 
     const SpeechRecognition =
       window.SpeechRecognition ||
       window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      return;
-    }
 
 
     const recognition =
@@ -138,26 +370,35 @@ function Interview() {
 
 
     recognition.continuous = true;
-    recognition.interimResults = false;
+
+    recognition.interimResults = true;
+
     recognition.lang = "en-US";
 
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (
+      event
+    ) => {
 
-      const transcript =
-        event.results[
-          event.results.length - 1
-        ][0].transcript;
+      let transcript = "";
 
 
-      setAnswer((previous) =>
-        previous
-          ? `${previous} ${transcript}`
-          : transcript
-      );
+      for (
+        let i = event.resultIndex;
+        i < event.results.length;
+        i++
+      ) {
+
+        transcript +=
+          event.results[i][0]
+            .transcript;
+
+      }
+
+
+      setAnswer(transcript);
 
     };
-
 
 
     recognition.onend = () => {
@@ -167,45 +408,58 @@ function Interview() {
     };
 
 
+    recognition.onerror = (
+      event
+    ) => {
 
-    recognition.onerror = () => {
+      console.error(
+        "Speech recognition error:",
+        event.error
+      );
 
       setIsRecording(false);
 
     };
 
 
-
     recognitionRef.current =
       recognition;
 
 
-
     return () => {
 
-      if (recognitionRef.current) {
+      try {
 
-        recognitionRef.current.stop();
+        recognition.stop();
+
+      } catch (error) {
+
+        console.error(
+          "Unable to stop recognition:",
+          error
+        );
 
       }
 
-    };
+      recognitionRef.current =
+        null;
 
+    };
 
   }, []);
 
 
-
-  // ==========================
-  // Recording Controls
-  // ==========================
-
+  /*
+   * Start voice recording.
+   */
   const startRecording = () => {
 
-    if (!recognitionRef.current) {
+    if (
+      !recognitionRef.current
+    ) {
 
       alert(
-        "Speech Recognition is not supported in this browser."
+        "Speech recognition is not supported in this browser."
       );
 
       return;
@@ -219,12 +473,10 @@ function Interview() {
 
       setIsRecording(true);
 
-    }
+    } catch (error) {
 
-    catch (error) {
-
-      console.log(
-        "Recording Error:",
+      console.error(
+        "Unable to start recording:",
         error
       );
 
@@ -233,59 +485,42 @@ function Interview() {
   };
 
 
-
+  /*
+   * Stop voice recording.
+   */
   const stopRecording = () => {
 
-    if (!recognitionRef.current) {
-      return;
+    if (
+      recognitionRef.current
+    ) {
+
+      try {
+
+        recognitionRef.current.stop();
+
+      } catch (error) {
+
+        console.error(
+          "Unable to stop recording:",
+          error
+        );
+
+      }
+
     }
 
-
-    recognitionRef.current.stop();
 
     setIsRecording(false);
 
   };
 
 
-
-  // ==========================
-  // Evaluate Answer
-  // ==========================
-
-  const handleEvaluateAnswer = () => {
-
-    if (!answer.trim()) {
-
-      alert(
-        "Please enter or record an answer first!"
-      );
-
-      return;
-
-    }
-
-
-    const result =
-      evaluateAnswer(
-        answer,
-        currentQuestionObj.keywords
-      );
-
-
-    setEvaluation(result);
-
-  };
-
-
-
-  // ==========================
-  // Save Interview History
-  // ==========================
-
-  const saveInterviewToHistory = async (
-    finalSkipped,
-    finalPassed
+  /*
+   * Finish the interview.
+   */
+  const finishInterview = async (
+    finalPassed = passedCountRef.current,
+    finalSkipped = skippedCountRef.current
   ) => {
 
     if (isFinished) {
@@ -296,203 +531,371 @@ function Interview() {
     setIsFinished(true);
 
 
+    if (isRecording) {
+      stopRecording();
+    }
+
+
     const totalQuestions =
       questionsList.length;
 
 
-    const score =
-      Math.round(
-        (finalPassed / totalQuestions) * 100
-      );
-
-
-    saveInterview(
-      category,
-      score
-    );
-
-
-    const user =
-      auth.currentUser;
-
-
-    if (!user) {
-      return;
-    }
-
-
-
+    /*
+     * Save completed question IDs.
+     */
     try {
 
-      await addDoc(
+      const existingUsed =
+        JSON.parse(
+          localStorage.getItem(
+            usedQuestionsStorageKey
+          )
+        ) || [];
 
-        collection(
-          db,
-          "users",
-          user.uid,
-          "history"
-        ),
 
-        {
+      const safeExistingUsed =
+        Array.isArray(existingUsed)
+          ? existingUsed
+          : [];
 
-          category,
 
-          score,
+      const updatedUsedQuestions = [
+        ...new Set([
+          ...safeExistingUsed,
+          ...completedQuestionIdsRef.current,
+        ]),
+      ];
 
-          totalQuestions,
 
-          passedQuestions:
-            finalPassed,
-
-          skippedQuestions:
-            finalSkipped,
-
-          completedAt:
-            new Date().toISOString(),
-
-          status:
-            "Completed",
-
-        }
-
+      localStorage.setItem(
+        usedQuestionsStorageKey,
+        JSON.stringify(
+          updatedUsedQuestions
+        )
       );
 
-    }
+    } catch (error) {
 
-    catch (error) {
-
-      console.log(
-        "Firebase History Error:",
+      console.error(
+        "Unable to save used questions:",
         error
       );
 
     }
 
+
+    /*
+     * Update completed interview count.
+     */
+    try {
+
+      let interviewCount =
+        Number(
+          localStorage.getItem(
+            interviewCountStorageKey
+          )
+        ) || 0;
+
+
+      interviewCount += 1;
+
+
+      /*
+       * Reset question cycle after
+       * configured number of interviews.
+       */
+      if (
+        interviewCount >=
+        INTERVIEWS_BEFORE_RESET
+      ) {
+
+        interviewCount = 0;
+
+        localStorage.removeItem(
+          usedQuestionsStorageKey
+        );
+
+      }
+
+
+      localStorage.setItem(
+        interviewCountStorageKey,
+        String(interviewCount)
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Unable to update interview count:",
+        error
+      );
+
+    }
+
+
+    /*
+     * Calculate final score.
+     */
+    const attempted =
+      totalQuestions -
+      finalSkipped;
+
+
+    const score =
+      totalQuestions === 0
+        ? 0
+        : Math.round(
+            (finalPassed /
+              totalQuestions) *
+              100
+          );
+
+
+    /*
+     * Save interview.
+     */
+    try {
+
+      saveInterview(
+        category,
+        score
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Unable to save interview:",
+        error
+      );
+
+    }
+
+
+    /*
+     * Navigate to Results page.
+     */
+    navigate(
+      "/results",
+      {
+        state: {
+          category,
+          score,
+          totalQuestions,
+          passedCount:
+            finalPassed,
+          skippedCount:
+            finalSkipped,
+          attempted,
+        },
+      }
+    );
+
   };
-  // ==========================
-  // Next Question
-  // ==========================
-
-  const handleNextQuestion = async () => {
 
 
-    let updatedPassed =
-      passedCount;
+  /*
+   * Evaluate current answer.
+   *
+   * IMPORTANT:
+   *
+   * The actual keywords remain hidden.
+   *
+   * If zero keywords match:
+   * - answer is rejected
+   * - user can edit answer
+   * - user can evaluate again
+   * - Next Question stays disabled
+   *
+   * If at least one keyword matches:
+   * - answer is accepted
+   * - answer becomes locked
+   * - Next Question becomes enabled
+   */
+  const handleEvaluate = () => {
+
+    if (
+      isEvaluating ||
+      isAnswerAccepted ||
+      isFinished
+    ) {
+      return;
+    }
 
 
+    if (!answer.trim()) {
 
-    if (evaluation?.passed) {
+      alert(
+        "Please provide an answer first."
+      );
 
-      updatedPassed =
-        passedCount + 1;
+      return;
+
+    }
+
+
+    if (!currentQuestionObj) {
+      return;
+    }
+
+
+    setIsEvaluating(true);
+
+
+    try {
+
+      const result =
+        evaluateAnswer(
+          answer,
+          currentQuestionObj.keywords
+        );
+
+
+      /*
+       * Save evaluation result.
+       *
+       * Keywords themselves are NOT
+       * displayed anywhere.
+       */
+      setEvaluation(result);
+
+
+      /*
+       * If answer is NOT accepted:
+       *
+       * Keep textarea unlocked so the
+       * user can improve the answer.
+       */
+      if (!result?.passed) {
+
+        setIsAnswerAccepted(false);
+
+        setIsEvaluating(false);
+
+        return;
+
+      }
+
+
+      /*
+       * Answer is accepted.
+       */
+      setIsAnswerAccepted(true);
+
+
+      /*
+       * Remember completed question.
+       */
+      if (
+        currentQuestionObj.id &&
+        !completedQuestionIdsRef.current.includes(
+          currentQuestionObj.id
+        )
+      ) {
+
+        completedQuestionIdsRef.current.push(
+          currentQuestionObj.id
+        );
+
+      }
+
+
+      /*
+       * Update passed count.
+       */
+      const newPassedCount =
+        passedCountRef.current + 1;
+
+
+      passedCountRef.current =
+        newPassedCount;
 
 
       setPassedCount(
-        updatedPassed
+        newPassedCount
       );
+
+
+      setIsEvaluating(false);
+
+
+      /*
+       * LAST QUESTION
+       *
+       * Only finish automatically
+       * when the final answer has
+       * been accepted.
+       */
+      setIsEvaluating(false);
+
+    } catch (error) {
+
+      console.error(
+        "Answer evaluation error:",
+        error
+      );
+
+      alert(
+        "Unable to evaluate the answer. Please try again."
+      );
+
+      setIsEvaluating(false);
 
     }
-
-
-
-    if (
-      currentIdx <
-      questionsList.length - 1
-    ) {
-
-
-      setCurrentIdx(
-        (previous) =>
-          previous + 1
-      );
-
-
-      setAnswer("");
-
-      setEvaluation(null);
-
-
-      return;
-
-    }
-
-
-
-    const finalScore =
-      Math.round(
-        (
-          updatedPassed /
-          questionsList.length
-        ) * 100
-      );
-
-
-
-    await saveInterviewToHistory(
-
-      skippedCount,
-
-      updatedPassed
-
-    );
-
-
-
-    navigate(
-      "/results",
-      {
-
-        state: {
-
-          category,
-
-          score:
-            finalScore,
-
-        },
-
-      }
-
-    );
-
 
   };
 
 
+  /*
+   * Skip current question.
+   */
+  const handleSkip = () => {
 
-  // ==========================
-  // Skip Question
-  // ==========================
+    if (
+      isFinished ||
+      isAnswerAccepted
+    ) {
+      return;
+    }
 
-  const handleSkipQuestion = async () => {
+
+    if (isRecording) {
+      stopRecording();
+    }
 
 
-    const updatedSkipped =
-      skippedCount + 1;
+    const newSkippedCount =
+      skippedCountRef.current + 1;
 
+
+    skippedCountRef.current =
+      newSkippedCount;
 
 
     setSkippedCount(
-      updatedSkipped
+      newSkippedCount
     );
 
 
-
+    /*
+     * Move to next question.
+     */
     if (
       currentIdx <
       questionsList.length - 1
     ) {
 
-
-      setCurrentIdx(
-        (previous) =>
-          previous + 1
-      );
-
-
       setAnswer("");
 
       setEvaluation(null);
+
+      setIsAnswerAccepted(false);
+
+      setIsEvaluating(false);
+
+
+      setCurrentIdx(
+        (prev) => prev + 1
+      );
 
 
       return;
@@ -500,707 +903,978 @@ function Interview() {
     }
 
 
-
-    const finalScore =
-      Math.round(
-        (
-          passedCount /
-          questionsList.length
-        ) * 100
-      );
-
-
-
-    await saveInterviewToHistory(
-
-      updatedSkipped,
-
-      passedCount
-
+    /*
+     * If last question is skipped,
+     * finish the interview.
+     */
+    finishInterview(
+      passedCountRef.current,
+      newSkippedCount
     );
-
-
-
-    navigate(
-      "/results",
-      {
-
-        state: {
-
-          category,
-
-          score:
-            finalScore,
-
-        },
-
-      }
-
-    );
-
 
   };
 
 
+  /*
+   * Move to next question.
+   *
+   * An accepted answer is required.
+   */
+  const handleNext = () => {
 
-  // ==========================
-  // Progress Calculation
-  // ==========================
+    if (
+      isFinished ||
+      !isAnswerAccepted
+    ) {
+      return;
+    }
 
-  const progressPercent =
-    Math.round(
 
-      (
-        (currentIdx + 1) /
-        questionsList.length
-      ) * 100
+    if (isRecording) {
+      stopRecording();
+    }
 
+
+    /*
+     * Last question.
+     */
+    if (
+      currentIdx >=
+      questionsList.length - 1
+    ) {
+
+      finishInterview(
+        passedCountRef.current,
+        skippedCountRef.current
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * Clear current question data.
+     */
+    setAnswer("");
+
+    setEvaluation(null);
+
+    setIsAnswerAccepted(false);
+
+    setIsEvaluating(false);
+
+
+    /*
+     * Move to next question.
+     */
+    setCurrentIdx(
+      (prev) => prev + 1
+    );
+
+  };
+
+
+  /*
+   * Timer.
+   */
+  const [
+    timeLeft,
+    setTimeLeft,
+  ] = useState(
+    15 * 60
+  );
+
+
+  useEffect(() => {
+
+    if (isFinished) {
+      return;
+    }
+
+
+    if (timeLeft <= 0) {
+
+      finishInterview(
+        passedCountRef.current,
+        skippedCountRef.current
+      );
+
+      return;
+
+    }
+
+
+    const timer =
+      setInterval(() => {
+
+        setTimeLeft(
+          (prev) => prev - 1
+        );
+
+      }, 1000);
+
+
+    return () =>
+      clearInterval(timer);
+
+  }, [
+    timeLeft,
+    isFinished,
+  ]);
+
+
+  /*
+   * Format timer.
+   */
+  const minutes =
+    Math.floor(
+      timeLeft / 60
     );
 
 
+  const seconds =
+    timeLeft % 60;
+
+
+  const formattedTime =
+    `${String(
+      minutes
+    ).padStart(2, "0")}:${String(
+      seconds
+    ).padStart(2, "0")}`;
+
+
+  /*
+   * Prevent copy.
+   */
+  const handleCopy = (
+    event
+  ) => {
+
+    event.preventDefault();
+
+  };
+
+
+  /*
+   * Prevent paste.
+   */
+  const handlePaste = (
+    event
+  ) => {
+
+    event.preventDefault();
+
+    alert(
+      "Copy and paste are disabled for interview answers."
+    );
+
+  };
+
+
+  /*
+   * Prevent cut.
+   */
+  const handleCut = (
+    event
+  ) => {
+
+    event.preventDefault();
+
+  };
+
+
+  /*
+   * Prevent right-click.
+   */
+  const handleContextMenu = (
+    event
+  ) => {
+
+    event.preventDefault();
+
+  };
+
+
+  /*
+   * Prevent keyboard shortcuts.
+   */
+  const handleKeyDown = (
+    event
+  ) => {
+
+    if (
+      (event.ctrlKey ||
+        event.metaKey) &&
+      [
+        "c",
+        "v",
+        "x",
+        "a",
+      ].includes(
+        event.key.toLowerCase()
+      )
+    ) {
+
+      event.preventDefault();
+
+    }
+
+  };
+
+
+  /*
+   * If no question exists.
+   */
+  if (!currentQuestionObj) {
+
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-950 px-4">
+
+        <div className="text-center">
+
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            No questions available
+          </h2>
+
+
+          <button
+            onClick={() =>
+              navigate("/interview")
+            }
+            className="mt-6 px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+          >
+            Back to Interviews
+          </button>
+
+        </div>
+
+      </div>
+    );
+
+  }
+
 
   return (
-
     <div
       className="
-      min-h-screen
-      bg-gray-100
-      dark:bg-slate-950
-      transition-colors
-      duration-300
-      py-8
-      px-4
+        min-h-screen
+        bg-gray-50
+        dark:bg-slate-950
+        px-4
+        py-6
+        sm:px-6
+        lg:px-8
       "
     >
 
-      <div
-        className="
-        max-w-5xl
-        mx-auto
-        "
-      >
+      <div className="max-w-5xl mx-auto">
 
 
         {/* Header */}
 
         <div
           className="
-          flex
-          flex-col
-          md:flex-row
-          justify-between
-          md:items-center
-          gap-4
-          mb-8
+            flex
+            flex-col
+            sm:flex-row
+            sm:items-center
+            sm:justify-between
+            gap-4
+            mb-6
           "
         >
 
           <div>
 
-            <p
-              className="
-              text-sm
-              uppercase
-              tracking-widest
-              font-semibold
-              text-blue-600
-              "
-            >
-              AI Interview Platform
-            </p>
-
-
             <h1
               className="
-              text-3xl
-              font-bold
-              text-gray-900
-              dark:text-white
-              mt-2
+                text-2xl
+                sm:text-3xl
+                font-bold
+                text-gray-900
+                dark:text-white
               "
             >
-
-              {category.toUpperCase()} Interview
-
+              {category
+                .charAt(0)
+                .toUpperCase() +
+                category.slice(1)
+              } Interview
             </h1>
 
 
             <p
               className="
-              mt-2
-              text-gray-500
-              dark:text-gray-400
+                text-gray-500
+                dark:text-gray-400
+                mt-1
               "
             >
-
-              Question {currentIdx + 1} of {questionsList.length}
-
+              Question{" "}
+              {currentIdx + 1}{" "}
+              of{" "}
+              {questionsList.length}
             </p>
 
           </div>
 
 
-
-          <button
-
-            onClick={() =>
-              navigate("/dashboard")
-            }
-
-            className="
-            bg-red-500
-            hover:bg-red-600
-            text-white
-            px-6
-            py-3
-            rounded-xl
-            font-semibold
-            transition
-            "
-
-          >
-
-            Quit Interview
-
-          </button>
-
-
-        </div>
-        {/* Progress Bar */}
-
-        <div className="mb-8">
+          {/* Timer */}
 
           <div
-            className="
-            flex
-            justify-between
-            mb-2
-            text-sm
-            "
-          >
-
-            <span
-              className="
-              font-medium
-              text-gray-700
-              dark:text-gray-300
-              "
-            >
-
-              Progress
-
-            </span>
-
-            <span
-              className="
+            className={`
+              px-5
+              py-3
+              rounded-xl
               font-bold
-              text-blue-600
-              "
-            >
-
-              {progressPercent}%
-
-            </span>
-
-          </div>
-
-          <div
-            className="
-            w-full
-            h-3
-            rounded-full
-            overflow-hidden
-            bg-gray-200
-            dark:bg-slate-800
-            "
+              text-lg
+              ${
+                timeLeft <= 60
+                  ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+                  : "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+              }
+            `}
           >
-
-            <div
-
-              className="
-              h-full
-              bg-gradient-to-r
-              from-blue-500
-              to-indigo-600
-              transition-all
-              duration-500
-              "
-
-              style={{
-                width: `${progressPercent}%`,
-              }}
-
-            />
-
+            {formattedTime}
           </div>
 
         </div>
 
 
-
-        {/* Question Card */}
+        {/* Progress Bar */}
 
         <div
           className="
-          bg-white
-          dark:bg-slate-900
-          border
-          border-gray-200
-          dark:border-slate-800
-          rounded-3xl
-          shadow-xl hover:shadow-2xl transition-all duration-300
-          p-8
-lg:p-10
+            w-full
+            bg-gray-200
+            dark:bg-slate-800
+            rounded-full
+            h-2
+            mb-6
           "
         >
 
-          <h2
+          <div
             className="
-            text-2xl
-            font-bold
-            text-gray-900
-            dark:text-white
-            leading-relaxed
+              bg-blue-600
+              h-2
+              rounded-full
+              transition-all
+              duration-300
             "
-          >
-
-            {currentQuestionObj?.question}
-
-          </h2>
-
-        </div>
-
-
-
-        {/* Answer Input */}
-
-        <div className="mt-8">
-
-          <textarea
-
-            value={answer}
-
-            onChange={(e) =>
-              setAnswer(e.target.value)
-            }
-
-            disabled={
-              evaluation !== null
-            }
-
-            placeholder="
-            Type your answer here or use microphone...
-            "
-
-            className="
-            w-full
-            h-56
-            resize-none
-            rounded-2xl
-            border
-            border-gray-300
-            dark:border-slate-700
-            bg-white
-            dark:bg-slate-900
-            text-gray-900
-            dark:text-white
-            p-5
-            outline-none
-            focus:ring-2
-            focus:ring-blue-500
-            "
-
+            style={{
+              width: `${
+                ((currentIdx + 1) /
+                  questionsList.length) *
+                100
+              }%`,
+            }}
           />
 
         </div>
 
 
+        {/* Main Interview Card */}
 
-        {/* Action Buttons */}
-
-        {!evaluation && (
-
-          <div
-            className="
-            flex
-            flex-col
-            sm:flex-row
-            gap-4
-            mt-6
-            "
-          >
-
-            <button
-
-              onClick={
-                isRecording
-                  ? stopRecording
-                  : startRecording
-              }
-
-              className={`
-
-              flex
-              items-center
-              justify-center
-              gap-2
-              px-6
-              py-3
-              rounded-xl
-              text-white
-              font-semibold
-              transition
-
-              ${isRecording
-  ? "bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 shadow-lg hover:shadow-xl"
-  : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl"
-}
-
-              `}
-
-            >
-
-              {
-                isRecording
-                  ?
-                  <>
-                    <Square size={18} />
-                    Stop Recording
-                  </>
-                  :
-                  <>
-                    <Mic size={18} />
-                    Start Recording
-                  </>
-              }
-
-            </button>
-
-            <button
-
-              onClick={handleSkipQuestion}
-
-              className="
-              px-6
-              py-3
-              rounded-xl
-              bg-gray-200
-              hover:bg-gray-300
-              dark:bg-slate-800
-              dark:hover:bg-slate-700
-              font-semibold
-              transition
-              "
-
-            >
-
-              Skip Question
-
-            </button>
-
-            <button
-
-              onClick={handleEvaluateAnswer}
-
-              className="
-              px-6
-              py-3
-              rounded-xl
-              bg-gradient-to-r from-yellow-500 to-orange-500
-hover:from-yellow-600
-hover:to-orange-600
-              text-white
-              font-semibold
-              transition
-              "
-
-            >
-
-              Evaluate Answer
-
-            </button>
-
-          </div>
-
-        )}
-
-
-
-        {/* Evaluation Result */}
-
-        {evaluation && (
-
-          <div
-            className="
-            mt-8
+        <div
+          className="
             bg-white
             dark:bg-slate-900
+            rounded-3xl
             border
             border-gray-200
             dark:border-slate-800
-            rounded-3xl
             shadow-lg
             p-6
-            lg:p-8
-            "
-          >
+            sm:p-8
+          "
+        >
+
+
+          {/* Question */}
+
+          <div className="mb-8">
+
+            <span
+              className="
+                inline-flex
+                items-center
+                px-3
+                py-1
+                rounded-full
+                bg-blue-100
+                dark:bg-blue-900/30
+                text-blue-600
+                dark:text-blue-400
+                text-sm
+                font-semibold
+                mb-4
+              "
+            >
+              Question{" "}
+              {currentIdx + 1}
+            </span>
+
+
+            <h2
+              className="
+                text-xl
+                sm:text-2xl
+                font-bold
+                text-gray-900
+                dark:text-white
+                leading-relaxed
+              "
+            >
+              {
+                currentQuestionObj.question
+              }
+            </h2>
+
+          </div>
+
+
+          {/* Answer Area */}
+
+          <div className="space-y-4">
+
+            <textarea
+              value={answer}
+              onChange={(e) =>
+                setAnswer(
+                  e.target.value
+                )
+              }
+              onCopy={handleCopy}
+              onPaste={handlePaste}
+              onCut={handleCut}
+              onContextMenu={
+                handleContextMenu
+              }
+              onKeyDown={
+                handleKeyDown
+              }
+              onDragStart={
+                handleCopy
+              }
+              onDrop={
+                handlePaste
+              }
+              placeholder="Type your answer here..."
+              rows={7}
+              disabled={
+                isAnswerAccepted ||
+                isFinished
+              }
+              className="
+                w-full
+                resize-none
+                rounded-2xl
+                border
+                border-gray-300
+                dark:border-slate-700
+                bg-white
+                dark:bg-slate-950
+                text-gray-900
+                dark:text-white
+                placeholder-gray-400
+                dark:placeholder-gray-500
+                p-4
+                focus:outline-none
+                focus:ring-4
+                focus:ring-blue-500/20
+                focus:border-blue-500
+                transition
+                disabled:bg-gray-100
+                disabled:dark:bg-slate-800
+                disabled:cursor-not-allowed
+                disabled:opacity-80
+              "
+            />
+
+
+            {/* Recording + Evaluate */}
 
             <div
               className="
-              flex
-              flex-col
-              sm:flex-row
-              justify-between
-              gap-6
+                flex
+                flex-col
+                sm:flex-row
+                gap-3
               "
             >
 
-              <div>
+              {!isRecording ? (
 
-                <h2
-                  className={`
-
-                  text-2xl
-                  font-bold
-
-                  ${evaluation.passed
-                      ? "text-green-600"
-                      : "text-red-600"
-                    }
-
-                  `}
-                >
-
-                  {
-                    evaluation.passed
-                      ? "✅ Answer Approved"
-                      : "❌ Needs Improvement"
+                <button
+                  onClick={
+                    startRecording
                   }
-
-                </h2>
-
-                <p
+                  disabled={
+                    isAnswerAccepted ||
+                    isFinished
+                  }
                   className="
-                  mt-2
-                  text-gray-600
-                  dark:text-gray-400
+                    flex-1
+                    flex
+                    items-center
+                    justify-center
+                    gap-2
+                    px-5
+                    py-3
+                    rounded-xl
+                    bg-red-600
+                    hover:bg-red-700
+                    disabled:bg-gray-400
+                    disabled:cursor-not-allowed
+                    text-white
+                    font-semibold
+                    transition
                   "
                 >
 
-                  AI Evaluation Result
+                  <Mic size={20} />
 
-                </p>
+                  Start Recording
 
-              </div>
+                </button>
 
-              <div
+              ) : (
+
+                <button
+                  onClick={
+                    stopRecording
+                  }
+                  disabled={
+                    isAnswerAccepted ||
+                    isFinished
+                  }
+                  className="
+                    flex-1
+                    flex
+                    items-center
+                    justify-center
+                    gap-2
+                    px-5
+                    py-3
+                    rounded-xl
+                    bg-gray-700
+                    hover:bg-gray-800
+                    disabled:bg-gray-400
+                    disabled:cursor-not-allowed
+                    text-white
+                    font-semibold
+                    transition
+                  "
+                >
+
+                  <Square
+                    size={18}
+                  />
+
+                  Stop Recording
+
+                </button>
+
+              )}
+
+
+              {/* Evaluate Answer */}
+
+              <button
+                onClick={
+                  handleEvaluate
+                }
+                disabled={
+                  !answer.trim() ||
+                  isAnswerAccepted ||
+                  isEvaluating ||
+                  isFinished
+                }
                 className="
-                text-right
+                  flex-1
+                  px-5
+                  py-3
+                  rounded-xl
+                  bg-blue-600
+                  hover:bg-blue-700
+                  disabled:bg-gray-400
+                  disabled:cursor-not-allowed
+                  text-white
+                  font-semibold
+                  transition
                 "
               >
 
-                <p
-                  className="
-                  text-sm
-                  text-gray-500
-                  "
-                >
+                {isEvaluating
+                  ? "Evaluating..."
+                  : isAnswerAccepted
+                  ? "Answer Accepted"
+                  : "Evaluate Answer"}
 
-                  Score
+              </button>
 
-                </p>
+            </div>
+
+          </div>
+
+
+          {/* Evaluation */}
+
+          {evaluation && (
+
+            <div
+              className="
+                mt-8
+                rounded-2xl
+                border
+                border-gray-200
+                dark:border-slate-700
+                bg-gray-50
+                dark:bg-slate-950
+                p-5
+              "
+            >
+
+              <div
+                className="
+                  flex
+                  flex-col
+                  sm:flex-row
+                  sm:items-center
+                  sm:justify-between
+                  gap-3
+                "
+              >
 
                 <h3
                   className="
-                  text-3xl
-                  font-bold
-                  text-blue-600
+                    text-lg
+                    font-bold
+                    text-gray-900
+                    dark:text-white
                   "
                 >
-
-                  {evaluation.marks}/5
-
+                  Evaluation
                 </h3>
 
-              </div>
-
-            </div>
-
-            <div
-              className="
-              flex
-              gap-2
-              mt-6
-              text-3xl
-              "
-            >
-
-              {[1, 2, 3, 4, 5].map((star) => (
 
                 <span
-
-                  key={star}
-
-                  className={
-                    star <= evaluation.marks
-                      ? "text-yellow-500"
-                      : "text-gray-300"
-                  }
-
+                  className={`
+                    px-3
+                    py-1
+                    rounded-full
+                    text-sm
+                    font-semibold
+                    ${
+                      evaluation.passed
+                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                        : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                    }
+                  `}
                 >
-
-                  ★
-
+                  {evaluation.passed
+                    ? "Answer Accepted"
+                    : "Invalid Answer"}
                 </span>
 
-              ))}
+              </div>
+
+
+              {/* Only show general feedback.
+                  Never show keywords or percentages. */}
+
+              {evaluation.message && (
+
+                <p
+                  className="
+                    mt-4
+                    text-gray-600
+                    dark:text-gray-400
+                    leading-relaxed
+                  "
+                >
+                  {
+                    evaluation.message
+                  }
+                </p>
+
+              )}
+
+
+              {/* Retry message */}
+
+              {!evaluation.passed && (
+
+                <p
+                  className="
+                    mt-3
+                    text-sm
+                    font-semibold
+                    text-red-600
+                    dark:text-red-400
+                  "
+                >
+                  Please improve your answer and evaluate again.
+                </p>
+
+              )}
+
+
+              {/* Last Question Message */}
+
+              {evaluation.passed &&
+                currentIdx ===
+                  questionsList.length - 1 && (
+
+                <p
+                  className="
+                    mt-4
+                    text-sm
+                    font-semibold
+                    text-blue-600
+                    dark:text-blue-400
+                  "
+                >
+                  Final answer accepted. Generating your result...
+                </p>
+
+              )}
 
             </div>
 
-            <div className="mt-6">
+          )}
 
-              <h3
-                className="
-                font-semibold
-                text-lg
-                text-gray-900
-                dark:text-white
-                "
-              >
 
-                Feedback
+          {/* Navigation Buttons */}
 
-              </h3>
-
-              <p
-                className="
-                mt-2
-                text-gray-600
-                dark:text-gray-400
-                leading-7
-                "
-              >
-
-                {evaluation.message}
-
-              </p>
-
-            </div>
-
-            <div
-              className="
-              grid
-              grid-cols-1
-              sm:grid-cols-2
-              gap-4
+          <div
+            className="
+              flex
+              flex-col-reverse
+              sm:flex-row
+              sm:items-center
+              sm:justify-between
+              gap-3
               mt-8
+              pt-6
+              border-t
+              border-gray-200
+              dark:border-slate-800
+            "
+          >
+
+            {/* Skip */}
+
+            <button
+              onClick={
+                handleSkip
+              }
+              disabled={
+                isAnswerAccepted ||
+                isFinished
+              }
+              className="
+                px-5
+                py-3
+                rounded-xl
+                border
+                border-gray-300
+                dark:border-slate-700
+                text-gray-700
+                dark:text-gray-300
+                hover:bg-gray-100
+                dark:hover:bg-slate-800
+                disabled:bg-gray-200
+                disabled:dark:bg-slate-800
+                disabled:cursor-not-allowed
+                disabled:opacity-50
+                font-semibold
+                transition
+              "
+            >
+              Skip Question
+            </button>
+
+
+            {/* Next / Finish */}
+
+            <button
+              onClick={
+                handleNext
+              }
+              disabled={
+                !isAnswerAccepted ||
+                isFinished
+              }
+              className="
+                px-6
+                py-3
+                rounded-xl
+                bg-blue-600
+                hover:bg-blue-700
+                disabled:bg-gray-400
+                disabled:cursor-not-allowed
+                text-white
+                font-semibold
+                transition
               "
             >
 
-              <div
-                className="
-                bg-blue-50
-                dark:bg-slate-800
-                rounded-xl
-                p-5
-                text-center
-                "
-              >
-
-                <p className="text-gray-500">
-                  Passed
-                </p>
-
-                <h2
-                  className="
-                  text-3xl
-                  font-bold
-                  text-green-600
-                  mt-2
-                  "
-                >
-
-                  {passedCount}
-
-                </h2>
-
-              </div>
-
-              <div
-                className="
-                bg-blue-50
-                dark:bg-slate-800
-                rounded-xl
-                p-5
-                text-center
-                "
-              >
-
-                <p className="text-gray-500">
-                  Skipped
-                </p>
-
-                <h2
-                  className="
-                  text-3xl
-                  font-bold
-                  text-orange-500
-                  mt-2
-                  "
-                >
-
-                  {skippedCount}
-
-                </h2>
-
-              </div>
-
-            </div>
-
-            <button
-
-              disabled={isFinished}
-
-              onClick={handleNextQuestion}
-
-              className={`
-
-              w-full
-              mt-8
-              py-4
-              rounded-2xl
-              text-white
-              font-bold
-              text-lg
-              transition
-
-              ${isFinished
-  ? "bg-gray-500 cursor-not-allowed"
-  : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl"
-}
-
-              `}
-
-            >
-
-              {
-                currentIdx === questionsList.length - 1
-                  ? "Finish Interview"
-                  : "Next Question"
-              }
+              {currentIdx ===
+              questionsList.length - 1
+                ? "Finish Interview"
+                : "Next Question"}
 
             </button>
 
           </div>
 
-        )}
+        </div>
+
+
+        {/* Interview Statistics */}
+
+        <div
+          className="
+            grid
+            grid-cols-3
+            gap-3
+            mt-6
+          "
+        >
+
+          {/* Current */}
+
+          <div
+            className="
+              bg-white
+              dark:bg-slate-900
+              border
+              border-gray-200
+              dark:border-slate-800
+              rounded-2xl
+              p-4
+              text-center
+            "
+          >
+
+            <p
+              className="
+                text-2xl
+                font-bold
+                text-blue-600
+              "
+            >
+              {currentIdx + 1}
+            </p>
+
+
+            <p
+              className="
+                text-xs
+                sm:text-sm
+                text-gray-500
+                dark:text-gray-400
+                mt-1
+              "
+            >
+              Current
+            </p>
+
+          </div>
+
+
+          {/* Passed */}
+
+          <div
+            className="
+              bg-white
+              dark:bg-slate-900
+              border
+              border-gray-200
+              dark:border-slate-800
+              rounded-2xl
+              p-4
+              text-center
+            "
+          >
+
+            <p
+              className="
+                text-2xl
+                font-bold
+                text-green-600
+              "
+            >
+              {passedCount}
+            </p>
+
+
+            <p
+              className="
+                text-xs
+                sm:text-sm
+                text-gray-500
+                dark:text-gray-400
+                mt-1
+              "
+            >
+              Passed
+            </p>
+
+          </div>
+
+
+          {/* Skipped */}
+
+          <div
+            className="
+              bg-white
+              dark:bg-slate-900
+              border
+              border-gray-200
+              dark:border-slate-800
+              rounded-2xl
+              p-4
+              text-center
+            "
+          >
+
+            <p
+              className="
+                text-2xl
+                font-bold
+                text-orange-600
+              "
+            >
+              {skippedCount}
+            </p>
+
+
+            <p
+              className="
+                text-xs
+                sm:text-sm
+                text-gray-500
+                dark:text-gray-400
+                mt-1
+              "
+            >
+              Skipped
+            </p>
+
+          </div>
+
+        </div>
 
       </div>
 
     </div>
-
   );
-
 }
+
 
 export default Interview;

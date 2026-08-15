@@ -106,7 +106,10 @@ function InterviewSelection() {
       id: cat.id,
       title: cat.title,
       description: cat.description,
-      questions: cat.questionsCount ?? 20,
+
+      // Question bank contains 50 questions
+      questions: 50,
+
       duration: cat.duration ?? "15 Minutes",
       difficulty: mapLevelToDifficulty(cat.level),
       progress: cat.progress ?? 0,
@@ -130,7 +133,6 @@ function InterviewSelection() {
           Select your preferred category to begin.
         </p>
       </div>
-
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
 
@@ -175,7 +177,6 @@ function InterviewSelection() {
                   {category.icon}
                 </div>
 
-
                 {category.badge && (
                   <div
                     className="
@@ -198,25 +199,18 @@ function InterviewSelection() {
 
               </div>
 
-
               <h2 className="text-3xl font-bold mt-6">
                 {category.title}
               </h2>
-
 
               <p className="text-white/90 mt-3 leading-7">
                 {category.description}
               </p>
 
             </div>
-
-
-
-            <div className="p-6">
-
+                        <div className="p-6">
 
               <div className="grid grid-cols-3 gap-4">
-
 
                 <div className="bg-gray-100 dark:bg-slate-800 rounded-xl p-4 text-center">
 
@@ -232,8 +226,6 @@ function InterviewSelection() {
 
                 </div>
 
-
-
                 <div className="bg-gray-100 dark:bg-slate-800 rounded-xl p-4 text-center">
 
                   <Clock3 className="mx-auto text-green-600" />
@@ -247,8 +239,6 @@ function InterviewSelection() {
                   </h3>
 
                 </div>
-
-
 
                 <div className="bg-gray-100 dark:bg-slate-800 rounded-xl p-4 text-center">
 
@@ -273,10 +263,7 @@ function InterviewSelection() {
 
                 </div>
 
-
               </div>
-
-
 
               <div className="mt-8">
 
@@ -286,13 +273,11 @@ function InterviewSelection() {
                     Preparation Level
                   </span>
 
-
                   <span className="text-blue-600 dark:text-blue-400 font-bold">
                     {category.progress}%
                   </span>
 
                 </div>
-
 
                 <div className="w-full h-3 bg-gray-200 dark:bg-slate-800 rounded-full overflow-hidden">
 
@@ -314,8 +299,6 @@ function InterviewSelection() {
                 </div>
 
               </div>
-
-
 
               <button
                 onClick={() =>
@@ -342,7 +325,6 @@ function InterviewSelection() {
                 Start Interview
                 <ArrowRight size={20} />
               </button>
-
 
             </div>
 

@@ -23,15 +23,16 @@ export function saveInterview(category, score) {
   const interview = {
     id: crypto.randomUUID(),
 
-    // User Information
     userId: user?.uid || "guest",
-    userName: user?.displayName || "Guest User",
-    email: user?.email || "guest@example.com",
+    userName:
+      user?.displayName || "Guest User",
+    email:
+      user?.email || "guest@example.com",
 
-    // Interview Information
     category,
     scorePercentage: score,
-    completedAt: new Date().toISOString(),
+    completedAt:
+      new Date().toISOString(),
   };
 
   history.push(interview);
@@ -80,7 +81,10 @@ export function getStatistics() {
     history.length;
 
   const scores = history.map(
-    (item) => Number(item.scorePercentage || 0)
+    (item) =>
+      Number(
+        item.scorePercentage || 0
+      )
   );
 
   const averageScore =
@@ -88,7 +92,8 @@ export function getStatistics() {
       ? 0
       : Math.round(
           scores.reduce(
-            (sum, score) => sum + score,
+            (sum, score) =>
+              sum + score,
             0
           ) / totalInterviews
         );
@@ -108,12 +113,121 @@ export function getStatistics() {
 }
 
 export function clearHistory() {
-  const key = getStorageKey();
+  const auth = getAuth();
+  const user = auth.currentUser;
 
-  localStorage.removeItem(key);
+  const historyKey =
+    getStorageKey();
+
+  localStorage.removeItem(
+    historyKey
+  );
+
+  if (!user) {
+    localStorage.removeItem(
+      "usedQuestions_guest_html"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_css"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_javascript"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_react"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_tailwind"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_frontend"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_backend"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_php"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_python"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_java"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_c"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_cpp"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_csharp"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_ai"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_machine-learning"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_deep-learning"
+    );
+
+    localStorage.removeItem(
+      "usedQuestions_guest_hr"
+    );
+
+    return;
+  }
+
+  const categories = [
+    "html",
+    "css",
+    "javascript",
+    "react",
+    "tailwind",
+    "frontend",
+    "backend",
+    "php",
+    "python",
+    "java",
+    "c",
+    "cpp",
+    "csharp",
+    "ai",
+    "machine-learning",
+    "deep-learning",
+    "hr",
+  ];
+
+  categories.forEach(
+    (category) => {
+      localStorage.removeItem(
+        `usedQuestions_${user.uid}_${category}`
+      );
+    }
+  );
 }
 
-export function updateInterview(id, updatedData) {
+export function updateInterview(
+  id,
+  updatedData
+) {
   const key = getStorageKey();
 
   const history = getHistory();
@@ -132,6 +246,8 @@ export function updateInterview(id, updatedData) {
 
   localStorage.setItem(
     key,
-    JSON.stringify(updatedHistory)
+    JSON.stringify(
+      updatedHistory
+    )
   );
 }
