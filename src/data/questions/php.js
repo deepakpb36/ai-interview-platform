@@ -1,252 +1,56 @@
+// ==========================================
+// PHP INTERVIEW QUESTIONS (Super Easy)
+// ==========================================
+
 export const phpQuestions = [
-  {
-    id: 1,
-    question: "What is PHP?",
-    keywords: ["php", "server", "language"]
-  },
-  {
-    id: 2,
-    question: "Why is PHP used?",
-    keywords: ["php", "web", "server"]
-  },
-  {
-    id: 3,
-    question: "How do you create a variable in PHP?",
-    keywords: ["variable", "$", "php"]
-  },
-  {
-    id: 4,
-    question: "What is the difference between echo and print?",
-    keywords: ["echo", "print", "output"]
-  },
-  {
-    id: 5,
-    question: "What are PHP functions?",
-    keywords: ["function", "php", "reuse"]
-  },
-  {
-    id: 6,
-    question: "How do you connect PHP with MySQL?",
-    keywords: ["mysql", "database", "mysqli", "pdo"]
-  },
-  {
-    id: 7,
-    question: "What are PHP sessions?",
-    keywords: ["session", "login", "user"]
-  },
-  {
-    id: 8,
-    question: "What are cookies in PHP?",
-    keywords: ["cookies", "browser", "storage"]
-  },
-  {
-    id: 9,
-    question: "What is the purpose of include and require?",
-    keywords: ["include", "require", "file"]
-  },
-  {
-    id: 10,
-    question: "Why is PHP popular for web development?",
-    keywords: ["php", "backend", "server"]
-  },
-  {
-    id: 11,
-    question: "What are superglobals in PHP?",
-    keywords: ["superglobals", "_GET", "_POST", "_SESSION", "global variables"]
-  },
-  {
-    id: 12,
-    question: "What is PDO in PHP?",
-    keywords: ["pdo", "database", "prepared statements", "security"]
-  },
-  {
-    id: 13,
-    question: "What is Composer in PHP?",
-    keywords: ["composer", "package manager", "dependencies", "autoload"]
-  },
-  {
-    id: 14,
-    question: "What is the difference between require and require_once?",
-    keywords: ["require", "require_once", "duplicate inclusion", "error handling"]
-  },
-  {
-    id: 15,
-    question: "What is the difference between isset() and empty()?",
-    keywords: ["isset", "empty", "null check", "variable validation"]
-  },
-  {
-    id: 16,
-    question: "What is Object-Oriented Programming (OOP) in PHP?",
-    keywords: ["oop", "classes", "objects", "encapsulation"]
-  },
-  {
-    id: 17,
-    question: "What are access modifiers in PHP?",
-    keywords: ["public", "private", "protected", "encapsulation"]
-  },
-  {
-    id: 18,
-    question: "What is a Trait in PHP?",
-    keywords: ["traits", "code reuse", "multiple inheritance"]
-  },
-  {
-    id: 19,
-    question: "What are magic methods in PHP?",
-    keywords: ["magic methods", "__construct", "__get", "__set", "dunder methods"]
-  },
-  {
-    id: 20,
-    question: "How do you prevent SQL injection in PHP?",
-    keywords: ["sql injection", "prepared statements", "pdo", "sanitization"]
-  },
-  {
-    id: 21,
-    question: "What is the difference between == and === in PHP?",
-    keywords: ["loose comparison", "strict comparison", "type checking"]
-  },
-  {
-    id: 22,
-    question: "What is exception handling in PHP?",
-    keywords: ["try", "catch", "throw", "exceptions"]
-  },
-  {
-    id: 23,
-    question: "What are namespaces in PHP?",
-    keywords: ["namespace", "name collision", "use", "organization"]
-  },
-  {
-    id: 24,
-    question: "What is PSR (PHP Standard Recommendation)?",
-    keywords: ["psr", "coding standards", "autoloading", "psr-4"]
-  },
-  {
-    id: 25,
-    question: "What is an Anonymous Function or Closure in PHP?",
-    keywords: ["anonymous function", "closure", "use keyword", "callbacks"]
-  },
-  {
-    id: 26,
-    question: "How do file uploads work in PHP?",
-    keywords: ["_FILES", "move_uploaded_file", "enctype", "multipart"]
-  },
-  {
-    id: 27,
-    question: "What is the difference between session_unset() and session_destroy()?",
-    keywords: ["session_unset", "session_destroy", "session clear", "logout"]
-  },
-  {
-    id: 28,
-    question: "What is the Null Coalescing Operator (??) in PHP?",
-    keywords: ["null coalescing", "ternary operator", "default value", "isset"]
-  },
-  {
-    id: 29,
-    question: "What is the Spaceship Operator (<=>) in PHP?",
-    keywords: ["spaceship operator", "three-way comparison", "sorting"]
-  },
-  {
-    id: 30,
-    question: "What is type hinting and return type declaration in PHP?",
-    keywords: ["type hinting", "strict_types", "return type", "type safety"]
-  },
-  {
-    id: 31,
-    question: "What is OPcache in PHP?",
-    keywords: ["opcache", "performance", "bytecode cache", "execution speed"]
-  },
-  {
-    id: 32,
-    question: "What is Cross-Site Scripting (XSS) and how to prevent it in PHP?",
-    keywords: ["xss", "htmlspecialchars", "sanitization", "security"]
-  },
-  {
-    id: 33,
-    question: "What is CSRF and how do you prevent it in PHP?",
-    keywords: ["csrf", "token", "security", "form validation"]
-  },
-  {
-    id: 34,
-    question: "What is the difference between array_merge() and the + operator for arrays?",
-    keywords: ["array_merge", "array union", "keys", "override"]
-  },
-  {
-    id: 35,
-    question: "What are Generators in PHP?",
-    keywords: ["generators", "yield", "memory efficiency", "iteration"]
-  },
-  {
-    id: 36,
-    question: "How do json_encode() and json_decode() work?",
-    keywords: ["json_encode", "json_decode", "json", "api response"]
-  },
-  {
-    id: 37,
-    question: "What is cURL in PHP?",
-    keywords: ["curl", "http requests", "api integration", "fetch"]
-  },
-  {
-    id: 38,
-    question: "What is the difference between Abstract Class and Interface in PHP?",
-    keywords: ["abstract class", "interface", "implements", "extends"]
-  },
-  {
-    id: 39,
-    question: "What is Constructor Property Promotion in PHP 8?",
-    keywords: ["php 8", "constructor promotion", "shorthand", "properties"]
-  },
-  {
-    id: 40,
-    question: "What is the Match Expression in PHP 8?",
-    keywords: ["match expression", "switch case", "strict comparison", "php 8"]
-  },
-  {
-    id: 41,
-    question: "What are Named Arguments in PHP 8?",
-    keywords: ["named arguments", "function parameters", "php 8", "optional parameters"]
-  },
-  {
-    id: 42,
-    question: "What are Attributes in PHP 8?",
-    keywords: ["attributes", "annotations", "metadata", "php 8"]
-  },
-  {
-    id: 43,
-    question: "What are Enums in PHP 8.1?",
-    keywords: ["enums", "enumerated types", "php 8.1", "backed enums"]
-  },
-  {
-    id: 44,
-    question: "What are Fibers in PHP 8.1?",
-    keywords: ["fibers", "concurrency", "async", "coroutines"]
-  },
-  {
-    id: 45,
-    question: "What is Laravel?",
-    keywords: ["laravel", "framework", "mvc", "artisan"]
-  },
-  {
-    id: 46,
-    question: "What is the MVC pattern in PHP frameworks?",
-    keywords: ["mvc", "model", "view", "controller"]
-  },
-  {
-    id: 47,
-    question: "How do headers work in PHP?",
-    keywords: ["header()", "redirect", "content-type", "http response"]
-  },
-  {
-    id: 48,
-    question: "What is the difference between exec(), system(), and shell_exec()?",
-    keywords: ["exec", "system", "shell_exec", "command line"]
-  },
-  {
-    id: 49,
-    question: "How does garbage collection work in PHP?",
-    keywords: ["garbage collection", "reference counting", "zval", "memory management"]
-  },
-  {
-    id: 50,
-    question: "What is the __autoload() or spl_autoload_register() function?",
-    keywords: ["spl_autoload_register", "autoloading", "class loading", "psr-4"]
-  }
+  { id: 1, question: "What is PHP?", keywords: ["php", "server side script", "web dev"] },
+  { id: 2, question: "Why is PHP used?", keywords: ["backend web", "dynamic pages", "db connection"] },
+  { id: 3, question: "How to declare variables?", keywords: ["dollar sign", "variable prefix", "dynamic type"] },
+  { id: 4, question: "echo vs print?", keywords: ["echo faster", "print returns 1", "output text"] },
+  { id: 5, question: "What are PHP functions?", keywords: ["functions", "code block", "reuse"] },
+  { id: 6, question: "PHP to MySQL connection?", keywords: ["mysqli", "pdo connect", "database"] },
+  { id: 7, question: "What are PHP sessions?", keywords: ["session start", "server state", "login session"] },
+  { id: 8, question: "What are PHP cookies?", keywords: ["cookies", "browser storage", "setcookie"] },
+  { id: 9, question: "include vs require?", keywords: ["include warning", "require fatal error", "file import"] },
+  { id: 10, question: "Why is PHP popular?", keywords: ["open source", "easy deployment", "wordpress power"] },
+  { id: 11, question: "What are superglobals?", keywords: ["superglobals", "get post session", "global array"] },
+  { id: 12, question: "What is PDO?", keywords: ["pdo object", "db abstraction", "prepared statements"] },
+  { id: 13, question: "What is Composer?", keywords: ["composer manager", "dependency tool", "packagist"] },
+  { id: 14, question: "require vs require_once?", keywords: ["require once", "prevent duplicate", "file load"] },
+  { id: 15, question: "isset() vs empty()?", keywords: ["isset checks variable", "empty checks falsey", "null test"] },
+  { id: 16, question: "What is PHP OOP?", keywords: ["classes objects", "encapsulation", "inheritance"] },
+  { id: 17, question: "What are access modifiers?", keywords: ["public private protected", "visibility", "oop capsulation"] },
+  { id: 18, question: "What is a Trait?", keywords: ["traits reuse", "horizontal inheritance", "class mixin"] },
+  { id: 19, question: "What are magic methods?", keywords: ["magic construct", "dunder methods", "event triggers"] },
+  { id: 20, question: "How to prevent SQL injection?", keywords: ["prepared statements", "pdo bindings", "sanitize input"] },
+  { id: 21, question: "== vs === in PHP?", keywords: ["loose equality", "strict type equal", "type comparison"] },
+  { id: 22, question: "What is Exception handling?", keywords: ["try catch block", "throw exception", "error handle"] },
+  { id: 23, question: "What are namespaces?", keywords: ["namespaces", "class collision", "use import"] },
+  { id: 24, question: "What is PSR?", keywords: ["psr standards", "psr4 autoload", "coding style"] },
+  { id: 25, question: "What is Closure in PHP?", keywords: ["anonymous function", "use keyword scope", "callback"] },
+  { id: 26, question: "How to handle file uploads?", keywords: ["files array", "move uploaded file", "multipart form"] },
+  { id: 27, question: "session_unset vs session_destroy?", keywords: ["session unset clear", "session destroy kill", "logout handle"] },
+  { id: 28, question: "What is Null Coalescing Operator?", keywords: ["null coalescing operator", "double question mark", "fallback value"] },
+  { id: 29, question: "What is Spaceship Operator?", keywords: ["spaceship operator", "three way compare", "returns minus one zero one"] },
+  { id: 30, question: "Type hinting & strict types?", keywords: ["declare strict types", "type hinting", "return type safe"] },
+  { id: 31, question: "What is OPcache?", keywords: ["opcache speed", "bytecode caching", "precompiled php"] },
+  { id: 32, question: "How to prevent XSS?", keywords: ["htmlspecialchars", "sanitize html output", "xss prevention"] },
+  { id: 33, question: "How to prevent CSRF?", keywords: ["csrf tokens", "form validation", "session match"] },
+  { id: 34, question: "array_merge vs + operator?", keywords: ["array merge reindex", "plus operator keep keys", "union array"] },
+  { id: 35, question: "What are Generators?", keywords: ["generators yield", "memory optimization", "iterators"] },
+  { id: 36, question: "json_encode vs json_decode?", keywords: ["json encode array string", "json decode string object", "api format"] },
+  { id: 37, question: "What is cURL?", keywords: ["curl requests", "http fetch client", "api call"] },
+  { id: 38, question: "Abstract Class vs Interface?", keywords: ["abstract class method body", "interface contracts", "implements extends"] },
+  { id: 39, question: "Constructor Property Promotion?", keywords: ["constructor promotion", "php 8 shorthand", "auto property init"] },
+  { id: 40, question: "What is Match Expression?", keywords: ["match expression", "php 8 switch replacement", "strict value return"] },
+  { id: 41, question: "What are Named Arguments?", keywords: ["named arguments", "pass params by name", "php 8 feature"] },
+  { id: 42, question: "What are Attributes in PHP 8?", keywords: ["attributes metadata", "annotations replacement", "php 8 syntax"] },
+  { id: 43, question: "What are Enums in PHP 8.1?", keywords: ["enums type", "backed enum cases", "php 8 1 feature"] },
+  { id: 44, question: "What are Fibers in PHP 8.1?", keywords: ["fibers coroutines", "async concurrency", "non blocking php"] },
+  { id: 45, question: "What is Laravel?", keywords: ["laravel framework", "mvc architecture", "artisan cli"] },
+  { id: 46, question: "What is MVC Pattern?", keywords: ["model database", "view ui", "controller logic"] },
+  { id: 47, question: "How do HTTP headers work?", keywords: ["header function", "redirect location", "response type"] },
+  { id: 48, question: "exec vs system vs shell_exec?", keywords: ["exec array output", "system echo output", "shell exec raw string"] },
+  { id: 49, question: "Garbage Collection in PHP?", keywords: ["zval refcount", "cycle collector", "memory release"] },
+  { id: 50, question: "What is spl_autoload_register?", keywords: ["spl autoload register", "dynamic class loading", "psr4 loading"] }
 ];

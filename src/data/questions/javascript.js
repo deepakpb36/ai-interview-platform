@@ -1,252 +1,56 @@
+// ==========================================
+// JAVASCRIPT INTERVIEW QUESTIONS (Super Easy)
+// ==========================================
+
 export const javascriptQuestions = [
-  {
-    id: 1,
-    question: "What is JavaScript?",
-    keywords: ["javascript", "programming", "web"]
-  },
-  {
-    id: 2,
-    question: "What is the difference between let, const and var?",
-    keywords: ["let", "const", "var"]
-  },
-  {
-    id: 3,
-    question: "What is a function in JavaScript?",
-    keywords: ["function", "code", "reuse"]
-  },
-  {
-    id: 4,
-    question: "What is an array?",
-    keywords: ["array", "list", "elements"]
-  },
-  {
-    id: 5,
-    question: "What is an object in JavaScript?",
-    keywords: ["object", "key", "value"]
-  },
-  {
-    id: 6,
-    question: "What is the DOM?",
-    keywords: ["dom", "document", "html"]
-  },
-  {
-    id: 7,
-    question: "What is an event in JavaScript?",
-    keywords: ["event", "click", "user"]
-  },
-  {
-    id: 8,
-    question: "What is the difference between == and === ?",
-    keywords: ["==", "===", "comparison"]
-  },
-  {
-    id: 9,
-    question: "What are promises in JavaScript?",
-    keywords: ["promise", "async", "resolve", "reject"]
-  },
-  {
-    id: 10,
-    question: "What is the purpose of async and await?",
-    keywords: ["async", "await", "promise"]
-  },
-  {
-    id: 11,
-    question: "What is a closure in JavaScript?",
-    keywords: ["closure", "lexical scope", "outer function"]
-  },
-  {
-    id: 12,
-    question: "What is hoisting?",
-    keywords: ["hoisting", "declarations", "scope"]
-  },
-  {
-    id: 13,
-    question: "What is the Event Loop?",
-    keywords: ["event loop", "call stack", "callback queue", "concurrency"]
-  },
-  {
-    id: 14,
-    question: "What is the 'this' keyword in JavaScript?",
-    keywords: ["this", "context", "binding", "execution context"]
-  },
-  {
-    id: 15,
-    question: "What is prototypal inheritance?",
-    keywords: ["prototype", "inheritance", "prototype chain", "object"]
-  },
-  {
-    id: 16,
-    question: "What is the difference between null and undefined?",
-    keywords: ["null", "undefined", "type", "value"]
-  },
-  {
-    id: 17,
-    question: "What are arrow functions and how do they differ from regular functions?",
-    keywords: ["arrow functions", "this binding", "syntax"]
-  },
-  {
-    id: 18,
-    question: "What is Destructuring in JavaScript?",
-    keywords: ["destructuring", "array", "object", "unpacking"]
-  },
-  {
-    id: 19,
-    question: "What are the rest and spread operators?",
-    keywords: ["rest operator", "spread operator", "three dots", "arrays"]
-  },
-  {
-    id: 20,
-    question: "What is call, apply, and bind?",
-    keywords: ["call", "apply", "bind", "this context"]
-  },
-  {
-    id: 21,
-    question: "What is a Higher-Order Function?",
-    keywords: ["higher order function", "callback", "return function"]
-  },
-  {
-    id: 22,
-    question: "What is the difference between map, filter, and reduce?",
-    keywords: ["map", "filter", "reduce", "array methods"]
-  },
-  {
-    id: 23,
-    question: "What is the Fetch API?",
-    keywords: ["fetch", "http request", "promise", "api"]
-  },
-  {
-    id: 24,
-    question: "What is the difference between microtasks and macrotasks?",
-    keywords: ["microtask", "macrotask", "promise", "settimeout"]
-  },
-  {
-    id: 25,
-    question: "What is the Temporal Dead Zone (TDZ)?",
-    keywords: ["tdz", "temporal dead zone", "let", "const"]
-  },
-  {
-    id: 26,
-    question: "What is Currying in JavaScript?",
-    keywords: ["currying", "functional programming", "closures"]
-  },
-  {
-    id: 27,
-    question: "What is an Immediately Invoked Function Expression (IIFE)?",
-    keywords: ["iife", "scope isolation", "anonymous function"]
-  },
-  {
-    id: 28,
-    question: "What is Memoization?",
-    keywords: ["memoization", "caching", "performance", "optimization"]
-  },
-  {
-    id: 29,
-    question: "What is the difference between shallow copy and deep copy?",
-    keywords: ["shallow copy", "deep copy", "structuredClone", "spread"]
-  },
-  {
-    id: 30,
-    question: "What are JavaScript Modules (ESM vs CommonJS)?",
-    keywords: ["import", "export", "require", "module.exports"]
-  },
-  {
-    id: 31,
-    question: "What is Debouncing and Throttling?",
-    keywords: ["debounce", "throttle", "performance", "events"]
-  },
-  {
-    id: 32,
-    question: "What are Map and Set objects?",
-    keywords: ["map", "set", "data structures", "unique values"]
-  },
-  {
-    id: 33,
-    question: "What are WeakMap and WeakSet?",
-    keywords: ["weakmap", "weakset", "garbage collection", "memory"]
-  },
-  {
-    id: 34,
-    question: "What is Event Delegation?",
-    keywords: ["event delegation", "event bubbling", "target", "listener"]
-  },
-  {
-    id: 35,
-    question: "What is a Proxy object in JavaScript?",
-    keywords: ["proxy", "metaprogramming", "traps", "handler"]
-  },
-  {
-    id: 36,
-    question: "What is the Reflect API?",
-    keywords: ["reflect", "metaprogramming", "proxy", "methods"]
-  },
-  {
-    id: 37,
-    question: "What are Generators and Iterators?",
-    keywords: ["generators", "iterators", "yield", "next"]
-  },
-  {
-    id: 38,
-    question: "What is the Symbol data type?",
-    keywords: ["symbol", "primitive", "unique keys", "hidden properties"]
-  },
-  {
-    id: 39,
-    question: "What is Optional Chaining (?.) and Nullish Coalescing (??)?",
-    keywords: ["optional chaining", "nullish coalescing", "operators", "null"]
-  },
-  {
-    id: 40,
-    question: "What is strict mode ('use strict')?",
-    keywords: ["use strict", "strict mode", "error handling", "safety"]
-  },
-  {
-    id: 41,
-    question: "What is Garbage Collection and how does mark-and-sweep work?",
-    keywords: ["garbage collection", "memory management", "mark and sweep"]
-  },
-  {
-    id: 42,
-    question: "What is the difference between Object.freeze() and Object.seal()?",
-    keywords: ["object freeze", "object seal", "immutability", "properties"]
-  },
-  {
-    id: 43,
-    question: "How does error handling work with try...catch...finally?",
-    keywords: ["try catch", "finally", "error handling", "throw"]
-  },
-  {
-    id: 44,
-    question: "What is Type Coercion in JavaScript?",
-    keywords: ["type coercion", "implicit", "explicit", "conversion"]
-  },
-  {
-    id: 45,
-    question: "What is the BigInt type and why is it used?",
-    keywords: ["bigint", "large numbers", "precision", "primitive"]
-  },
-  {
-    id: 46,
-    question: "What is Promise.all, Promise.allSettled, Promise.race, and Promise.any?",
-    keywords: ["promise methods", "concurrency", "promise all", "promise race"]
-  },
-  {
-    id: 47,
-    question: "What is the MutationObserver API?",
-    keywords: ["mutationobserver", "dom changes", "observer pattern"]
-  },
-  {
-    id: 48,
-    question: "What is the IntersectionObserver API?",
-    keywords: ["intersectionobserver", "lazy loading", "scroll animation", "viewport"]
-  },
-  {
-    id: 49,
-    question: "What is the purpose of Object.defineProperty()?",
-    keywords: ["defineproperty", "getters", "setters", "enumerable"]
-  },
-  {
-    id: 50,
-    question: "What are Web Workers and how do they enable multithreading in JS?",
-    keywords: ["web workers", "multithreading", "background task", "postMessage"]
-  }
+  { id: 1, question: "What is JavaScript?", keywords: ["javascript", "web language", "scripting"] },
+  { id: 2, question: "let vs const vs var?", keywords: ["let block scope", "const reassign", "var function scope"] },
+  { id: 3, question: "What is a function?", keywords: ["function", "reusable code", "invoke"] },
+  { id: 4, question: "What is an array?", keywords: ["array list", "index elements", "data structure"] },
+  { id: 5, question: "What is an object?", keywords: ["object", "key value pairs", "properties"] },
+  { id: 6, question: "What is the DOM?", keywords: ["dom tree", "document object", "html elements"] },
+  { id: 7, question: "What is an event?", keywords: ["event click", "user interaction", "listener"] },
+  { id: 8, question: "== vs === operator?", keywords: ["== value check", "=== strict type", "coercion"] },
+  { id: 9, question: "What are Promises?", keywords: ["promises", "async resolve", "reject state"] },
+  { id: 10, question: "async and await?", keywords: ["async await", "clean promise", "syntax sugar"] },
+  { id: 11, question: "What is a closure?", keywords: ["closure", "outer lexical scope", "inner function"] },
+  { id: 12, question: "What is hoisting?", keywords: ["hoisting", "var function moved top", "tdz"] },
+  { id: 13, question: "What is Event Loop?", keywords: ["event loop", "call stack", "callback queue"] },
+  { id: 14, question: "What is 'this' keyword?", keywords: ["this keyword", "execution context", "binding"] },
+  { id: 15, question: "What is prototypal inheritance?", keywords: ["prototype chain", "object inheritance", "proto"] },
+  { id: 16, question: "null vs undefined?", keywords: ["null assigned empty", "undefined unassigned", "types"] },
+  { id: 17, question: "Arrow vs regular functions?", keywords: ["arrow function", "lexical this", "no arguments obj"] },
+  { id: 18, question: "What is Destructuring?", keywords: ["destructuring", "unpack array object", "clean syntax"] },
+  { id: 19, question: "Rest vs Spread operator?", keywords: ["rest collect args", "spread expand elements", "dots"] },
+  { id: 20, question: "call vs apply vs bind?", keywords: ["call comma args", "apply array args", "bind return func"] },
+  { id: 21, question: "What is Higher-Order Function?", keywords: ["higher order function", "takes returns func", "callback"] },
+  { id: 22, question: "map vs filter vs reduce?", keywords: ["map transform", "filter subset", "reduce aggregate"] },
+  { id: 23, question: "What is Fetch API?", keywords: ["fetch api", "http requests", "promise fetch"] },
+  { id: 24, question: "Microtasks vs Macrotasks?", keywords: ["microtask promise", "macrotask settimeout", "priority queue"] },
+  { id: 25, question: "What is Temporal Dead Zone?", keywords: ["tdz error", "let const access", "before declaration"] },
+  { id: 26, question: "What is Currying?", keywords: ["currying", "nested single arg functions", "fp"] },
+  { id: 27, question: "What is IIFE?", keywords: ["iife", "self executing", "isolate scope"] },
+  { id: 28, question: "What is Memoization?", keywords: ["memoization cache", "speed up function", "store result"] },
+  { id: 29, question: "Shallow vs Deep Copy?", keywords: ["shallow reference", "deep copy clone", "structuredClone"] },
+  { id: 30, question: "ESM vs CommonJS?", keywords: ["esm import export", "commonjs require", "module format"] },
+  { id: 31, question: "Debouncing vs Throttling?", keywords: ["debounce delay", "throttle rate limit", "event optimization"] },
+  { id: 32, question: "Map vs Set objects?", keywords: ["map key value", "set unique values", "es6 collections"] },
+  { id: 33, question: "WeakMap vs WeakSet?", keywords: ["weakmap weakset", "garbage collected", "object keys only"] },
+  { id: 34, question: "What is Event Delegation?", keywords: ["event delegation", "single parent listener", "bubbling"] },
+  { id: 35, question: "What is Proxy object?", keywords: ["proxy trap", "intercept object operations", "handler"] },
+  { id: 36, question: "What is Reflect API?", keywords: ["reflect api", "metaprogramming", "forward proxy"] },
+  { id: 37, question: "Generators and Iterators?", keywords: ["generators function star", "yield next", "pause execution"] },
+  { id: 38, question: "What is Symbol type?", keywords: ["symbol primitive", "unique key", "hidden property"] },
+  { id: 39, question: "Optional Chaining & Nullish Coalescing?", keywords: ["optional chaining", "nullish coalescing", "safe access"] },
+  { id: 40, question: "What is strict mode?", keywords: ["use strict", "catch silent errors", "safer js"] },
+  { id: 41, question: "Garbage Collection Mark-and-Sweep?", keywords: ["mark and sweep", "garbage collector", "unreachable memory"] },
+  { id: 42, question: "Object.freeze vs Object.seal?", keywords: ["freeze immutable", "seal prevent add delete", "object methods"] },
+  { id: 43, question: "try...catch...finally error handling?", keywords: ["try catch block", "finally execute always", "throw error"] },
+  { id: 44, question: "What is Type Coercion?", keywords: ["type coercion", "implicit casting", "string number add"] },
+  { id: 45, question: "What is BigInt type?", keywords: ["bigint primitive", "large integers", "beyond max safe int"] },
+  { id: 46, question: "Promise.all vs allSettled vs race vs any?", keywords: ["promise all parallel", "race first settled", "any first fulfilled"] },
+  { id: 47, question: "What is MutationObserver?", keywords: ["mutation observer", "watch dom changes", "event listener"] },
+  { id: 48, question: "What is IntersectionObserver?", keywords: ["intersection observer", "lazy load element", "viewport visibility"] },
+  { id: 49, question: "Object.defineProperty() purpose?", keywords: ["define property", "configurable enumerable", "getters setters"] },
+  { id: 50, question: "What are Web Workers?", keywords: ["web workers", "background thread", "no ui block"] }
 ];

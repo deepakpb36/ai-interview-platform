@@ -1,252 +1,56 @@
+// ==========================================
+// TAILWIND CSS QUESTIONS (Super Easy)
+// ==========================================
+
 export const tailwindQuestions = [
-  {
-    id: 1,
-    question: "What is Tailwind CSS?",
-    keywords: ["tailwind", "utility", "css"]
-  },
-  {
-    id: 2,
-    question: "What is a utility-first CSS framework?",
-    keywords: ["utility", "classes", "framework"]
-  },
-  {
-    id: 3,
-    question: "How do you make text blue in Tailwind?",
-    keywords: ["text-blue", "color"]
-  },
-  {
-    id: 4,
-    question: "How do you create padding in Tailwind?",
-    keywords: ["padding", "p-4", "spacing"]
-  },
-  {
-    id: 5,
-    question: "How do you center items using Flexbox in Tailwind?",
-    keywords: ["flex", "justify-center", "items-center"]
-  },
-  {
-    id: 6,
-    question: "How do responsive classes work in Tailwind?",
-    keywords: ["responsive", "sm", "md", "lg"]
-  },
-  {
-    id: 7,
-    question: "How do you add hover effects in Tailwind?",
-    keywords: ["hover", "hover:"]
-  },
-  {
-    id: 8,
-    question: "How do you apply rounded corners in Tailwind?",
-    keywords: ["rounded", "border radius"]
-  },
-  {
-    id: 9,
-    question: "How do dark mode classes work in Tailwind?",
-    keywords: ["dark", "theme", "dark:"]
-  },
-  {
-    id: 10,
-    question: "Why is Tailwind CSS popular?",
-    keywords: ["utility", "fast", "css"]
-  },
-  {
-    id: 11,
-    question: "What is the @apply directive in Tailwind CSS?",
-    keywords: ["@apply", "reusability", "custom css", "extracting classes"]
-  },
-  {
-    id: 12,
-    question: "How does Just-In-Time (JIT) mode work in Tailwind?",
-    keywords: ["jit", "compiler", "on-demand", "performance"]
-  },
-  {
-    id: 13,
-    question: "How do you use arbitrary values in Tailwind CSS?",
-    keywords: ["arbitrary values", "brackets", "custom sizes", "w-[300px]"]
-  },
-  {
-    id: 14,
-    question: "How do you configure custom colors and fonts in Tailwind?",
-    keywords: ["tailwind.config.js", "theme extension", "colors", "fontFamily"]
-  },
-  {
-    id: 15,
-    question: "What are states/variants in Tailwind CSS?",
-    keywords: ["focus", "active", "disabled", "group-hover", "variants"]
-  },
-  {
-    id: 16,
-    question: "How does group-hover work in Tailwind?",
-    keywords: ["group", "group-hover", "parent state", "nested hover"]
-  },
-  {
-    id: 17,
-    question: "How does peer modifier work in Tailwind CSS?",
-    keywords: ["peer", "peer-checked", "sibling selector", "form elements"]
-  },
-  {
-    id: 18,
-    question: "How do you implement CSS Grid using Tailwind?",
-    keywords: ["grid", "grid-cols-12", "col-span", "gap"]
-  },
-  {
-    id: 19,
-    question: "How do you control visibility and display in Tailwind?",
-    keywords: ["hidden", "block", "inline-block", "display"]
-  },
-  {
-    id: 20,
-    question: "What is PurgeCSS / Content configuration in Tailwind?",
-    keywords: ["purge", "content array", "dead code elimination", "bundle size"]
-  },
-  {
-    id: 21,
-    question: "How do transitions and animations work in Tailwind?",
-    keywords: ["transition", "duration", "ease-in-out", "animate-spin"]
-  },
-  {
-    id: 22,
-    question: "How do you create custom animations in Tailwind config?",
-    keywords: ["keyframes", "animation extension", "custom animation"]
-  },
-  {
-    id: 23,
-    question: "How do gradients work in Tailwind CSS?",
-    keywords: ["bg-gradient-to-r", "from-", "via-", "to-", "gradients"]
-  },
-  {
-    id: 24,
-    question: "How do you handle z-index and positioning in Tailwind?",
-    keywords: ["relative", "absolute", "z-10", "inset-0", "top-0"]
-  },
-  {
-    id: 25,
-    question: "What is container query support in Tailwind?",
-    keywords: ["container queries", "@container", "responsive design"]
-  },
-  {
-    id: 26,
-    question: "How do aspect-ratio utilities work in Tailwind?",
-    keywords: ["aspect-square", "aspect-video", "aspect-ratio"]
-  },
-  {
-    id: 27,
-    question: "What are Tailwind Plugins and how do you use them?",
-    keywords: ["plugins", "official plugins", "@tailwindcss/forms", "typography"]
-  },
-  {
-    id: 28,
-    question: "What is the Typography plugin (@tailwindcss/typography)?",
-    keywords: ["prose", "markdown styling", "typography plugin"]
-  },
-  {
-    id: 29,
-    question: "How do you apply backdrop filters in Tailwind?",
-    keywords: ["backdrop-blur", "backdrop-filter", "glassmorphism"]
-  },
-  {
-    id: 30,
-    question: "How do margin and padding directional shorthands work?",
-    keywords: ["mx", "my", "px", "py", "mt", "pr", "spacing"]
-  },
-  {
-    id: 31,
-    question: "How do space-x and space-y utilities work?",
-    keywords: ["space-x", "space-y", "child spacing", "margin auto"]
-  },
-  {
-    id: 32,
-    question: "How do you override default styles using !important in Tailwind?",
-    keywords: ["important modifier", "!", "!text-red-500", "override"]
-  },
-  {
-    id: 33,
-    question: "How do pseudo-element utilities work in Tailwind (before/after)?",
-    keywords: ["before:", "after:", "content", "pseudo elements"]
-  },
-  {
-    id: 34,
-    question: "How do focus-within and focus-visible work?",
-    keywords: ["focus-within", "focus-visible", "accessibility", "form focus"]
-  },
-  {
-    id: 35,
-    question: "How do you format text truncation and multi-line clamp in Tailwind?",
-    keywords: ["truncate", "line-clamp", "text overflow", "ellipsis"]
-  },
-  {
-    id: 36,
-    question: "What is the difference between inline utilities and custom Tailwind CSS components?",
-    keywords: ["@components", "@layer", "modularity", "component abstraction"]
-  },
-  {
-    id: 37,
-    question: "How does theme() function work inside custom CSS?",
-    keywords: ["theme()", "css functions", "tailwind config values"]
-  },
-  {
-    id: 38,
-    question: "How do you style form inputs cleanly with Tailwind?",
-    keywords: ["@tailwindcss/forms", "accent-color", "ring", "outline-none"]
-  },
-  {
-    id: 39,
-    question: "How do box-shadow and ring utilities differ in Tailwind?",
-    keywords: ["shadow", "ring", "ring-offset", "focus outlines"]
-  },
-  {
-    id: 40,
-    question: "How do you create fluid typography or custom responsive sizes?",
-    keywords: ["clamp()", "arbitrary text sizes", "text-[clamp()]"]
-  },
-  {
-    id: 41,
-    question: "What is Tailwind CSS v4 and its main architectural changes?",
-    keywords: ["tailwind v4", "css-first configuration", "oxide engine", "@import tailwindcss"]
-  },
-  {
-    id: 42,
-    question: "How do CSS variables integrate with Tailwind CSS?",
-    keywords: ["css variables", "var()", "dynamic themes", "hsl colors"]
-  },
-  {
-    id: 43,
-    question: "How do pointer-events and user-select utilities work?",
-    keywords: ["pointer-events-none", "select-none", "user interaction"]
-  },
-  {
-    id: 44,
-    question: "How do you use tailwind-merge (twMerge) and clsx in React projects?",
-    keywords: ["tailwind-merge", "clsx", "cn helper", "class conflicts"]
-  },
-  {
-    id: 45,
-    question: "How do scroll-snap utilities work in Tailwind?",
-    keywords: ["snap-x", "snap-center", "scroll-snap", "carousel"]
-  },
-  {
-    id: 46,
-    question: "How do transform utilities work in Tailwind?",
-    keywords: ["scale", "rotate", "translate", "skew", "transform"]
-  },
-  {
-    id: 47,
-    question: "How do print modifier variants work in Tailwind?",
-    keywords: ["print:", "media print", "print layout"]
-  },
-  {
-    id: 48,
-    question: "How do you style HTML lists using list-style utilities?",
-    keywords: ["list-disc", "list-decimal", "list-inside", "list-none"]
-  },
-  {
-    id: 49,
-    question: "How do object-fit and object-position work for images in Tailwind?",
-    keywords: ["object-cover", "object-contain", "object-center", "image sizing"]
-  },
-  {
-    id: 50,
-    question: "What is the screen() directive or media query helpers in Tailwind?",
-    keywords: ["@media screen", "breakpoint helpers", "custom media queries"]
-  }
+  { id: 1, question: "What is Tailwind CSS?", keywords: ["utility css framework", "styled classes", "rapid UI"] },
+  { id: 2, question: "What is utility-first CSS?", keywords: ["single purpose classes", "inline styling feel", "no custom css"] },
+  { id: 3, question: "How to make text blue?", keywords: ["text blue class", "text-blue-500", "font color"] },
+  { id: 4, question: "How to add padding?", keywords: ["p-4 class", "padding utility", "spacing unit"] },
+  { id: 5, question: "How to center items in Flexbox?", keywords: ["flex class", "justify-center", "items-center"] },
+  { id: 6, question: "How do responsive prefixes work?", keywords: ["sm md lg xl", "mobile first breakpoints", "media queries"] },
+  { id: 7, question: "How to add hover state?", keywords: ["hover: prefix", "pseudo class", "interaction style"] },
+  { id: 8, question: "How to add rounded corners?", keywords: ["rounded class", "border radius", "rounded-full"] },
+  { id: 9, question: "How does dark mode work?", keywords: ["dark: prefix", "theme switching", "dark mode class"] },
+  { id: 10, question: "Why use Tailwind CSS?", keywords: ["fast development", "small bundle size", "consistent design system"] },
+  { id: 11, question: "What is @apply directive?", keywords: ["@apply in css", "group utility classes", "custom class reusability"] },
+  { id: 12, question: "What is JIT (Just-In-Time) mode?", keywords: ["jit compiler", "on demand generation", "fast builds"] },
+  { id: 13, question: "What are arbitrary values?", keywords: ["square brackets notation", "w-[300px]", "custom exact units"] },
+  { id: 14, question: "How to customize theme config?", keywords: ["tailwind.config.js", "extend theme object", "custom colors fonts"] },
+  { id: 15, question: "What are state variants?", keywords: ["focus active disabled", "pseudo class modifiers", "state prefixes"] },
+  { id: 16, question: "How does group-hover work?", keywords: ["group class parent", "group-hover child", "nested hover trigger"] },
+  { id: 17, question: "How does peer modifier work?", keywords: ["peer class sibling", "peer-checked modifier", "sibling state style"] },
+  { id: 18, question: "How to create CSS Grid?", keywords: ["grid class", "grid-cols-12", "gap spacing"] },
+  { id: 19, question: "How to show/hide elements?", keywords: ["hidden class", "block display", "flex display"] },
+  { id: 20, question: "What is content purge configuration?", keywords: ["content array config", "remove unused CSS", "production bundle size"] },
+  { id: 21, question: "How to add transitions & animations?", keywords: ["transition-all class", "duration-300", "animate-spin"] },
+  { id: 22, question: "How to add custom keyframes?", keywords: ["keyframes config", "custom animation name", "extend theme"] },
+  { id: 23, question: "How to create linear gradients?", keywords: ["bg-gradient-to-r", "from-color", "to-color"] },
+  { id: 24, question: "How to handle z-index & positioning?", keywords: ["relative absolute", "z-10 z-50", "top-0 inset-0"] },
+  { id: 25, question: "What are container queries?", keywords: ["@container class", "@sm responsive", "parent width queries"] },
+  { id: 26, question: "How to use aspect-ratio utilities?", keywords: ["aspect-square", "aspect-video", "aspect ratio constraint"] },
+  { id: 27, question: "What are Tailwind plugins?", keywords: ["official plugins", "extend functionality", "forms typography plugins"] },
+  { id: 28, question: "What is @tailwindcss/typography plugin?", keywords: ["prose class", "markdown styling", "rich text format"] },
+  { id: 29, question: "How to create glassmorphism / blur?", keywords: ["backdrop-blur", "backdrop-filter", "frosted glass effect"] },
+  { id: 30, question: "What are spacing directional shorthands?", keywords: ["mx horizontal", "my vertical", "px py mt"] },
+  { id: 31, question: "What are space-x and space-y classes?", keywords: ["space-x-4", "space-y-2", "auto child margin"] },
+  { id: 32, question: "How to force important styles?", keywords: ["exclamation mark prefix", "!text-red-500", "override specificity"] },
+  { id: 33, question: "How to use before and after pseudo-elements?", keywords: ["before: content-", "after: content-", "pseudo elements"] },
+  { id: 34, question: "focus-within vs focus-visible?", keywords: ["focus-within parent", "focus-visible keyboard", "accessibility outlines"] },
+  { id: 35, question: "How to truncate text & line-clamp?", keywords: ["truncate class", "line-clamp-2", "text overflow ellipsis"] },
+  { id: 36, question: "Inline classes vs @components layer?", keywords: ["@layer components", "extracted classes", "custom modular css"] },
+  { id: 37, question: "What is theme() function in CSS?", keywords: ["theme() helper", "access config values", "custom css variables"] },
+  { id: 38, question: "How to style form controls cleanly?", keywords: ["@tailwindcss/forms", "ring focus outline", "custom form inputs"] },
+  { id: 39, question: "box-shadow vs ring utility?", keywords: ["shadow-md drop shadow", "ring-2 outline border", "box shadow difference"] },
+  { id: 40, question: "How to create fluid responsive text?", keywords: ["text-[clamp()]", "arbitrary text size", "fluid typography"] },
+  { id: 41, question: "What is Tailwind CSS v4?", keywords: ["css-first setup", "oxide engine fast", "no javascript config"] },
+  { id: 42, question: "How to use CSS variables with Tailwind?", keywords: ["var() function", "dynamic themes", "hsl custom variables"] },
+  { id: 43, question: "How to disable user select or clicks?", keywords: ["pointer-events-none", "select-none", "prevent interaction"] },
+  { id: 44, question: "Why use tailwind-merge with clsx?", keywords: ["tailwind-merge twMerge", "clsx classnames", "resolve class conflicts"] },
+  { id: 45, question: "How to create scroll snap carousels?", keywords: ["snap-x snap-mandatory", "snap-center child", "smooth scroll snap"] },
+  { id: 46, question: "How to apply transform scale/rotate?", keywords: ["hover:scale-105", "rotate-45", "translate-x-2"] },
+  { id: 47, question: "How to style elements for printing?", keywords: ["print: prefix", "media print rules", "print layout utility"] },
+  { id: 48, question: "How to style HTML lists?", keywords: ["list-disc", "list-decimal", "list-inside bullet"] },
+  { id: 49, question: "How to scale images with object-fit?", keywords: ["object-cover", "object-contain", "image aspect fit"] },
+  { id: 50, question: "What is the @screen directive?", keywords: ["@screen media query", "breakpoint reference", "custom css media"] }
 ];
