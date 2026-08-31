@@ -36,7 +36,7 @@ export const categories = [
     description: "Semantic HTML and web page structure.",
     icon: BookOpen,
     difficulty: "Easy",
-    duration: "10 min",
+    duration: "15 min",
     color: "from-orange-500 to-red-500",
   },
 
@@ -46,7 +46,7 @@ export const categories = [
     description: "Layouts, Flexbox, Grid and responsive design.",
     icon: BookOpen,
     difficulty: "Easy",
-    duration: "10 min",
+    duration: "15 min",
     color: "from-blue-500 to-cyan-500",
   },
 
@@ -76,7 +76,7 @@ export const categories = [
     description: "Utility-first CSS framework.",
     icon: BookOpen,
     difficulty: "Medium",
-    duration: "10 min",
+    duration: "15 min",
     color: "from-teal-500 to-cyan-500",
   },
 
@@ -136,7 +136,7 @@ export const categories = [
     description: "Artificial Intelligence fundamentals.",
     icon: Brain,
     difficulty: "Advanced",
-    duration: "20 min",
+    duration: "15 min",
     color: "from-pink-500 to-purple-600",
   },
 
@@ -146,7 +146,7 @@ export const categories = [
     description: "ML algorithms and concepts.",
     icon: Cpu,
     difficulty: "Advanced",
-    duration: "20 min",
+    duration: "15 min",
     color: "from-amber-500 to-orange-600",
   },
 
@@ -156,7 +156,7 @@ export const categories = [
     description: "Neural Networks and Deep Learning.",
     icon: Brain,
     difficulty: "Advanced",
-    duration: "20 min",
+    duration: "15 min",
     color: "from-red-500 to-pink-600",
   },
 
@@ -166,7 +166,7 @@ export const categories = [
     description: "Behavioral and HR interview questions.",
     icon: Users,
     difficulty: "Easy",
-    duration: "10 min",
+    duration: "15 min",
     color: "from-fuchsia-500 to-pink-600",
   },
 ];

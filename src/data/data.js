@@ -31,7 +31,7 @@ export const categories = [
     description:
       "Master semantic HTML, accessibility standards, and document page structure.",
     questionsCount: 20,
-    duration: "10 min",
+    duration: "15 min",
     level: "Beginner",
     badge: "Core",
     color: "#E34F26",
@@ -44,7 +44,7 @@ export const categories = [
     description:
       "Understand Flexbox, Grid layout, responsiveness, keyframes, and CSS specificity.",
     questionsCount: 20,
-    duration: "10 min",
+    duration: "15 min",
     level: "Beginner",
     badge: "Core",
     color: "#1572B6",
@@ -83,7 +83,7 @@ export const categories = [
     description:
       "Practice utility-first styling, responsive design, dark mode, and custom configuration.",
     questionsCount: 20,
-    duration: "10 min",
+    duration: "15 min",
     level: "Intermediate",
     badge: "Hot",
     color: "#06B6D4",
@@ -109,7 +109,7 @@ export const categories = [
     description:
       "Practice Python syntax, data structures, functions, OOP, and file handling.",
     questionsCount: 20,
-    duration: "10 min",
+    duration: "15 min",
     level: "Intermediate",
     badge: "Popular",
     color: "#3776AB",
@@ -173,7 +173,7 @@ export const categories = [
     description:
       "Explore AI fundamentals, intelligent agents, search algorithms, and expert systems.",
     questionsCount: 20,
-    duration: "20 min",
+    duration: "15 min",
     level: "Advanced",
     badge: "Trending",
     color: "#8E44AD",
@@ -186,7 +186,7 @@ export const categories = [
     description:
       "Practice supervised learning, unsupervised learning, regression, classification, and evaluation.",
     questionsCount: 20,
-    duration: "20 min",
+    duration: "15 min",
     level: "Advanced",
     badge: "High Demand",
     color: "#F39C12",
@@ -199,7 +199,7 @@ export const categories = [
     description:
       "Learn neural networks, CNNs, RNNs, transformers, activation functions, and optimization.",
     questionsCount: 20,
-    duration: "20 min",
+    duration: "15 min",
     level: "Advanced",
     badge: "Advanced",
     color: "#E74C3C",
@@ -212,7 +212,7 @@ export const categories = [
     description:
       "Practice communication skills, behavioral questions, strengths, weaknesses, teamwork, and career goals.",
     questionsCount: 20,
-    duration: "10 min",
+    duration: "15 min",
     level: "Easy",
     badge: "Must Practice",
     color: "#EC4899",

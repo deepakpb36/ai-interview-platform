@@ -55,7 +55,7 @@ const INTERVIEW_TRACKS = [
     icon: BookOpen,
     color: "from-orange-500 to-red-500",
     difficulty: "Beginner",
-    duration: "10 min",
+    duration: "15 min",
   },
   {
     id: "css",
@@ -64,7 +64,7 @@ const INTERVIEW_TRACKS = [
     icon: Code,
     color: "from-sky-500 to-cyan-500",
     difficulty: "Beginner",
-    duration: "10 min",
+    duration: "15 min",
   },
   {
     id: "javascript",
@@ -73,7 +73,7 @@ const INTERVIEW_TRACKS = [
     icon: Code,
     color: "from-yellow-500 to-amber-500",
     difficulty: "Intermediate",
-    duration: "12 min",
+    duration: "15 min",
   },
   {
     id: "react",
@@ -82,7 +82,7 @@ const INTERVIEW_TRACKS = [
     icon: Code,
     color: "from-cyan-500 to-blue-500",
     difficulty: "Intermediate",
-    duration: "12 min",
+    duration: "15 min",
   },
   {
     id: "tailwind",
@@ -91,7 +91,7 @@ const INTERVIEW_TRACKS = [
     icon: Code,
     color: "from-teal-500 to-cyan-500",
     difficulty: "Intermediate",
-    duration: "10 min",
+    duration: "15 min",
   },
   {
     id: "frontend",
@@ -118,7 +118,7 @@ const INTERVIEW_TRACKS = [
     icon: Terminal,
     color: "from-indigo-500 to-violet-500",
     difficulty: "Intermediate",
-    duration: "10 min",
+    duration: "15 min",
   },
   {
     id: "python",
@@ -127,7 +127,7 @@ const INTERVIEW_TRACKS = [
     icon: Terminal,
     color: "from-blue-500 to-indigo-500",
     difficulty: "Intermediate",
-    duration: "10 min",
+    duration: "15 min",
   },
   {
     id: "java",
@@ -136,7 +136,7 @@ const INTERVIEW_TRACKS = [
     icon: Code,
     color: "from-red-500 to-rose-500",
     difficulty: "Intermediate",
-    duration: "10 min",
+    duration: "15 min",
   },
   {
     id: "c",
@@ -145,7 +145,7 @@ const INTERVIEW_TRACKS = [
     icon: Code,
     color: "from-gray-600 to-gray-800",
     difficulty: "Intermediate",
-    duration: "10 min",
+    duration: "15 min",
   },
   {
     id: "cpp",
@@ -154,7 +154,7 @@ const INTERVIEW_TRACKS = [
     icon: Code,
     color: "from-blue-700 to-indigo-700",
     difficulty: "Intermediate",
-    duration: "12 min",
+    duration: "15 min",
   },
   {
     id: "csharp",
@@ -163,7 +163,7 @@ const INTERVIEW_TRACKS = [
     icon: Code,
     color: "from-purple-600 to-violet-700",
     difficulty: "Intermediate",
-    duration: "12 min",
+    duration: "15 min",
   },
   {
     id: "ai",
@@ -199,7 +199,7 @@ const INTERVIEW_TRACKS = [
     icon: Users,
     color: "from-purple-500 to-pink-500",
     difficulty: "Easy",
-    duration: "8 min",
+    duration: " 15min",
   },
 ];
 // How many category cards to show on the Dashboard before collapsing
