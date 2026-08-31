@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+gimport { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 function CategoryCard({ title, interviews, score, color }) {
