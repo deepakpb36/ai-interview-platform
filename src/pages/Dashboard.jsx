@@ -1,3 +1,4 @@
+import AIAssistant from "../components/AIAssistant";
 import React, { useMemo } from "react";
 import { getAuth } from "firebase/auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -44,6 +45,7 @@ ChartJS.register(
   Legend,
   Filler
 );
+
 
 
 // Interview Categories Data
@@ -1140,6 +1142,13 @@ function Dashboard() {
             </button>
           </div>
         )}
+        {/* AI Assistant */}
+<section>
+  <AIAssistant
+    userName={userName}
+    category="Interview Preparation"
+  />
+</section>
 
 
       </section>

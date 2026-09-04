@@ -1,3 +1,4 @@
+
 import {
   useState,
   useEffect,
@@ -14,7 +15,7 @@ import {
   Mic,
   Square,
 } from "lucide-react";
-
+import AIAssistant from "../components/AIAssistant";
 import {
   questionsByCategory,
 } from "../data/questions";
@@ -71,6 +72,12 @@ function Interview() {
 
   const userId =
     user?.uid || "guest";
+    const userName =
+  user?.displayName ||
+  user?.providerData?.[0]?.displayName ||
+  (user?.email
+    ? user.email.split("@")[0]
+    : "there");
 
 
   /*
@@ -1732,6 +1739,26 @@ function Interview() {
 
           </div>
 
+        </div>
+                {/* AI Interview Assistant */}
+
+        <div className="mt-6">
+          <AIAssistant
+            userName={userName}
+            category={
+              category.charAt(0).toUpperCase() +
+              category.slice(1)
+            }
+            currentQuestion={
+              currentQuestionObj.question
+            }
+            questionNumber={
+              currentIdx + 1
+            }
+            totalQuestions={
+              questionsList.length
+            }
+          />
         </div>
 
 
